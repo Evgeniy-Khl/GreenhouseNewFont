@@ -1,0 +1,7 @@
+
+pointY += 30;
+ILI9341_WriteString(45, pointY, "28.5", Font_11x18, MAGENTA, fillScreen, 2);
+pointY += 40;
+ILI9341_WriteString(65, pointY, "28.5", Font_11x18, MAGENTA, fillScreen, 3);
+pointY += 60;
+ILI9341_WriteString(45, pointY, "28.5", Font_11x18, MAGENTA, fillScreen, 4);
