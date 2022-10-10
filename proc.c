@@ -98,3 +98,32 @@ char Bcd2ToByte(char Value)
 //  Told1[i] = val;
 //  return val;
 //}
+
+void setDAC(void) // V = Vref x (255/256)
+{
+unsigned char i, val;
+  for (i=0; i<4; i++){
+     switch (i){
+        case 0: CSDAC1 = 0; break;
+        case 1: CSDAC2 = 0; break;
+        case 2: CSDAC3 = 0; break;
+        case 3: CSDAC4 = 0; break;
+     }
+     SPCR = SPI_MOUD_FL;// SPI port enabled
+     val = dacU[i]>>4;
+     SPDR = val & 0x0F; // Load Register to DAC
+     while (!(SPSR & (1<<SPIF)));     // ожидаем конца передачи по SPI Opcode
+     val = dacU[i]<<4;
+     SPDR = val & 0xF0;
+     while (!(SPSR & (1<<SPIF)));     // ожидаем конца передачи по SPI Opcode
+     PORTD|=0xF0;       // INSTRUCTION EXECUTED
+  };
+  SPCR = 0;             //disable SPI
+}
+
+unsigned char adapt(unsigned char n)
+{
+  if (n>100) n=100;
+  n <<= 1; n += ZERO;
+  return n;
+}

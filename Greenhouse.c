@@ -20,7 +20,11 @@ Programm size       : 11358 words (22716 bytes), 69,3% of FLASH 11.09.2022
 #include "fontsN.h"
 #include "tft.h"
 #include "9341.h"
-
+//*********************************
+#define CSDAC1		    PORTD.4
+#define CSDAC2		    PORTD.5
+#define CSDAC3		    PORTD.6
+#define CSDAC4	        PORTD.7
 #define CONECT          PINB.3    // если bluetooth подключен то здесь +3,3В
 #define MAX_DEVICES     3
 #define MAX_MENU        5
@@ -31,20 +35,22 @@ Programm size       : 11358 words (22716 bytes), 69,3% of FLASH 11.09.2022
 #define OFF             0
 #define UNCHANGED       2
 #define MISTAKE         3
+#define ZERO	        50
 
 #define SBLK		    0x91      // Начало блока данных
 #define BSTR		    0x81      // Начало строки данных
 #define EBLK            0xF1      // Конец блока данных
 #define DS3231          0xD0      // Часовая микросхема
 
+#define SPI_MOUD_FL	    0x51	  // SPI Type: Master, Clock Rate: 1000,000 kHz, Clock Phase: Cycle Half, Clock Polarity: Low, Data Order: MSB First
 #define TWI_CLK_RATE    100000    // TWI clock rate [bps]
 #define EEPROM_TWI_BUS_ADDRESS (0xA0 >> 1)// 7 bit TWI bus slave address of the AT24C16B 2kbyte EEPROM
 #define ADC_VREF_TYPE   0x40
 
 // Declare your global variables here
-unsigned char BeepT, displ_num, newButton, newSetButt, ds18b20, pointY, DHTexist, signchar, intval, frcval, error;
+unsigned char BeepT, displ_num, newSetButt, ds18b20, pointY, DHTexist, signchar, intval, frcval, error;
 signed char numMenu, numSet/*, displCO2, timerCO2*/;
-unsigned char relOut[4]={0}, analogOut[4], buff[40], familycode[MAX_DEVICES][9], clock_buffer[7], alarm[4]={2,2,2,2};
+unsigned char relOut[4]={0}, analogOut[4]={0}, dacU[4]={ZERO}, buff[40], familycode[MAX_DEVICES][9], clock_buffer[7], alarm[4]={2,2,2,2};
 unsigned int  max_X, max_Y, fillScreen = BLACK;
 signed int pvT=1990, offsetT, pvRH=1990, offsetRH, pvCO2, pvPH, newval[MAX_DATE];
 unsigned char *ptr_char;
@@ -81,7 +87,7 @@ bit CO2module;          // подключен измеритель СО2
 bit CheckCO2;           // разрешено использование данных измерителя СО2
 
 //- prototypes ------
-char newButtonCheck(void);
+
 
 #include "fontsN.c"
 #include "ili9341.c"
@@ -117,7 +123,13 @@ while (1){
        if(readDHT()) DHTexist = 3; 
        else if(DHTexist) DHTexist--;                   // датчик влажности работает? 
        else {pvT = 1900; pvRH = 190;}
-     }   
+     }
+     for(byte=0; byte<4; byte++){if(relay[byte]<2) relOut[byte]=relay[byte];}
+     for(byte=0; byte<4; byte++){
+        if(analog[byte]>=0) analogOut[byte] = analog[byte]; else analogOut[byte] = 0; //??????????????
+        dacU[byte] = adapt(analogOut[byte]);// конверсия для ЦАП
+     }
+ //    setDAC();                           // подать напряжение на аналоговые выходы
      // --------КАНАЛ 1 ---------
 //     if(Dht){
 //       RelayControl(pvT,0);
@@ -139,8 +151,9 @@ while (1){
 //     }
    }
    //---------------------------------------------------------
-   if(newButton==100) display();
-   else {touchpad(newButton); newButton=100; display();}
+//   if(newButton==100) display();
+//   else {touchpad(newButton); newButton=100; display();}
+    display();
 //   sprintf(buff,"X%4u; Y%4u; D%u newB=%3u",point_X,point_Y, displ_num, newButton);
 //   ILI9341_WriteString(5,TFTBUTTON-10,buff,Font_11x18,WHITE,BLACK,1);
  }

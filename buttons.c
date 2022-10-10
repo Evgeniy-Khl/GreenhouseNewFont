@@ -143,29 +143,29 @@ long val;
  return val;
 }
 
-char contains(int touch_X, int touch_Y, char b)// проверка попадания пересчитаной координаты в область кнопки.
+char contains(char b)// проверка попадания пересчитаной координаты в область кнопки.
  {
  int beg, end;
    beg = buttons[b].x;
    end = beg + buttons[b].w-3;
-   if ((touch_X < beg)||(touch_X > end)) return 0;
+   if ((point_X < beg)||(point_X > end)) return 0;
    beg = buttons[b].y;
    end = beg + buttons[b].h-3;
-   if ((touch_Y < beg)||(touch_Y > end)) return 0;
+   if ((point_Y < beg)||(point_Y > end)) return 0;
    return 1;
  }
  
-//char containsPlus(int touch_X, int touch_Y, char b)// проверка попадания пересчитаной координаты в область кнопки.
-// {
-// int beg, end;
-//   beg = plus[b].x;
-//   end = beg + plus[b].w-3;
-//   if ((touch_X < beg)||(touch_X > end)) return 0;
-//   beg = plus[b].y;
-//   end = beg + plus[b].h-3;
-//   if ((touch_Y < beg)||(touch_Y > end)) return 0;
-//   return 1;
-// }
+char containsPlus(char b)// проверка попадания пересчитаной координаты в область кнопки.
+ {
+ int beg, end;
+   beg = plus[b].x-3;
+   end = beg + plus[b].w+3;
+   if ((point_X < beg)||(point_X > end)) return 0;
+   beg = plus[b].y-3;
+   end = beg + plus[b].h+3;
+   if ((point_Y < beg)||(point_Y > end)) return 0;
+   return 1;
+ }
 
 char checkTouch(void)// вычисление кординаты касания резистивной матрицы (point_Y, point_X)
 {
@@ -191,8 +191,8 @@ int val, samples[2];
     InitInterface();
 //    sprintf(buff,"слабое нажатие v=%3u",val);
 //    ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1); 
-    return 0;
-  }// если слабое нажатие то выход
+    return 0;         // если слабое нажатие то выход
+  }
   else                // иначе определяем координаты
    {
      YP_DIR = INPUT;   // TFT_WRX ?????????????
@@ -228,28 +228,10 @@ int val, samples[2];
      InitInterface();
      point_X = map(point_X, TS_MINX, TS_MAXX, 0, max_X);// пересчет координаты резистивной матрицы на пиксельную метрицу
      point_Y = map(point_Y, TS_MINY, TS_MAXY, 0, max_Y);// пересчет координаты резистивной матрицы на пиксельную метрицу
-//     sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
-//     ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
+ILI9341_FillRectangle(point_X, point_Y, 5, 5, RED);
+//sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
+//ILI9341_WriteString(5,TFTBUTTON-15,buff,Font_11x18,WHITE,BLACK,1);
      return 1;
    }
 }
 
-char checkButton(char count){
- char i;  
-//  ILI9341_FillRectangle(point_X, point_Y, 5, 5, RED);
-//  sprintf(buff,"X=%4u; Y=%4u;", point_X,point_Y);
-//  ILI9341_WriteString(5,TFTBUTTON-25,buff,Font_11x18,BLACK,GREEN1,1);
-  for (i=0; i<count; i++){if(contains(point_X, point_Y, i)) break;}// проверка попадания новой координаты в область кнопки
-  if (i<count) BeepT = 20;
-  return i;
-}
-
-//signed char checkPlus(char count){
-//  char i;
-////  TFT_FillRectangle(point_X, point_Y, 5, 5, RED);
-////  sprintf(buff,"X=%4u; Y=%4u;", point_X,point_Y);
-////  TFT_DrawString(buff,5,TFTBUTTON-25,1,1,BLACK,GREEN1);
-//  for (i=0; i<count; i++){if(containsPlus(point_X, point_Y, i)) break;}// проверка попадания новой координаты в область кнопки 
-//  if (i<count) BeepT = 20;
-//  return i;
-//}

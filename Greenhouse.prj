@@ -7,9 +7,9 @@ A=
 C=
 D=07.10.2022
 Files=1
-OpenedFiles=10
+OpenedFiles=4
 OF1=Greenhouse.c
-Active1=0
+Active1=1
 DebugOutputListFilesDirectory=Debug\List
 DebugOutputObjectFilesDirectory=Debug
 DebugOutputExecutableFilesDirectory=Debug\Exe
@@ -18,7 +18,7 @@ OutputListFilesDirectory=Release\List
 OutputObjectFilesDirectory=Release
 OutputExecutableFilesDirectory=Release\Exe
 OutputLinkerFilesDirectory=Release\Exe
-AllowDisplayFunctionCallTree=1
+AllowDisplayFunctionCallTree=0
 CleanUp=2
 EditorPanelMode=0
 ActiveEditorPanel=0
@@ -26,27 +26,27 @@ Active0=0
 EditorPanel0=0
 PageIndex0=0
 EditorPanel1=0
-TimeStamp1=1430868501
+TimeStamp1=1430890673
 PageIndex1=2
 OF2=init.c
 Active2=0
 EditorPanel2=0
-TimeStamp2=1430862523
+TimeStamp2=1430885819
 PageIndex2=1
-OF3=proc.c
+OF3=displ.c
 Active3=0
 EditorPanel3=0
-TimeStamp3=1430860021
-PageIndex3=4
-OF4=displ.c
-Active4=1
+TimeStamp3=1430890673
+PageIndex3=3
+OF4=buttons.c
+Active4=0
 EditorPanel4=0
-TimeStamp4=1430868762
-PageIndex4=3
+TimeStamp4=1430889180
+PageIndex4=4
 OF5=buttons.c
 Active5=0
 EditorPanel5=0
-TimeStamp5=1430867202
+TimeStamp5=1430877700
 PageIndex5=5
 OF6=ili9341.c
 Active6=0
@@ -177,8 +177,8 @@ WatchAVR8LAutoVariables=0
 UseEEPROMLocation0=1
 RebuildAll=0
 LinkageInformationPresent=1
-COFFileTimeStamp=1430871345
-Build=139
+COFFileTimeStamp=1430930651
+Build=195
 [DefinedSymbolsDebug]
 Count=0
 [Compiler]
@@ -280,7 +280,7 @@ UseEEPROMLocation0=1
 RebuildAll=1
 LinkageInformationPresent=0
 COFFileTimeStamp=-1
-Build=139
+Build=195
 IncludePath0=
 IncludePath1=
 IncludePath2=
@@ -492,7 +492,7 @@ CheckSignature=1
 CheckErasure=0
 PreserveEEPROM=0
 VerifyProgramming=0
-ProgrammingCounter=92
+ProgrammingCounter=120
 RunUserProg=0
 UserProgPath=
 UserProgCmdLine=
@@ -514,8 +514,8 @@ L13=Enhanced function parameters passing: Yes
 L14=Automatic register allocation: Yes
 L15=Smart register allocation: Yes
 L16=
-L17=Build: 139
-L18=15577 line(s) compiled
+L17=Build: 195
+L18=15638 line(s) compiled
 L19=No errors
 L20=No warnings
 L21=
@@ -526,17 +526,17 @@ L25=Data Stack area: 0x60 to 0x25F
 L26=Data Stack size: 512 byte(s)
 L27=Estimated Data Stack usage: 107 byte(s)
 L28=
-L29=RAM Global variables area: 0x260 to 0x46C
-L30=RAM Global variables size: 525 byte(s)
+L29=RAM Global variables area: 0x260 to 0x46F
+L30=RAM Global variables size: 528 byte(s)
 L31=
-L32=Hardware Stack area: 0x46D to 0x85F
-L33=Hardware Stack size: 1011 byte(s)
+L32=Hardware Stack area: 0x470 to 0x85F
+L33=Hardware Stack size: 1008 byte(s)
 L34=
 L35=Heap size: 0 byte(s)
 L36=
 L37=EEPROM usage: 40 byte(s), 3,9% of EEPROM
-L38=Program size: 10080 words (20160 bytes), 61,5% of FLASH
-L39=1904 words (3808 bytes), 15,9% reduced by Code Compression
+L38=Program size: 9153 words (18306 bytes), 55,9% of FLASH
+L39=1195 words (2390 bytes), 11,5% reduced by Code Compression
 Lines=39
 [BuildInfoAssembler]
 L1=AVRASM: AVR macro assembler 2.1.30 (build 592 Nov  7 2008 12:38:17)
@@ -545,8 +545,8 @@ L3=
 L4=ATmega32 memory use summary [bytes]:
 L5=Segment   Begin    End      Code   Data   Used    Size   Use%
 L6=---------------------------------------------------------------
-L7=[.cseg] 0x000000 0x004ec0  13516   6644  20160   32768  61.5%
-L8=[.dseg] 0x000060 0x00046d      0    525    525    2048  25.6%
+L7=[.cseg] 0x000000 0x004782  11608   6698  18306   32768  55.9%
+L8=[.dseg] 0x000060 0x000470      0    528    528    2048  25.8%
 L9=[.eseg] 0x000000 0x000028      0     40     40    1024   3.9%
 L10=
 L11=[.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
@@ -600,13 +600,13 @@ Row=6
 Column=76
 ScrollPosX=0
 ScrollPosY=0
-TimeStamp=1430870565
+TimeStamp=1430890677
 [Bookmarks2]
-TimeStamp=1430868501
-Row=46
-Column=41
+TimeStamp=1430890673
+Row=128
+Column=102
 ScrollPosX=0
-ScrollPosY=29
+ScrollPosY=100
 BK0=-1
 BK1=-1
 BK2=-1
@@ -808,11 +808,11 @@ BK9=-1
 [FoldedCode13]
 Blocks=0
 [Bookmarks14]
-TimeStamp=1430860021
-Row=91
-Column=0
+TimeStamp=1430885819
+Row=115
+Column=15
 ScrollPosX=0
-ScrollPosY=69
+ScrollPosY=98
 BK0=-1
 BK1=-1
 BK2=-1
@@ -824,11 +824,11 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks15]
-TimeStamp=1430862523
-Row=59
-Column=15
+TimeStamp=1430885819
+Row=58
+Column=2
 ScrollPosX=0
-ScrollPosY=72
+ScrollPosY=39
 BK0=-1
 BK1=-1
 BK2=-1
@@ -840,11 +840,11 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks16]
-TimeStamp=1430868762
-Row=81
-Column=2
+TimeStamp=1430890673
+Row=217
+Column=96
 ScrollPosX=0
-ScrollPosY=83
+ScrollPosY=194
 BK0=-1
 BK1=-1
 BK2=-1
@@ -858,11 +858,11 @@ BK9=-1
 [FoldedCode6]
 Blocks=0
 [Bookmarks17]
-TimeStamp=1430867202
-Row=167
-Column=2
+TimeStamp=1430889180
+Row=157
+Column=5
 ScrollPosX=0
-ScrollPosY=221
+ScrollPosY=157
 BK0=-1
 BK1=-1
 BK2=-1
@@ -889,23 +889,23 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
-[FoldedCode2]
+[FoldedCode18]
 Blocks=0
 [FoldedCode3]
 Blocks=0
-[FoldedCode18]
+[FoldedCode14]
 Blocks=0
-[FoldedCode1]
+[FoldedCode7]
 Blocks=0
 [FoldedCode8]
 Blocks=0
-[FoldedCode7]
+[FoldedCode1]
+Blocks=0
+[FoldedCode2]
 Blocks=0
 [FoldedCode17]
 Blocks=0
 [FoldedCode16]
-Blocks=0
-[FoldedCode14]
 Blocks=0
 [FoldedCode15]
 Blocks=0

@@ -184,7 +184,7 @@ void touchpad(char byte){
         //- сярюмнбйх педкеимше бшундш -
         case 7:
           switch (byte){
-               case 0: displ_num = 2; newSetButt = 1; break;
+            case 0: displ_num = 2; newSetButt = 1; break;
             case 1: if (--numSet<0) numSet = 0;    break;
             case 2: if (++numSet>MAX_SET-1) numSet = MAX_SET-1;    break;
             case 3: displ_num = 9; newSetButt = 1; 
@@ -196,7 +196,7 @@ void touchpad(char byte){
         //- педюйрхп. юмюкнцнбше бшундш -
         case 8:
           switch (byte){
-               case 0: displ_num = 6; newSetButt = 1; break;
+            case 0: displ_num = 6; newSetButt = 1; break;
             case 1: if(++newval[numSet]>100) newval[numSet]=100; break;
             case 2: if(--newval[numSet]<-1) newval[numSet] = -1; break;
             case 3: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
