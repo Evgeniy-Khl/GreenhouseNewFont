@@ -1945,10 +1945,7 @@ _0x0:
 	.DB  0xCD,0xDF,0x0,0xD0,0xC5,0xCB,0xC5,0x20
 	.DB  0x20,0x4E,0x25,0x75,0x3A,0x20,0x0,0xC0
 	.DB  0xC2,0xD2,0x0,0x4F,0x4E,0x20,0x0,0x4F
-	.DB  0x46,0x46,0x0,0x58,0x25,0x34,0x75,0x3B
-	.DB  0x20,0x59,0x25,0x34,0x75,0x0,0x69,0x3D
-	.DB  0x25,0x32,0x75,0x0,0x69,0x3D,0x25,0x32
-	.DB  0x75,0x3B,0x20,0x78,0x3D,0x25,0x32,0x69
+	.DB  0x46,0x46,0x0,0x69,0x3D,0x25,0x32,0x75
 	.DB  0x0,0xC2,0xC8,0xD5,0xDB,0xC4,0x20,0x4E
 	.DB  0x25,0x75,0x3A,0x20,0x0,0xD0,0xD3,0xD7
 	.DB  0x0,0x20,0x25,0x33,0x75,0x25,0x25,0x20
@@ -2011,96 +2008,96 @@ __GLOBAL_INI_TBL:
 	.DW  _0xF*2
 
 	.DW  0x02
-	.DW  _0xB5
+	.DW  _0xB6
 	.DW  _0x0*2+179
 
 	.DW  0x02
-	.DW  _0xB5+2
+	.DW  _0xB6+2
 	.DW  _0x0*2+181
 
 	.DW  0x11
-	.DW  _0x1FA
+	.DW  _0x1FB
 	.DW  _0x0*2+183
 
 	.DW  0x11
-	.DW  _0x1FA+17
+	.DW  _0x1FB+17
 	.DW  _0x0*2+183
 
 	.DW  0x11
-	.DW  _0x1FA+34
+	.DW  _0x1FB+34
 	.DW  _0x0*2+183
 
 	.DW  0x0C
-	.DW  _0x247
+	.DW  _0x248
 	.DW  _0x0*2+281
 
 	.DW  0x0A
-	.DW  _0x247+12
+	.DW  _0x248+12
 	.DW  _0x0*2+313
 
 	.DW  0x14
-	.DW  _0x247+22
+	.DW  _0x248+22
 	.DW  _0x0*2+336
 
 	.DW  0x04
-	.DW  _0x247+42
+	.DW  _0x248+42
 	.DW  _0x0*2+366
 
 	.DW  0x16
-	.DW  _0x247+46
+	.DW  _0x248+46
 	.DW  _0x0*2+370
 
 	.DW  0x13
-	.DW  _0x247+68
+	.DW  _0x248+68
 	.DW  _0x0*2+392
 
 	.DW  0x08
-	.DW  _0x247+87
+	.DW  _0x248+87
 	.DW  _0x0*2+423
 
 	.DW  0x16
-	.DW  _0x247+95
+	.DW  _0x248+95
 	.DW  _0x0*2+431
 
 	.DW  0x0C
-	.DW  _0x264
+	.DW  _0x265
 	.DW  _0x0*2+453
 
 	.DW  0x10
-	.DW  _0x26F
+	.DW  _0x270
 	.DW  _0x0*2+475
 
 	.DW  0x04
-	.DW  _0x26F+16
+	.DW  _0x270+16
 	.DW  _0x0*2+503
 
 	.DW  0x04
-	.DW  _0x26F+20
+	.DW  _0x270+20
 	.DW  _0x0*2+507
 
 	.DW  0x04
-	.DW  _0x26F+24
+	.DW  _0x270+24
 	.DW  _0x0*2+511
 
 	.DW  0x04
-	.DW  _0x26F+28
+	.DW  _0x270+28
 	.DW  _0x0*2+503
 
 	.DW  0x04
-	.DW  _0x26F+32
-	.DW  _0x0*2+557
+	.DW  _0x270+32
+	.DW  _0x0*2+533
 
 	.DW  0x14
-	.DW  _0x2AE
-	.DW  _0x0*2+585
+	.DW  _0x2AF
+	.DW  _0x0*2+561
 
 	.DW  0x08
-	.DW  _0x2AE+20
-	.DW  _0x0*2+605
+	.DW  _0x2AF+20
+	.DW  _0x0*2+581
 
 	.DW  0x08
-	.DW  _0x2AE+28
-	.DW  _0x0*2+613
+	.DW  _0x2AF+28
+	.DW  _0x0*2+589
 
 	.DW  0x01
 	.DW  _twi_result
@@ -2857,14 +2854,14 @@ _0x26:
 	LDD  R30,Y+21
 	LDI  R31,0
 	SBIW R30,32
-	RJMP _0x2C3
+	RJMP _0x2C4
 ;      else b = font.data[(ch - 97) * font.height + i];  // кирилица 192 - 96 = 96
 _0x24:
 	LDD  R30,Y+21
 	LDI  R31,0
 	SUBI R30,LOW(97)
 	SBCI R31,HIGH(97)
-_0x2C3:
+_0x2C4:
 	MOVW R26,R30
 	LDD  R30,Y+18
 	LDI  R31,0
@@ -2899,7 +2896,7 @@ _0x29:
 	CALL SUBOPT_0xE
 	LDD  R26,Y+23
 	LDD  R27,Y+23+1
-	RJMP _0x2C4
+	RJMP _0x2C5
 ;            }
 ;            else {
 _0x2B:
@@ -2907,7 +2904,7 @@ _0x2B:
 	CALL SUBOPT_0xE
 	LDD  R26,Y+21
 	LDD  R27,Y+21+1
-_0x2C4:
+_0x2C5:
 	RCALL _ILI9341_FillRectangle
 ;            }
 ;        }
@@ -3829,11 +3826,11 @@ _startDHT:
 	SBRS R2,5
 	RJMP _0x73
 	LDI  R26,LOW(30)
-	RJMP _0x2C5
+	RJMP _0x2C6
 ;   else delay_ms(10); // MCU Sends out Start Signal to DHT and pull down voltage for at least 18ms to let DHT21 detect t ...
 _0x73:
 	LDI  R26,LOW(10)
-_0x2C5:
+_0x2C6:
 	LDI  R27,0
 	CALL _delay_ms
 ;   dhtddr = 0;   // MCU pull up
@@ -3983,7 +3980,7 @@ _0x86:
 	LDD  R26,Y+8
 	MUL  R30,R26
 	MOVW R30,R0
-	RJMP _0x2C6
+	RJMP _0x2C7
 ;      else {tempRH =(int)tem[0]*256+tem[1]; pvT =(int)tem[2]*256+tem[3];} // Other = 0 -> DHT21
 _0x92:
 	LDD  R26,Y+6
@@ -3999,7 +3996,7 @@ _0x92:
 	LDI  R31,0
 	ADD  R30,R26
 	ADC  R31,R27
-_0x2C6:
+_0x2C7:
 	STS  _pvT,R30
 	STS  _pvT+1,R31
 ;      pvT  += offsetT;
@@ -4035,14 +4032,14 @@ _0x2C6:
 	BRLT _0x94
 	LDI  R30,LOW(100)
 	LDI  R31,HIGH(100)
-	RJMP _0x2C7
+	RJMP _0x2C8
 _0x94:
 	CALL SUBOPT_0x1E
 	SBIW R26,1
 	BRGE _0x96
 	LDI  R30,LOW(1)
 	LDI  R31,HIGH(1)
-_0x2C7:
+_0x2C8:
 	STS  _pvRH,R30
 	STS  _pvRH+1,R31
 ;      return 1;
@@ -4099,8 +4096,8 @@ _0x99:
 ;
 ;unsigned char buttonCount, plusCount;
 ;unsigned int point_X, point_Y, point_Z, bottom_Y, left_X;
-;struct ram_structure {int x,y; char w,h;} buttons[4];// Global structure located in RAM
-;struct {int x,y; char w,h;} plus[8];// Global structure located in RAM
+;struct {int x,y; char w,h;} buttons[4];// Global structure located in RAM
+;struct {int x,y; char w,h;} plus[16];  // Global structure located in RAM
 ;
 ;// Read the AD conversion result
 ;unsigned int read_adc(unsigned char adc_input)
@@ -4138,81 +4135,75 @@ _0x9A:
 ;void initializePlus(char y, char row, char h){// высота кнопки
 _initializePlus:
 ; .FSTART _initializePlus
-; char i,j,indx, w=40, col=2;
+; char i,j,indx=0;
 ; unsigned int x;
-;  if(h<14) h=14;
+;    if(h<14) h=14;
 	ST   -Y,R26
-	SBIW R28,2
 	CALL __SAVELOCR6
-;	y -> Y+10
-;	row -> Y+9
-;	h -> Y+8
+;	y -> Y+8
+;	row -> Y+7
+;	h -> Y+6
 ;	i -> R17
 ;	j -> R16
 ;	indx -> R19
-;	w -> R18
-;	col -> R21
-;	x -> Y+6
-	LDI  R18,40
-	LDI  R21,2
-	LDD  R26,Y+8
+;	x -> R20,R21
+	LDI  R19,0
+	LDD  R26,Y+6
 	CPI  R26,LOW(0xE)
 	BRSH _0x9D
 	LDI  R30,LOW(14)
-	STD  Y+8,R30
-;  y = y - 4;      // Y начало контура кнопки
-_0x9D:
-	LDD  R30,Y+10
-	SUBI R30,LOW(4)
-	STD  Y+10,R30
-;  indx = 0;
-	LDI  R19,LOW(0)
-;  for (j=0; j<row; j++){
-	LDI  R16,LOW(0)
-_0x9F:
-	LDD  R30,Y+9
-	CP   R16,R30
-	BRSH _0xA0
-;    x = TFTWIDTH-90;// X начало 1 кнопки
-	LDI  R30,LOW(230)
-	LDI  R31,HIGH(230)
 	STD  Y+6,R30
-	STD  Y+6+1,R31
-;#pragma warn-
-;    for (i=0; i<col; i++){
+;    if(y>3)  y-=4;  // Y начало контура кнопки
+_0x9D:
+	LDD  R26,Y+8
+	CPI  R26,LOW(0x4)
+	BRLO _0x9E
+	LDD  R30,Y+8
+	SUBI R30,LOW(4)
+	STD  Y+8,R30
+;    for (j=0; j<row; j++){
+_0x9E:
+	LDI  R16,LOW(0)
+_0xA0:
+	LDD  R30,Y+7
+	CP   R16,R30
+	BRSH _0xA1
+;    x = TFTWIDTH-90;// X начало 1 кнопки
+	__GETWRN 20,21,230
+;    for (i=0; i<2; i++){
 	LDI  R17,LOW(0)
-_0xA2:
-	CP   R17,R21
-	BRSH _0xA3
-;        plus[indx].x = x+i*(w+5);// интервал между кнопками
+_0xA3:
+	CPI  R17,2
+	BRSH _0xA4
+;        plus[indx].x = (int)x+i*45;// интервал между кнопками
 	LDI  R26,LOW(6)
 	MUL  R19,R26
 	MOVW R30,R0
 	SUBI R30,LOW(-_plus)
 	SBCI R31,HIGH(-_plus)
-	CALL SUBOPT_0x1F
-	LDD  R26,Y+6
-	LDD  R27,Y+6+1
-	ADD  R30,R26
-	ADC  R31,R27
-	CALL SUBOPT_0x20
-;        plus[indx].w = w;
+	MOVW R26,R30
+	LDI  R30,LOW(45)
+	MUL  R30,R17
+	MOVW R30,R0
+	ADD  R30,R20
+	ADC  R31,R21
+	ST   X+,R30
+	ST   X,R31
+;        plus[indx].w = 40;
+	LDI  R26,LOW(6)
+	MUL  R19,R26
+	MOVW R30,R0
 	__ADDW1MN _plus,4
-	ST   Z,R18
+	LDI  R26,LOW(40)
+	CALL SUBOPT_0x1F
 ;        plus[indx].h = h;
-	LDI  R26,LOW(6)
-	MUL  R19,R26
-	MOVW R30,R0
 	__ADDW1MN _plus,5
-	LDD  R26,Y+8
-	STD  Z+0,R26
+	LDD  R26,Y+6
+	CALL SUBOPT_0x1F
 ;        plus[indx].y = y;
-	LDI  R26,LOW(6)
-	MUL  R19,R26
-	MOVW R30,R0
 	__ADDW1MN _plus,2
 	MOVW R26,R30
-	LDD  R30,Y+10
+	LDD  R30,Y+8
 	LDI  R31,0
 	ST   X+,R30
 	ST   X,R31
@@ -4220,31 +4211,28 @@ _0xA2:
 	SUBI R19,-1
 ;    }
 	SUBI R17,-1
-	RJMP _0xA2
-_0xA3:
+	RJMP _0xA3
+_0xA4:
 ;    y += (h+6);// интервал между кнопками
-	LDD  R30,Y+8
-	SUBI R30,-LOW(6)
-	LDD  R26,Y+10
-	ADD  R30,R26
-	STD  Y+10,R30
-;#pragma warn+
-;  }
-	SUBI R16,-1
-	RJMP _0x9F
-_0xA0:
-;  left_X = x;// левая граница до которой можно закрашивать экран
 	LDD  R30,Y+6
-	LDD  R31,Y+6+1
-	STS  _left_X,R30
-	STS  _left_X+1,R31
-;  plusCount = col * row;// обшее количество кнопок
-	LDD  R30,Y+9
-	MULS R30,R21
-	MOVW R30,R0
+	SUBI R30,-LOW(6)
+	LDD  R26,Y+8
+	ADD  R30,R26
+	STD  Y+8,R30
+;    }
+	SUBI R16,-1
+	RJMP _0xA0
+_0xA1:
+;    left_X = x;// левая граница до которой можно закрашивать экран
+	__PUTWMRN _left_X,0,20,21
+;    plusCount = row*2;// обшее количество кнопок
+	LDD  R30,Y+7
+	LSL  R30
 	STS  _plusCount,R30
 ;}
-	RJMP _0x20C0009
+	CALL __LOADLOCR6
+	ADIW R28,9
+	RET
 ; .FEND
 ;
 ;void initializeButtons(char col, char row, char h){// высота кнопки
@@ -4252,9 +4240,9 @@ _initializeButtons:
 ; .FSTART _initializeButtons
 ; char i,j,indx, w;
 ; unsigned int x,y;
-;  switch (col)                  // ширина кнопки зависит от кол-ва кнопок в строке
+;    switch (col){                  // ширина кнопки зависит от кол-ва кнопок в строке
 	ST   -Y,R26
-	CALL SUBOPT_0x21
+	CALL SUBOPT_0x20
 ;	col -> Y+10
 ;	row -> Y+9
 ;	h -> Y+8
@@ -4265,53 +4253,52 @@ _initializeButtons:
 ;	x -> R20,R21
 ;	y -> Y+6
 	LDI  R31,0
-;   {
-;    case 4: w = max_X/4-6; break;  // 72
+;        case 4:  w = max_X/4-6; break;  // 72
 	CPI  R30,LOW(0x4)
 	LDI  R26,HIGH(0x4)
 	CPC  R31,R26
-	BRNE _0xA7
-	CALL SUBOPT_0x22
+	BRNE _0xA8
+	CALL SUBOPT_0x21
 	CALL __LSRW2
-	RJMP _0x2C8
-;    case 3: w = max_X/3-6; break;  // 100
-_0xA7:
+	RJMP _0x2C9
+;        case 3:  w = max_X/3-6; break;  // 100
+_0xA8:
 	CPI  R30,LOW(0x3)
 	LDI  R26,HIGH(0x3)
 	CPC  R31,R26
-	BRNE _0xA8
+	BRNE _0xA9
 	CALL SUBOPT_0x17
 	LDI  R30,LOW(3)
 	LDI  R31,HIGH(3)
 	CALL __DIVW21U
-	RJMP _0x2C8
-;    case 2: w = max_X/2-9; break;  // 150
-_0xA8:
+	RJMP _0x2C9
+;        case 2:  w = max_X/2-9; break;  // 150
+_0xA9:
 	CPI  R30,LOW(0x2)
 	LDI  R26,HIGH(0x2)
 	CPC  R31,R26
-	BRNE _0xAA
-	CALL SUBOPT_0x22
+	BRNE _0xAB
+	CALL SUBOPT_0x21
 	LSR  R31
 	ROR  R30
 	SUBI R30,LOW(9)
-	RJMP _0x2C9
-;    default: w = max_X-6;
-_0xAA:
+	RJMP _0x2CA
+;        default: w = max_X-6;
+_0xAB:
 	LDS  R30,_max_X
-_0x2C8:
-	SUBI R30,LOW(6)
 _0x2C9:
+	SUBI R30,LOW(6)
+_0x2CA:
 	MOV  R18,R30
-;   };
-;  if(h<20) h=20;
+;    };
+;    if(h<20) h=20;
 	LDD  R26,Y+8
 	CPI  R26,LOW(0x14)
-	BRSH _0xAB
+	BRSH _0xAC
 	LDI  R30,LOW(20)
 	STD  Y+8,R30
-;  y = max_Y - h - 4;      // начало контура кнопки
-_0xAB:
+;    y = max_Y - h - 4;      // начало контура кнопки
+_0xAC:
 	LDD  R30,Y+8
 	LDI  R31,0
 	CALL SUBOPT_0x18
@@ -4320,59 +4307,65 @@ _0xAB:
 	SBIW R26,4
 	STD  Y+6,R26
 	STD  Y+6+1,R27
-;  indx = 0;
+;    indx = 0;
 	LDI  R19,LOW(0)
-;  for (j=0; j<row; j++){
+;    for (j=0; j<row; j++){
 	LDI  R16,LOW(0)
-_0xAD:
+_0xAE:
 	LDD  R30,Y+9
 	CP   R16,R30
-	BRSH _0xAE
-;    x = 4;// начало 1 кнопки
+	BRSH _0xAF
+;        x = 4;// начало 1 кнопки
 	__GETWRN 20,21,4
-;    #pragma warn-
-;    for (i=0; i<col; i++){
+;        for (i=0; i<col; i++){
 	LDI  R17,LOW(0)
-_0xB0:
+_0xB1:
 	LDD  R30,Y+10
 	CP   R17,R30
-	BRSH _0xB1
-;        buttons[indx].x = x+i*(w+5);// интервал между кнопками
+	BRSH _0xB2
+;            buttons[indx].x = (int)x+i*(w+5);// интервал между кнопками
 	LDI  R26,LOW(6)
 	MUL  R19,R26
 	MOVW R30,R0
 	SUBI R30,LOW(-_buttons)
 	SBCI R31,HIGH(-_buttons)
-	CALL SUBOPT_0x1F
+	MOVW R22,R30
+	MOV  R26,R17
+	CLR  R27
+	MOV  R30,R18
+	LDI  R31,0
+	ADIW R30,5
+	CALL __MULW12
 	ADD  R30,R20
 	ADC  R31,R21
-	CALL SUBOPT_0x20
-;        buttons[indx].w = w;
+	MOVW R26,R22
+	ST   X+,R30
+	ST   X,R31
+;            buttons[indx].w = w;
+	LDI  R26,LOW(6)
+	MUL  R19,R26
+	MOVW R30,R0
 	__ADDW1MN _buttons,4
 	ST   Z,R18
-;        buttons[indx].h = h;
-	LDI  R26,LOW(6)
+;            buttons[indx].h = h;
 	MUL  R19,R26
 	MOVW R30,R0
 	__ADDW1MN _buttons,5
 	LDD  R26,Y+8
-	STD  Z+0,R26
-;        buttons[indx].y = y;
-	LDI  R26,LOW(6)
-	MUL  R19,R26
-	MOVW R30,R0
+	CALL SUBOPT_0x1F
+;            buttons[indx].y = y;
 	__ADDW1MN _buttons,2
 	LDD  R26,Y+6
 	LDD  R27,Y+6+1
 	STD  Z+0,R26
 	STD  Z+1,R27
-;        indx++;
+;            indx++;
 	SUBI R19,-1
-;    }
+;        }
 	SUBI R17,-1
-	RJMP _0xB0
-_0xB1:
-;    y -= (h+5);// интервал между кнопками
+	RJMP _0xB1
+_0xB2:
+;        y -= (h+5);// интервал между кнопками
 	LDD  R30,Y+8
 	LDI  R31,0
 	ADIW R30,5
@@ -4382,17 +4375,16 @@ _0xB1:
 	SBC  R27,R31
 	STD  Y+6,R26
 	STD  Y+6+1,R27
-;    #pragma warn+
-;  }
+;    }
 	SUBI R16,-1
-	RJMP _0xAD
-_0xAE:
-;  bottom_Y = y;// верхняя граница меню до которой можно закрашивать экран
+	RJMP _0xAE
+_0xAF:
+;    bottom_Y = y;// верхняя граница меню до которой можно закрашивать экран
 	LDD  R30,Y+6
 	LDD  R31,Y+6+1
 	STS  _bottom_Y,R30
 	STS  _bottom_Y+1,R31
-;  buttonCount = col * row;// обшее количество кнопок
+;    buttonCount = col * row;// обшее количество кнопок
 	LDD  R30,Y+9
 	LDD  R26,Y+10
 	MULS R30,R26
@@ -4405,11 +4397,11 @@ _0xAE:
 ;void drawButton(unsigned int fill, unsigned int bord, unsigned int text, char b, char flash *str){
 _drawButton:
 ; .FSTART _drawButton
-; int x, y, w, h;//, r;
+; int x, y, w, h;
 ;   w = buttons[b].w;      // ширина кнопки
 	ST   -Y,R27
 	ST   -Y,R26
-	CALL SUBOPT_0x21
+	CALL SUBOPT_0x20
 ;	fill -> Y+15
 ;	bord -> Y+13
 ;	text -> Y+11
@@ -4423,34 +4415,33 @@ _drawButton:
 	MUL  R30,R26
 	MOVW R30,R0
 	__ADDW1MN _buttons,4
-	CALL SUBOPT_0x23
+	CALL SUBOPT_0x22
 ;   h = buttons[b].h;      // высота кнопки
 	__ADDW1MN _buttons,5
-	CALL SUBOPT_0x24
+	CALL SUBOPT_0x23
 ;   x = buttons[b].x;      // начало контура кнопки
 	SUBI R30,LOW(-_buttons)
 	SBCI R31,HIGH(-_buttons)
-	CALL SUBOPT_0x25
+	CALL SUBOPT_0x24
 ;   y = buttons[b].y;      // начало контура кнопки
 	__ADDW1MN _buttons,2
 	LD   R18,Z
 	LDD  R19,Z+1
-;//   r = min(w,h)/4;
 ;   //TFT_FillRoundRect(x, y, w, h, r, fill);
 ;   ILI9341_FillRectangle(x, y, w, h, fill);
-	CALL SUBOPT_0x26
+	CALL SUBOPT_0x25
 	LDD  R26,Y+23
 	LDD  R27,Y+23+1
 	RCALL _ILI9341_FillRectangle
 ;   //TFT_DrawRoundRect(x, y, w, h, r, bord);
 ;   ILI9341_DrawRectangle(x, y, w, h, bord);
-	CALL SUBOPT_0x26
+	CALL SUBOPT_0x25
 	LDD  R26,Y+21
 	LDD  R27,Y+21+1
 	RCALL _ILI9341_DrawRectangle
 ;#pragma warn-
 ;   x = x + w/2 - strlenf(str)*5;
-	CALL SUBOPT_0x27
+	CALL SUBOPT_0x26
 	PUSH R31
 	PUSH R30
 	LDD  R26,Y+8
@@ -4465,23 +4456,23 @@ _drawButton:
 	SBC  R27,R31
 	MOVW R16,R26
 ;   y = y + h/2 - 8;
-	CALL SUBOPT_0x28
+	CALL SUBOPT_0x27
 ;#pragma warn+
 ;   sprintf(buff,str); ILI9341_WriteString(x, y, buff, Font_11x18, text, fill, 1);
-	CALL SUBOPT_0x29
+	CALL SUBOPT_0x28
 	LDD  R30,Y+10
 	LDD  R31,Y+10+1
-	CALL SUBOPT_0x2A
-	CALL SUBOPT_0x2B
 	CALL SUBOPT_0x29
-	CALL SUBOPT_0x2C
+	CALL SUBOPT_0x2A
+	CALL SUBOPT_0x28
+	CALL SUBOPT_0x2B
 	LDD  R30,Y+21
 	LDD  R31,Y+21+1
 	ST   -Y,R31
 	ST   -Y,R30
 	LDD  R30,Y+27
 	LDD  R31,Y+27+1
-	CALL SUBOPT_0x2D
+	CALL SUBOPT_0x2C
 ;}
 	CALL __LOADLOCR6
 	ADIW R28,17
@@ -4495,7 +4486,7 @@ _drawPlus:
 ;   w = plus[i].w;      // ширина кнопки
 	ST   -Y,R27
 	ST   -Y,R26
-	CALL SUBOPT_0x21
+	CALL SUBOPT_0x20
 ;	i -> Y+10
 ;	fill -> Y+8
 ;	x -> R16,R17
@@ -4506,62 +4497,62 @@ _drawPlus:
 	MUL  R30,R26
 	MOVW R30,R0
 	__ADDW1MN _plus,4
-	CALL SUBOPT_0x23
+	CALL SUBOPT_0x22
 ;   h = plus[i].h;      // высота кнопки
 	__ADDW1MN _plus,5
-	CALL SUBOPT_0x24
+	CALL SUBOPT_0x23
 ;   x = plus[i].x;      // начало контура кнопки
 	SUBI R30,LOW(-_plus)
 	SBCI R31,HIGH(-_plus)
-	CALL SUBOPT_0x25
+	CALL SUBOPT_0x24
 ;   y = plus[i].y;      // начало контура кнопки
 	__ADDW1MN _plus,2
 	LD   R18,Z
 	LDD  R19,Z+1
 ;   if(i%2) ILI9341_DrawRectangle(x, y, w, h, BLUE);
-	CALL SUBOPT_0x2E
-	BREQ _0xB2
-	CALL SUBOPT_0x26
+	CALL SUBOPT_0x2D
+	BREQ _0xB3
+	CALL SUBOPT_0x25
 	LDI  R26,LOW(65504)
 	LDI  R27,HIGH(65504)
-	RJMP _0x2CA
+	RJMP _0x2CB
 ;   else ILI9341_DrawRectangle(x, y, w, h, RED);
-_0xB2:
-	CALL SUBOPT_0x26
+_0xB3:
+	CALL SUBOPT_0x25
 	LDI  R26,LOW(2047)
 	LDI  R27,HIGH(2047)
-_0x2CA:
+_0x2CB:
 	RCALL _ILI9341_DrawRectangle
 ;#pragma warn-
 ;   x = x + w/2 - 5;
-	CALL SUBOPT_0x27
+	CALL SUBOPT_0x26
 	SBIW R30,5
 	MOVW R16,R30
 ;   y = y + h/2 - 8;
-	CALL SUBOPT_0x28
+	CALL SUBOPT_0x27
 ;#pragma warn+
 ;   if(i%2) ILI9341_WriteString(x, y, "-", Font_11x18, BLUE, fill, 1);
+	CALL SUBOPT_0x2D
+	BREQ _0xB5
+	CALL SUBOPT_0x2A
+	__POINTW1MN _0xB6,0
 	CALL SUBOPT_0x2E
-	BREQ _0xB4
-	CALL SUBOPT_0x2B
-	__POINTW1MN _0xB5,0
-	CALL SUBOPT_0x2F
 	LDI  R30,LOW(65504)
 	LDI  R31,HIGH(65504)
-	RJMP _0x2CB
+	RJMP _0x2CC
 ;   else ILI9341_WriteString(x, y, "+", Font_11x18, RED, fill, 1);
-_0xB4:
-	CALL SUBOPT_0x2B
-	__POINTW1MN _0xB5,2
-	CALL SUBOPT_0x2F
+_0xB5:
+	CALL SUBOPT_0x2A
+	__POINTW1MN _0xB6,2
+	CALL SUBOPT_0x2E
 	LDI  R30,LOW(2047)
 	LDI  R31,HIGH(2047)
-_0x2CB:
+_0x2CC:
 	ST   -Y,R31
 	ST   -Y,R30
 	LDD  R30,Y+20
 	LDD  R31,Y+20+1
-	CALL SUBOPT_0x2D
+	CALL SUBOPT_0x2C
 ;}
 _0x20C0009:
 	CALL __LOADLOCR6
@@ -4571,7 +4562,7 @@ _0x20C000A:
 ; .FEND
 
 	.DSEG
-_0xB5:
+_0xB6:
 	.BYTE 0x4
 ;
 ;//x:    переменная, значение которой необходимо преобразовать
@@ -4579,14 +4570,13 @@ _0xB5:
 ;//in_max: верхний предел текущего диапазона переменной value
 ;//out_min:    нижний предел нового диапазона переменной value
 ;//out_max:   верхний предел нового диапазона переменной value
-;unsigned int map(unsigned int x, char in_min, unsigned int in_max, char out_min, unsigned int out_max)
-;{
+;unsigned int map(unsigned int x, char in_min, unsigned int in_max, char out_min, unsigned int out_max){
 
 	.CSEG
 _map:
 ; .FSTART _map
-;long val;
-; val = (x - in_min); val *= (out_max - out_min); val /= (in_max - in_min); val += out_min;
+; long val;
+;    val = (x - in_min); val *= (out_max - out_min); val /= (in_max - in_min); val += out_min;
 	ST   -Y,R27
 	ST   -Y,R26
 	SBIW R28,4
@@ -4600,37 +4590,37 @@ _map:
 	LDI  R31,0
 	LDD  R26,Y+10
 	LDD  R27,Y+10+1
-	CALL SUBOPT_0x30
+	CALL SUBOPT_0x2F
 	CLR  R22
 	CLR  R23
-	CALL SUBOPT_0x31
+	CALL SUBOPT_0x30
 	LDD  R30,Y+6
 	LDI  R31,0
 	LDD  R26,Y+4
 	LDD  R27,Y+4+1
-	CALL SUBOPT_0x30
+	CALL SUBOPT_0x2F
 	CALL SUBOPT_0xD
 	CLR  R22
 	CLR  R23
 	CALL __MULD12
-	CALL SUBOPT_0x31
+	CALL SUBOPT_0x30
 	LDD  R30,Y+9
 	LDI  R31,0
 	LDD  R26,Y+7
 	LDD  R27,Y+7+1
-	CALL SUBOPT_0x30
+	CALL SUBOPT_0x2F
 	CALL SUBOPT_0xD
 	CLR  R22
 	CLR  R23
 	CALL __DIVD21
-	CALL SUBOPT_0x31
+	CALL SUBOPT_0x30
 	LDD  R30,Y+6
 	LDI  R31,0
 	CALL SUBOPT_0xD
 	CALL __CWD1
 	CALL __ADDD12
-	CALL SUBOPT_0x31
-; return val;
+	CALL SUBOPT_0x30
+;    return val;
 	LD   R30,Y
 	LDD  R31,Y+1
 	ADIW R28,12
@@ -4638,56 +4628,53 @@ _map:
 ;}
 ; .FEND
 ;
-;char contains(char b)// проверка попадания пересчитаной координаты в область кнопки.
-; {
+;char contains(char b){// проверка попадания пересчитаной координаты в область кнопки.
 _contains:
 ; .FSTART _contains
 ; int beg, end;
-;   beg = buttons[b].x;
-	CALL SUBOPT_0x32
+;    beg = buttons[b].x-3;
+	CALL SUBOPT_0x31
 ;	b -> Y+4
 ;	beg -> R16,R17
 ;	end -> R18,R19
 	SUBI R30,LOW(-_buttons)
 	SBCI R31,HIGH(-_buttons)
-	CALL SUBOPT_0x33
-;   end = beg + buttons[b].w-3;
+	CALL SUBOPT_0x32
+;    end = beg + buttons[b].w;
 	__ADDW1MN _buttons,4
-	CALL SUBOPT_0x34
-;   if ((point_X < beg)||(point_X > end)) return 0;
-	CALL SUBOPT_0x35
-	CP   R26,R16
-	CPC  R27,R17
-	BRLO _0xB8
-	CALL SUBOPT_0x35
-	CP   R18,R26
-	CPC  R19,R27
-	BRSH _0xB7
-_0xB8:
-	LDI  R30,LOW(0)
-	RJMP _0x20C0007
-;   beg = buttons[b].y;
-_0xB7:
-	CALL SUBOPT_0x36
-	__ADDW1MN _buttons,2
+	LD   R30,Z
+	LDI  R31,0
+	ADD  R30,R16
+	ADC  R31,R17
 	CALL SUBOPT_0x33
-;   end = beg + buttons[b].h-3;
-	__ADDW1MN _buttons,5
+;    if ((point_X < beg)||(point_X > end)) return 0;
+	BRLO _0xB9
 	CALL SUBOPT_0x34
-;   if ((point_Y < beg)||(point_Y > end)) return 0;
-	CALL SUBOPT_0x37
-	CP   R26,R16
-	CPC  R27,R17
-	BRLO _0xBB
-	CALL SUBOPT_0x37
-	CP   R18,R26
-	CPC  R19,R27
-	BRSH _0xBA
-_0xBB:
+	BRSH _0xB8
+_0xB9:
 	LDI  R30,LOW(0)
 	RJMP _0x20C0007
-;   return 1;
-_0xBA:
+;    beg = buttons[b].y-3;
+_0xB8:
+	LDD  R30,Y+4
+	LDI  R26,LOW(6)
+	MUL  R30,R26
+	MOVW R30,R0
+	__ADDW1MN _buttons,2
+	CALL SUBOPT_0x32
+;    end = beg + buttons[b].h;
+	__ADDW1MN _buttons,5
+	CALL SUBOPT_0x35
+	CALL SUBOPT_0x36
+;    if ((point_Y < beg)||(point_Y > end)) return 0;
+	BRLO _0xBC
+	CALL SUBOPT_0x37
+	BRSH _0xBB
+_0xBC:
+	LDI  R30,LOW(0)
+	RJMP _0x20C0007
+;    return 1;
+_0xBB:
 	RJMP _0x20C0008
 ; }
 ; .FEND
@@ -4698,50 +4685,47 @@ _containsPlus:
 ; .FSTART _containsPlus
 ; int beg, end;
 ;   beg = plus[b].x-3;
-	CALL SUBOPT_0x32
+	CALL SUBOPT_0x31
 ;	b -> Y+4
 ;	beg -> R16,R17
 ;	end -> R18,R19
 	SUBI R30,LOW(-_plus)
 	SBCI R31,HIGH(-_plus)
-	CALL SUBOPT_0x38
+	CALL SUBOPT_0x32
 ;   end = beg + plus[b].w+3;
 	__ADDW1MN _plus,4
-	CALL SUBOPT_0x39
+	CALL SUBOPT_0x35
+	ADIW R30,3
+	CALL SUBOPT_0x33
 ;   if ((point_X < beg)||(point_X > end)) return 0;
-	CALL SUBOPT_0x35
-	CP   R26,R16
-	CPC  R27,R17
-	BRLO _0xBE
-	CALL SUBOPT_0x35
-	CP   R18,R26
-	CPC  R19,R27
-	BRSH _0xBD
-_0xBE:
+	BRLO _0xBF
+	CALL SUBOPT_0x34
+	BRSH _0xBE
+_0xBF:
 	LDI  R30,LOW(0)
 	RJMP _0x20C0007
 ;   beg = plus[b].y-3;
-_0xBD:
-	CALL SUBOPT_0x36
+_0xBE:
+	LDD  R30,Y+4
+	LDI  R26,LOW(6)
+	MUL  R30,R26
+	MOVW R30,R0
 	__ADDW1MN _plus,2
-	CALL SUBOPT_0x38
+	CALL SUBOPT_0x32
 ;   end = beg + plus[b].h+3;
 	__ADDW1MN _plus,5
-	CALL SUBOPT_0x39
+	CALL SUBOPT_0x35
+	ADIW R30,3
+	CALL SUBOPT_0x36
 ;   if ((point_Y < beg)||(point_Y > end)) return 0;
+	BRLO _0xC2
 	CALL SUBOPT_0x37
-	CP   R26,R16
-	CPC  R27,R17
-	BRLO _0xC1
-	CALL SUBOPT_0x37
-	CP   R18,R26
-	CPC  R19,R27
-	BRSH _0xC0
-_0xC1:
+	BRSH _0xC1
+_0xC2:
 	LDI  R30,LOW(0)
 	RJMP _0x20C0007
 ;   return 1;
-_0xC0:
+_0xC1:
 _0x20C0008:
 	LDI  R30,LOW(1)
 _0x20C0007:
@@ -4800,42 +4784,41 @@ _checkTouch:
 ;
 ;  if(val < 200){
 	__CPWRN 18,19,200
-	BRGE _0xD3
+	BRGE _0xD4
 ;    InitInterface();
 	RCALL _InitInterface
-;//    sprintf(buff,"слабое нажатие v=%3u",val);
-;//    ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
+;//sprintf(buff,"слабое нажатие v=%3u",val);
+;//ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
 ;    return 0;         // если слабое нажатие то выход
 	LDI  R30,LOW(0)
 	RJMP _0x20C0005
 ;  }
-;  else                // иначе определяем координаты
-_0xD3:
-;   {
-;     YP_DIR = INPUT;   // TFT_WRX ?????????????
+;  else{                // иначе определяем координаты
+_0xD4:
+;     YP_DIR = INPUT;   // TFT_WRX
 	CBI  0x1A,6
-;     YP_PORT = LOW;    // TFT_WRX ?????????????
+;     YP_PORT = LOW;    // TFT_WRX
 	CBI  0x1B,6
 ;     YM_DIR = INPUT;   // DDRC.7
 	CBI  0x14,7
 ;     YM_PORT = LOW;    // DDRC.7
 	CBI  0x15,7
-;     XP_DIR = OUTPUT;  // DDRC.6  ?????????????
+;     XP_DIR = OUTPUT;  // DDRC.6
 	SBI  0x14,6
 ;     XP_PORT = HIGH;   // DDRC.6
 	SBI  0x15,6
 ;     XM_DIR = OUTPUT;  // TFT_DCX
 	SBI  0x1A,5
-;     XM_PORT = LOW;    // TFT_DCX ?????????????
+;     XM_PORT = LOW;    // TFT_DCX
 	CBI  0x1B,5
 ;     do{
-_0xE6:
+_0xE7:
 ;        for (i=0; i<2; i++){samples[i] = read_adc(YP_PIN);}
 	LDI  R17,LOW(0)
-_0xE9:
+_0xEA:
 	CPI  R17,2
-	BRSH _0xEA
-	CALL SUBOPT_0x3A
+	BRSH _0xEB
+	CALL SUBOPT_0x38
 	PUSH R31
 	PUSH R30
 	LDI  R26,LOW(6)
@@ -4845,16 +4828,16 @@ _0xE9:
 	ST   X+,R30
 	ST   X,R31
 	SUBI R17,-1
-	RJMP _0xE9
-_0xEA:
+	RJMP _0xEA
+_0xEB:
 ;        val = abs(samples[0]-samples[1]);
-	CALL SUBOPT_0x3B
-;       } while (val>4);
+	CALL SUBOPT_0x39
+;     } while (val>4);
 	__CPWRN 18,19,5
-	BRGE _0xE6
+	BRGE _0xE7
 ;    //point_Y = (1023-(samples[0]+samples[1])/2);  // Orientation=0
 ;     point_X = (samples[0]+samples[1])/2;           // Orientation=3
-	CALL SUBOPT_0x3C
+	CALL SUBOPT_0x3A
 	STS  _point_X,R30
 	STS  _point_X+1,R31
 ;
@@ -4864,7 +4847,7 @@ _0xEA:
 	CBI  0x15,6
 ;     XM_DIR = INPUT;  // TFT_DCX
 	CBI  0x1A,5
-;     XM_PORT = LOW;   // TFT_DCX ?????????????
+;     XM_PORT = LOW;   // TFT_DCX
 	CBI  0x1B,5
 ;     YP_DIR = OUTPUT; // TFT_WRX
 	SBI  0x1A,6
@@ -4872,16 +4855,16 @@ _0xEA:
 	SBI  0x1B,6
 ;     YM_DIR = OUTPUT; // DDRC.7
 	SBI  0x14,7
-;     YM_PORT = LOW;   // DDRC.7  ?????????????
+;     YM_PORT = LOW;   // DDRC.7
 	CBI  0x15,7
 ;     do{
-_0xFC:
+_0xFD:
 ;        for (i=0; i<2; i++){samples[i] = read_adc(XM_PIN);}
 	LDI  R17,LOW(0)
-_0xFF:
+_0x100:
 	CPI  R17,2
-	BRSH _0x100
-	CALL SUBOPT_0x3A
+	BRSH _0x101
+	CALL SUBOPT_0x38
 	PUSH R31
 	PUSH R30
 	LDI  R26,LOW(5)
@@ -4891,16 +4874,16 @@ _0xFF:
 	ST   X+,R30
 	ST   X,R31
 	SUBI R17,-1
-	RJMP _0xFF
-_0x100:
+	RJMP _0x100
+_0x101:
 ;        val = abs(samples[0]-samples[1]);
-	CALL SUBOPT_0x3B
-;       } while (val>4);
+	CALL SUBOPT_0x39
+;     } while (val>4);
 	__CPWRN 18,19,5
-	BRGE _0xFC
+	BRGE _0xFD
 ;     //point_X = (1023-(samples[0]+samples[1])/2);   // Orientation=0
 ;     point_Y = (1023-(samples[0]+samples[1])/2);     // Orientation=3
-	CALL SUBOPT_0x3C
+	CALL SUBOPT_0x3A
 	LDI  R26,LOW(1023)
 	LDI  R27,HIGH(1023)
 	SUB  R26,R30
@@ -4911,40 +4894,39 @@ _0x100:
 ;     InitInterface();
 	RCALL _InitInterface
 ;     point_X = map(point_X, TS_MINX, TS_MAXX, 0, max_X);// пересчет координаты резистивной матрицы на пиксельную метрицу
-	CALL SUBOPT_0x3D
+	LDS  R30,_point_X
+	LDS  R31,_point_X+1
+	ST   -Y,R31
+	ST   -Y,R30
 	LDI  R30,LOW(125)
 	ST   -Y,R30
 	LDI  R30,LOW(907)
 	LDI  R31,HIGH(907)
-	CALL SUBOPT_0x3E
+	CALL SUBOPT_0x3B
 	CALL SUBOPT_0x17
 	RCALL _map
 	STS  _point_X,R30
 	STS  _point_X+1,R31
 ;     point_Y = map(point_Y, TS_MINY, TS_MAXY, 0, max_Y);// пересчет координаты резистивной матрицы на пиксельную метрицу
-	CALL SUBOPT_0x3F
+	LDS  R30,_point_Y
+	LDS  R31,_point_Y+1
+	ST   -Y,R31
+	ST   -Y,R30
 	LDI  R30,LOW(130)
 	ST   -Y,R30
 	LDI  R30,LOW(935)
 	LDI  R31,HIGH(935)
-	CALL SUBOPT_0x3E
+	CALL SUBOPT_0x3B
 	CALL SUBOPT_0x18
 	RCALL _map
 	STS  _point_Y,R30
 	STS  _point_Y+1,R31
-;ILI9341_FillRectangle(point_X, point_Y, 5, 5, RED);
-	CALL SUBOPT_0x3D
-	CALL SUBOPT_0x3F
-	CALL SUBOPT_0x40
-	CALL SUBOPT_0x40
-	LDI  R26,LOW(2047)
-	LDI  R27,HIGH(2047)
-	RCALL _ILI9341_FillRectangle
+;//ILI9341_FillRectangle(point_X, point_Y, 5, 5, RED);
 ;//sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
 ;//ILI9341_WriteString(5,TFTBUTTON-15,buff,Font_11x18,WHITE,BLACK,1);
 ;     return 1;
 	LDI  R30,LOW(1)
-;   }
+;  }
 ;}
 _0x20C0005:
 	CALL __LOADLOCR4
@@ -4971,10 +4953,10 @@ _temperature_check:
 ;	try -> R20
 	LDI  R20,0
 	LDI  R19,LOW(0)
-_0x102:
+_0x103:
 	CP   R19,R6
 	BRLO PC+2
-	RJMP _0x103
+	RJMP _0x104
 ;   {
 ;     w1_init();                 // 1 Wire Bus initialization
 	CALL _w1_init
@@ -4987,30 +4969,30 @@ _0x102:
 	MOVW R30,R0
 	SUBI R30,LOW(-_familycode)
 	SBCI R31,HIGH(-_familycode)
-	CALL SUBOPT_0x41
+	CALL SUBOPT_0x3C
 ;     for (byte=0; byte < 8; byte++) w1_write(*ptr_char++);
 	LDI  R18,LOW(0)
-_0x105:
+_0x106:
 	CPI  R18,8
-	BRSH _0x106
-	CALL SUBOPT_0x42
+	BRSH _0x107
+	CALL SUBOPT_0x3D
 	LD   R26,Z
 	CALL _w1_write
 	SUBI R18,-1
-	RJMP _0x105
-_0x106:
+	RJMP _0x106
+_0x107:
 	LDI  R30,LOW(_ds)
 	LDI  R31,HIGH(_ds)
-	CALL SUBOPT_0x41
+	CALL SUBOPT_0x3C
 ;     w1_write(0xBE);            // Read Scratchpad command [BE]
 	LDI  R26,LOW(190)
 	CALL _w1_write
 ;     for (byte=0; byte < 8; byte++) *ptr_char++ = w1_read(); // Read cont. byte
 	LDI  R18,LOW(0)
-_0x108:
+_0x109:
 	CPI  R18,8
-	BRSH _0x109
-	CALL SUBOPT_0x42
+	BRSH _0x10A
+	CALL SUBOPT_0x3D
 	PUSH R31
 	PUSH R30
 	CALL _w1_read
@@ -5018,14 +5000,14 @@ _0x108:
 	POP  R27
 	ST   X,R30
 	SUBI R18,-1
-	RJMP _0x108
-_0x109:
+	RJMP _0x109
+_0x10A:
 	CALL _w1_read
 	MOV  R21,R30
 ;     ptr_char = ds.buffer;
 	LDI  R30,LOW(_ds)
 	LDI  R31,HIGH(_ds)
-	CALL SUBOPT_0x41
+	CALL SUBOPT_0x3C
 ;     if (w1_dow_crc8(ptr_char, 8)==crc){
 	LDS  R30,_ptr_char
 	LDS  R31,_ptr_char+1
@@ -5034,48 +5016,48 @@ _0x109:
 	LDI  R26,LOW(8)
 	CALL _w1_dow_crc8
 	CP   R21,R30
-	BRNE _0x10A
+	BRNE _0x10B
 ;       try = 0; val = ds.pvT;
 	LDI  R20,LOW(0)
 	__GETWRMN 16,17,0,_ds
 ;       if (val<0) {val=-val; val = val*10/16; val=-val;} // перевод в десятичное значение !!
 	TST  R17
-	BRPL _0x10B
+	BRPL _0x10C
 	MOVW R30,R16
 	CALL __ANEGW1
 	MOVW R16,R30
-	CALL SUBOPT_0x43
+	CALL SUBOPT_0x3E
 	MOVW R16,R30
 	CALL __ANEGW1
-	RJMP _0x2CC
+	RJMP _0x2CD
 ;       else val = val*10/16; // перевод в десятичное значение !!
-_0x10B:
-	CALL SUBOPT_0x43
-_0x2CC:
+_0x10C:
+	CALL SUBOPT_0x3E
+_0x2CD:
 	MOVW R16,R30
 ;       //----- Коректировка датчика DS18B20 ----------
 ;       if(ds.buffer[2]==TUNING) val +=(signed char)ds.buffer[3]; // корекция показаний датчика
 	__GETB2MN _ds,2
 	CPI  R26,LOW(0xAA)
-	BRNE _0x10D
+	BRNE _0x10E
 	__GETB1MN _ds,3
 	LDI  R31,0
 	SBRC R30,7
 	SER  R31
 	__ADDWRR 16,17,30,31
 ;     }
-_0x10D:
+_0x10E:
 ;     else if (++try > 2) {val = 1990; try = 0;}// (199.0) если ошибка более X раз то больше не опрашиваем
-	RJMP _0x10E
-_0x10A:
+	RJMP _0x10F
+_0x10B:
 	SUBI R20,-LOW(1)
 	CPI  R20,3
-	BRLO _0x10F
+	BRLO _0x110
 	__GETWRN 16,17,1990
 	LDI  R20,LOW(0)
 ;     t.point[item] = val;
+_0x110:
 _0x10F:
-_0x10E:
 	MOV  R30,R19
 	LDI  R26,LOW(_t)
 	LDI  R27,HIGH(_t)
@@ -5085,14 +5067,14 @@ _0x10E:
 	STD  Z+1,R17
 ;     if (try==0) item++;
 	CPI  R20,0
-	BRNE _0x110
+	BRNE _0x111
 	SUBI R19,-1
 ;   }
-_0x110:
-	RJMP _0x102
-_0x103:
+_0x111:
+	RJMP _0x103
+_0x104:
 ;  w1_init();                    // 1 Wire Bus initialization
-	CALL SUBOPT_0x44
+	CALL SUBOPT_0x3F
 ;  w1_write(0xCC);               // Load Skip ROM [CCH] command
 ;  w1_write(0x44);               // Load Convert T [44H] command
 ;}
@@ -5208,11 +5190,11 @@ _adapt:
 ;	n -> Y+0
 	LD   R26,Y
 	CPI  R26,LOW(0x65)
-	BRLO _0x138
+	BRLO _0x139
 	LDI  R30,LOW(100)
 	ST   Y,R30
 ;  n <<= 1; n += ZERO;
-_0x138:
+_0x139:
 	LD   R30,Y
 	LSL  R30
 	ST   Y,R30
@@ -5452,7 +5434,7 @@ _0x20C0004:
 ;}
 
 	.DSEG
-_0x1FA:
+_0x1FB:
 	.BYTE 0x33
 ;
 ;#include "displ.c"
@@ -5470,17 +5452,17 @@ _fraction:
 ;	t -> Y+0
 	LDD  R26,Y+1
 	TST  R26
-	BRPL _0x23B
+	BRPL _0x23C
 	LD   R30,Y
 	LDD  R31,Y+1
 	CALL __ANEGW1
 	ST   Y,R30
 	STD  Y+1,R31
 	LDI  R30,LOW(45)
-	RJMP _0x2D3
-_0x23B:
+	RJMP _0x2D4
+_0x23C:
 	LDI  R30,LOW(32)
-_0x2D3:
+_0x2D4:
 	MOV  R11,R30
 ;  frcval = t%10; intval = t/10;
 	LD   R26,Y
@@ -5507,35 +5489,35 @@ _checkDisplNum:
 ;    if(point_Y>200){
 	ST   -Y,R17
 ;	i -> R17
-	CALL SUBOPT_0x37
+	CALL SUBOPT_0x40
 	CPI  R26,LOW(0xC9)
 	LDI  R30,HIGH(0xC9)
 	CPC  R27,R30
-	BRLO _0x23D
+	BRLO _0x23E
 ;        for (i=0; i<4; i++){if(contains(i)) break;}// проверка попадания новой координаты в область кнопки
 	LDI  R17,LOW(0)
-_0x23F:
+_0x240:
 	CPI  R17,4
-	BRSH _0x240
+	BRSH _0x241
 	MOV  R26,R17
 	RCALL _contains
 	CPI  R30,0
-	BRNE _0x240
+	BRNE _0x241
 	SUBI R17,-1
-	RJMP _0x23F
-_0x240:
+	RJMP _0x240
+_0x241:
 ;        if(i<4){BeepT = 20; displ_num = i; newSetButt = 1;}
 	CPI  R17,4
-	BRSH _0x242
+	BRSH _0x243
 	LDI  R30,LOW(20)
 	MOV  R5,R30
 	MOV  R4,R17
 	LDI  R30,LOW(1)
 	MOV  R7,R30
 ;    }
-_0x242:
+_0x243:
 ;}
-_0x23D:
+_0x23E:
 _0x20C0003:
 	LD   R17,Y+
 	RET
@@ -5566,42 +5548,42 @@ _displ_0:
 	__GETWRN 18,19,-1536
 	__GETWRN 20,21,-1
 	TST  R7
-	BREQ _0x243
+	BREQ _0x244
 ;        newSetButt = 0;
 	CLR  R7
 ;        ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x45
-	CALL SUBOPT_0x46
+	CALL SUBOPT_0x41
+	CALL SUBOPT_0x42
 ;        initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
 ;        //---------- фон ------- рамкa --- текст - номер -текст ---------
 ;        drawButton(fillWindow, fillWindow, bordWindow, 0, "Повытря");
-	CALL SUBOPT_0x47
+	CALL SUBOPT_0x43
 	LDI  R30,LOW(0)
 	ST   -Y,R30
-	CALL SUBOPT_0x48
+	CALL SUBOPT_0x44
 ;        drawButton(WHITE, WHITE, BLACK, 1, "Грунт");
 	CALL SUBOPT_0x16
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x49
-	CALL SUBOPT_0x4A
+	CALL SUBOPT_0x45
+	CALL SUBOPT_0x46
 ;        drawButton(WHITE, WHITE, BLACK, 2, "Управл");
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x49
-	CALL SUBOPT_0x4B
+	CALL SUBOPT_0x45
+	CALL SUBOPT_0x47
 ;        drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x49
-	CALL SUBOPT_0x4C
+	CALL SUBOPT_0x45
+	CALL SUBOPT_0x48
 ;    }
 ;//--- Индикация часов ------
 ;    pointY = 3;
-_0x243:
+_0x244:
 	LDI  R30,LOW(3)
 	MOV  R9,R30
 ;    if(Clock_Ok){
 	SBRS R2,1
-	RJMP _0x244
+	RJMP _0x245
 ;        read_TWI(DS3231,0,clock_buffer,7);// чтение данных часовой микросхемы
 	LDI  R30,LOW(208)
 	ST   -Y,R30
@@ -5614,57 +5596,57 @@ _0x243:
 	LDI  R27,0
 	RCALL _read_TWI
 ;        sprintf(buff,"%02x:%02x   %02x.%02x.20%02x",clock_buffer[2],clock_buffer[1],clock_buffer[4],clock_buffer[5],cloc ...
-	CALL SUBOPT_0x29
+	CALL SUBOPT_0x28
 	__POINTW1FN _0x0,228
 	ST   -Y,R31
 	ST   -Y,R30
 	__GETB1MN _clock_buffer,2
-	CALL SUBOPT_0x4D
+	CALL SUBOPT_0x49
 	__GETB1MN _clock_buffer,1
-	CALL SUBOPT_0x4D
+	CALL SUBOPT_0x49
 	__GETB1MN _clock_buffer,4
-	CALL SUBOPT_0x4D
+	CALL SUBOPT_0x49
 	__GETB1MN _clock_buffer,5
-	CALL SUBOPT_0x4D
+	CALL SUBOPT_0x49
 	__GETB1MN _clock_buffer,6
-	CALL SUBOPT_0x4D
+	CALL SUBOPT_0x49
 	LDI  R24,20
 	CALL _sprintf
 	ADIW R28,24
 ;        ILI9341_WriteString(70,pointY,buff,Font_11x18,BLACK,WHITE,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,WHIT ...
-	CALL SUBOPT_0x4E
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x49
+	CALL SUBOPT_0x4A
+	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x45
 	CALL SUBOPT_0x16
 	LDI  R26,LOW(1)
 	RCALL _ILI9341_WriteString
-	CALL SUBOPT_0x4E
-	CALL SUBOPT_0x2C
+	CALL SUBOPT_0x4A
+	CALL SUBOPT_0x2B
 	CALL SUBOPT_0x16
 	LDI  R30,LOW(65535)
 	LDI  R31,HIGH(65535)
-	RJMP _0x2D4
+	RJMP _0x2D5
 ;    }
 ;    else {
-_0x244:
+_0x245:
 ;        sprintf(buff,"Помилка часыв!");
-	CALL SUBOPT_0x29
+	CALL SUBOPT_0x28
 	__POINTW1FN _0x0,257
-	CALL SUBOPT_0x2A
+	CALL SUBOPT_0x29
 ;        ILI9341_WriteString(70,pointY,buff,Font_11x18,YELLOW,RED,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,RED,Y ...
-	CALL SUBOPT_0x4E
+	CALL SUBOPT_0x4A
+	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x4B
 	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x4F
-	CALL SUBOPT_0x2D
-	CALL SUBOPT_0x4E
-	CALL SUBOPT_0x2C
+	CALL SUBOPT_0x4A
+	CALL SUBOPT_0x2B
 	LDI  R30,LOW(2047)
 	LDI  R31,HIGH(2047)
 	ST   -Y,R31
 	ST   -Y,R30
 	LDI  R30,LOW(31)
 	LDI  R31,HIGH(31)
-_0x2D4:
+_0x2D5:
 	ST   -Y,R31
 	ST   -Y,R30
 	LDI  R26,LOW(1)
@@ -5676,188 +5658,186 @@ _0x2D4:
 ;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
 	RCALL _checkTouch
 	CPI  R30,0
-	BREQ _0x246
+	BREQ _0x247
 	RCALL _checkDisplNum
 ;//--- Индикация t ВОЗДУХА -----
 ;    temp = set[0][0]; fraction(temp);     // проверка знака температуры
-_0x246:
+_0x247:
 	LDI  R26,LOW(_set)
 	LDI  R27,HIGH(_set)
 	CALL __EEPROMRDW
-	CALL SUBOPT_0x50
+	CALL SUBOPT_0x4C
 ;    sprintf(buff,"[%2u.%u]",intval,frcval); // ЗАДАНИЕ T показываем с десятичным знаком
 	__POINTW1FN _0x0,272
-	CALL SUBOPT_0x51
-	MOV  R30,R13
 	CALL SUBOPT_0x4D
-	CALL SUBOPT_0x52
+	MOV  R30,R13
+	CALL SUBOPT_0x49
+	CALL SUBOPT_0x4E
 ;    ILI9341_WriteString(5,pointY+5,buff,Font_11x18,bordWindow,fillWindow,1);
-	CALL SUBOPT_0x40
-	CALL SUBOPT_0x53
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x54
+	CALL SUBOPT_0x4F
+	ADIW R30,5
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x51
 ;    ILI9341_WriteString(5,pointY+25,"температура",Font_11x18,bordWindow,fillWindow,1);
-	CALL SUBOPT_0x40
-	MOV  R30,R9
-	LDI  R31,0
+	CALL SUBOPT_0x4F
 	ADIW R30,25
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x247,0
-	CALL SUBOPT_0x2F
-	CALL SUBOPT_0x54
+	__POINTW1MN _0x248,0
+	CALL SUBOPT_0x2E
+	CALL SUBOPT_0x51
 ;    if (pvT>1250) sprintf(buff,"**.*");
 	LDS  R26,_pvT
 	LDS  R27,_pvT+1
 	CPI  R26,LOW(0x4E3)
 	LDI  R30,HIGH(0x4E3)
 	CPC  R27,R30
-	BRLT _0x248
-	CALL SUBOPT_0x29
+	BRLT _0x249
+	CALL SUBOPT_0x28
 	__POINTW1FN _0x0,293
-	CALL SUBOPT_0x2A
+	CALL SUBOPT_0x29
 ;    else {
-	RJMP _0x249
-_0x248:
+	RJMP _0x24A
+_0x249:
 ;        temp = pvT; fraction(temp);     // проверка знака температуры
 	LDS  R30,_pvT
 	LDS  R31,_pvT+1
-	CALL SUBOPT_0x50
+	CALL SUBOPT_0x4C
 ;        sprintf(buff,"%2u.%u",intval,frcval); // T датчиков показываем с десятичным знаком
 	__POINTW1FN _0x0,298
-	CALL SUBOPT_0x51
-	MOV  R30,R13
 	CALL SUBOPT_0x4D
-	CALL SUBOPT_0x52
+	MOV  R30,R13
+	CALL SUBOPT_0x49
+	CALL SUBOPT_0x4E
 ;    }
-_0x249:
+_0x24A:
 ;    ILI9341_WriteString(140,pointY,buff,Font_11x18,bordWindow,fillWindow,3);
 	LDI  R30,LOW(140)
 	LDI  R31,HIGH(140)
-	CALL SUBOPT_0x55
-	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x57
+	CALL SUBOPT_0x52
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x53
 ;    // индикация тревоги alarm[0]
 ;    switch (alarm[0]) {
 	LDS  R30,_alarm
 	LDI  R31,0
 ;        case 0: temp=GREEN; break;
 	SBIW R30,0
-	BREQ _0x2D5
+	BREQ _0x2D6
 ;        case 1: temp=RED;   break;
 	CPI  R30,LOW(0x1)
 	LDI  R26,HIGH(0x1)
 	CPC  R31,R26
-	BRNE _0x24F
+	BRNE _0x250
 	LDI  R30,LOW(2047)
 	LDI  R31,HIGH(2047)
-	RJMP _0x2D6
+	RJMP _0x2D7
 ;        default: temp=GREEN;
-_0x24F:
-_0x2D5:
+_0x250:
+_0x2D6:
 	LDI  R30,LOW(63519)
 	LDI  R31,HIGH(63519)
-_0x2D6:
+_0x2D7:
 	STD  Y+6,R30
 	STD  Y+6+1,R31
 ;    };
 ;    ILI9341_FillRectangle(280,pointY+2,30,45,temp);
 	LDI  R30,LOW(280)
 	LDI  R31,HIGH(280)
-	CALL SUBOPT_0x55
-	CALL SUBOPT_0x58
+	CALL SUBOPT_0x52
+	CALL SUBOPT_0x54
 ;    pointY += 55;
 	LDI  R30,LOW(55)
 	ADD  R9,R30
 ;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
 	RCALL _checkTouch
 	CPI  R30,0
-	BREQ _0x250
+	BREQ _0x251
 	RCALL _checkDisplNum
 ;//--- Индикация RH ------
 ;    sprintf(buff,"[%3u%%]",set[1][0]); // ЗАДАНИЕ RH
-_0x250:
-	CALL SUBOPT_0x29
+_0x251:
+	CALL SUBOPT_0x28
 	__POINTW1FN _0x0,305
 	ST   -Y,R31
 	ST   -Y,R30
 	__POINTW2MN _set,8
 	CALL __EEPROMRDW
-	CALL SUBOPT_0x59
+	CALL SUBOPT_0x55
 ;    ILI9341_WriteString(5,pointY+5,buff,Font_11x18,bordWindow,fillWindow,1);
-	CALL SUBOPT_0x40
-	CALL SUBOPT_0x53
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x54
+	CALL SUBOPT_0x4F
+	ADIW R30,5
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x51
 ;    ILI9341_WriteString(5,pointY+25,"вологысть",Font_11x18,bordWindow,fillWindow,1);
-	CALL SUBOPT_0x40
-	MOV  R30,R9
-	LDI  R31,0
+	CALL SUBOPT_0x4F
 	ADIW R30,25
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x247,12
-	CALL SUBOPT_0x2F
-	CALL SUBOPT_0x54
+	__POINTW1MN _0x248,12
+	CALL SUBOPT_0x2E
+	CALL SUBOPT_0x51
 ;    if (pvRH>100) sprintf(buff,"***%%",pvRH); else sprintf(buff,"%3u%% ",pvRH);
 	CALL SUBOPT_0x1E
 	CPI  R26,LOW(0x65)
 	LDI  R30,HIGH(0x65)
 	CPC  R27,R30
-	BRLT _0x251
-	CALL SUBOPT_0x29
+	BRLT _0x252
+	CALL SUBOPT_0x28
 	__POINTW1FN _0x0,323
-	RJMP _0x2D7
-_0x251:
-	CALL SUBOPT_0x29
+	RJMP _0x2D8
+_0x252:
+	CALL SUBOPT_0x28
 	__POINTW1FN _0x0,329
-_0x2D7:
+_0x2D8:
 	ST   -Y,R31
 	ST   -Y,R30
 	LDS  R30,_pvRH
 	LDS  R31,_pvRH+1
-	CALL SUBOPT_0x59
+	CALL SUBOPT_0x55
 ;    ILI9341_WriteString(142,pointY,buff,Font_11x18,bordWindow,fillWindow,3);
 	LDI  R30,LOW(142)
 	LDI  R31,HIGH(142)
-	CALL SUBOPT_0x55
-	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x57
+	CALL SUBOPT_0x52
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x53
 ;    // индикация тревоги alarm[1]
 ;    switch (alarm[1]) {
 	__GETB1MN _alarm,1
 	LDI  R31,0
 ;        case 0: temp=GREEN; break;
 	SBIW R30,0
-	BREQ _0x2D8
+	BREQ _0x2D9
 ;        case 1: temp=RED;   break;
 	CPI  R30,LOW(0x1)
 	LDI  R26,HIGH(0x1)
 	CPC  R31,R26
-	BRNE _0x258
+	BRNE _0x259
 	LDI  R30,LOW(2047)
 	LDI  R31,HIGH(2047)
-	RJMP _0x2D9
+	RJMP _0x2DA
 ;        default: temp=GREEN;
-_0x258:
-_0x2D8:
+_0x259:
+_0x2D9:
 	LDI  R30,LOW(63519)
 	LDI  R31,HIGH(63519)
-_0x2D9:
+_0x2DA:
 	STD  Y+6,R30
 	STD  Y+6+1,R31
 ;    };
 ;    ILI9341_FillRectangle(280,pointY+2,30,45,temp);
 	LDI  R30,LOW(280)
 	LDI  R31,HIGH(280)
-	CALL SUBOPT_0x55
-	CALL SUBOPT_0x58
+	CALL SUBOPT_0x52
+	CALL SUBOPT_0x54
 ;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
 	RCALL _checkTouch
 	CPI  R30,0
-	BREQ _0x259
+	BREQ _0x25A
 	RCALL _checkDisplNum
 ;//--- Индикация CO2 ----
 ;//CO2module = 1;
@@ -5865,145 +5845,145 @@ _0x2D9:
 ;//pvCO2 = 2500;
 ;//pvPH = 75;
 ;    pointY += 55;
-_0x259:
+_0x25A:
 	LDI  R30,LOW(55)
 	ADD  R9,R30
 ;    if(CO2module){
 	SBRS R2,6
-	RJMP _0x25A
+	RJMP _0x25B
 ;    if(error&0x08) ILI9341_WriteString(10,pointY,"CO2 помилка модуля!",Font_11x18,YELLOW,RED,1);
 	SBRS R12,3
-	RJMP _0x25B
-	CALL SUBOPT_0x5A
+	RJMP _0x25C
+	CALL SUBOPT_0x56
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x247,22
-	CALL SUBOPT_0x2F
-	CALL SUBOPT_0x4F
+	__POINTW1MN _0x248,22
+	CALL SUBOPT_0x2E
+	CALL SUBOPT_0x4B
 	ST   -Y,R31
 	ST   -Y,R30
-	RJMP _0x2DA
+	RJMP _0x2DB
 ;    else {
-_0x25B:
+_0x25C:
 ;        sprintf(buff,"CO2   %4u",pvCO2);
-	CALL SUBOPT_0x29
+	CALL SUBOPT_0x28
 	__POINTW1FN _0x0,356
 	ST   -Y,R31
 	ST   -Y,R30
 	LDS  R30,_pvCO2
 	LDS  R31,_pvCO2+1
-	CALL SUBOPT_0x59
+	CALL SUBOPT_0x55
 ;        ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
 	LDI  R30,LOW(20)
 	LDI  R31,HIGH(20)
-	CALL SUBOPT_0x55
-	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x5B
+	CALL SUBOPT_0x52
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x57
 	LDI  R26,LOW(2)
 	CALL _ILI9341_WriteString
 ;        ILI9341_WriteString(250,pointY+10,"ppm",Font_11x18,bordWindow,fillWindow,1);
 	LDI  R30,LOW(250)
 	LDI  R31,HIGH(250)
-	CALL SUBOPT_0x55
+	CALL SUBOPT_0x52
 	ADIW R30,10
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x247,42
-	CALL SUBOPT_0x2F
-	CALL SUBOPT_0x5B
-_0x2DA:
+	__POINTW1MN _0x248,42
+	CALL SUBOPT_0x2E
+	CALL SUBOPT_0x57
+_0x2DB:
 	LDI  R26,LOW(1)
 	CALL _ILI9341_WriteString
 ;    }
 ;    }
 ;    else ILI9341_WriteString(10,pointY,"CO2 модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
-	RJMP _0x25D
-_0x25A:
-	CALL SUBOPT_0x5A
+	RJMP _0x25E
+_0x25B:
+	CALL SUBOPT_0x56
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x247,46
-	CALL SUBOPT_0x2F
-	CALL SUBOPT_0x54
+	__POINTW1MN _0x248,46
+	CALL SUBOPT_0x2E
+	CALL SUBOPT_0x51
 ;//--- Индикация рH-4502 -----
 ;    pointY += 35;
-_0x25D:
+_0x25E:
 	LDI  R30,LOW(35)
 	ADD  R9,R30
 ;    if(pHsensor){
 	SBRS R2,4
-	RJMP _0x25E
+	RJMP _0x25F
 ;        if(error&0x08) ILI9341_WriteString(10,pointY,"рН помилка модуля!",Font_11x18,YELLOW,RED,1);
 	SBRS R12,3
-	RJMP _0x25F
-	CALL SUBOPT_0x5A
+	RJMP _0x260
+	CALL SUBOPT_0x56
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x247,68
-	CALL SUBOPT_0x2F
-	CALL SUBOPT_0x4F
+	__POINTW1MN _0x248,68
+	CALL SUBOPT_0x2E
+	CALL SUBOPT_0x4B
 	ST   -Y,R31
 	ST   -Y,R30
-	RJMP _0x2DB
+	RJMP _0x2DC
 ;        else {
-_0x25F:
+_0x260:
 ;          temp = pvPH; fraction(temp);
 	LDS  R30,_pvPH
 	LDS  R31,_pvPH+1
-	CALL SUBOPT_0x50
+	CALL SUBOPT_0x4C
 ;          sprintf(buff,"рН   %2u.%u",intval,frcval);
 	__POINTW1FN _0x0,411
-	CALL SUBOPT_0x51
-	MOV  R30,R13
 	CALL SUBOPT_0x4D
-	CALL SUBOPT_0x52
+	MOV  R30,R13
+	CALL SUBOPT_0x49
+	CALL SUBOPT_0x4E
 ;          ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
 	LDI  R30,LOW(20)
 	LDI  R31,HIGH(20)
-	CALL SUBOPT_0x55
-	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x5B
+	CALL SUBOPT_0x52
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x57
 	LDI  R26,LOW(2)
 	CALL _ILI9341_WriteString
 ;          ILI9341_WriteString(230,pointY+10,"одиниць",Font_11x18,bordWindow,fillWindow,1);
 	LDI  R30,LOW(230)
 	LDI  R31,HIGH(230)
-	CALL SUBOPT_0x55
+	CALL SUBOPT_0x52
 	ADIW R30,10
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x247,87
-	CALL SUBOPT_0x2F
-	CALL SUBOPT_0x5B
-_0x2DB:
+	__POINTW1MN _0x248,87
+	CALL SUBOPT_0x2E
+	CALL SUBOPT_0x57
+_0x2DC:
 	LDI  R26,LOW(1)
 	CALL _ILI9341_WriteString
 ;        }
 ;    }
 ;    else ILI9341_WriteString(10,pointY,"рН  модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
-	RJMP _0x261
-_0x25E:
-	CALL SUBOPT_0x5A
+	RJMP _0x262
+_0x25F:
+	CALL SUBOPT_0x56
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x247,95
-	CALL SUBOPT_0x2F
-	CALL SUBOPT_0x54
+	__POINTW1MN _0x248,95
+	CALL SUBOPT_0x2E
+	CALL SUBOPT_0x51
 ;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
-_0x261:
+_0x262:
 	RCALL _checkTouch
 	CPI  R30,0
-	BREQ _0x262
+	BREQ _0x263
 	RCALL _checkDisplNum
 ;}
-_0x262:
+_0x263:
 	RJMP _0x20C0002
 ; .FEND
 
 	.DSEG
-_0x247:
+_0x248:
 	.BYTE 0x75
 ;
 ;//-------------------------------- СТАН ГРУНТУ. -------------------------------------------
@@ -6029,13 +6009,13 @@ _displ_1:
 	MOV  R9,R30
 ;    if(newSetButt){
 	TST  R7
-	BREQ _0x263
+	BREQ _0x264
 ;        newSetButt = 0;
 	CLR  R7
 ;        ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x45
-	CALL SUBOPT_0x46
+	CALL SUBOPT_0x41
+	CALL SUBOPT_0x42
 ;        initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
 ;        //---------- фон ------- рамкa --- текст - номер -текст ---------
 ;        drawButton(WHITE, WHITE, BLACK, 0, "Повытря");
@@ -6043,57 +6023,55 @@ _displ_1:
 	CALL SUBOPT_0x16
 	LDI  R30,LOW(65535)
 	LDI  R31,HIGH(65535)
-	CALL SUBOPT_0x3E
-	CALL SUBOPT_0x48
+	CALL SUBOPT_0x3B
+	CALL SUBOPT_0x44
 ;        drawButton(fillWindow, fillWindow, bordWindow, 1, "Грунт");
-	CALL SUBOPT_0x47
-	CALL SUBOPT_0x4A
+	CALL SUBOPT_0x43
+	CALL SUBOPT_0x46
 ;        drawButton(WHITE, WHITE, BLACK, 2, "Управл");
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x49
-	CALL SUBOPT_0x4B
+	CALL SUBOPT_0x45
+	CALL SUBOPT_0x47
 ;        drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x49
-	CALL SUBOPT_0x4C
+	CALL SUBOPT_0x45
+	CALL SUBOPT_0x48
 ;        ILI9341_WriteString(100,pointY,"СТАН ГРУНТУ",Font_11x18,bordWindow,fillWindow,1);
 	LDI  R30,LOW(100)
 	LDI  R31,HIGH(100)
-	CALL SUBOPT_0x55
+	CALL SUBOPT_0x52
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x264,0
-	CALL SUBOPT_0x2F
-	CALL SUBOPT_0x54
+	__POINTW1MN _0x265,0
+	CALL SUBOPT_0x2E
+	CALL SUBOPT_0x51
 ;    }
 ;//--- Индикация t ГРУНТА ---
 ;    pointY += 20;
-_0x263:
+_0x264:
 	LDI  R30,LOW(20)
 	ADD  R9,R30
 ;    for (i=0;i<ds18b20;i++){
 	LDI  R17,LOW(0)
-_0x266:
+_0x267:
 	CP   R17,R6
 	BRLO PC+2
-	RJMP _0x267
+	RJMP _0x268
 ;        sprintf(buff,"датчик %u",i+1);
-	CALL SUBOPT_0x29
+	CALL SUBOPT_0x28
 	__POINTW1FN _0x0,465
 	ST   -Y,R31
 	ST   -Y,R30
 	MOV  R30,R17
 	LDI  R31,0
 	ADIW R30,1
-	CALL SUBOPT_0x59
+	CALL SUBOPT_0x55
 ;        ILI9341_WriteString(5,pointY+12,buff,Font_11x18,bordWindow,fillWindow,1);
-	CALL SUBOPT_0x40
-	MOV  R30,R9
-	LDI  R31,0
+	CALL SUBOPT_0x4F
 	ADIW R30,12
-	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x54
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x51
 ;        temp = t.point[i];
 	MOV  R30,R17
 	LDI  R26,LOW(_t)
@@ -6103,38 +6081,38 @@ _0x266:
 	ROL  R31
 	ADD  R26,R30
 	ADC  R27,R31
-	CALL SUBOPT_0x5C
+	CALL SUBOPT_0x58
 ;        if(temp>1250) sprintf(buff,"**.*");
 	CPI  R26,LOW(0x4E3)
 	LDI  R30,HIGH(0x4E3)
 	CPC  R27,R30
-	BRLO _0x268
-	CALL SUBOPT_0x29
+	BRLO _0x269
+	CALL SUBOPT_0x28
 	__POINTW1FN _0x0,293
-	CALL SUBOPT_0x2A
+	CALL SUBOPT_0x29
 ;        else {
-	RJMP _0x269
-_0x268:
+	RJMP _0x26A
+_0x269:
 ;            fraction(temp);     // проверка знака температуры
 	LDD  R26,Y+6
 	LDD  R27,Y+6+1
 	RCALL _fraction
 ;            sprintf(buff,"%2u.%u",intval,frcval); // T датчиков показываем с десятичным знаком
-	CALL SUBOPT_0x29
+	CALL SUBOPT_0x28
 	__POINTW1FN _0x0,298
-	CALL SUBOPT_0x51
-	MOV  R30,R13
 	CALL SUBOPT_0x4D
-	CALL SUBOPT_0x52
+	MOV  R30,R13
+	CALL SUBOPT_0x49
+	CALL SUBOPT_0x4E
 ;        }
-_0x269:
+_0x26A:
 ;        ILI9341_WriteString(120,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
 	LDI  R30,LOW(120)
 	LDI  R31,HIGH(120)
-	CALL SUBOPT_0x55
-	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x5B
+	CALL SUBOPT_0x52
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x57
 	LDI  R26,LOW(2)
 	CALL _ILI9341_WriteString
 ;        pointY += 35;
@@ -6142,20 +6120,20 @@ _0x269:
 	ADD  R9,R30
 ;    };
 	SUBI R17,-1
-	RJMP _0x266
-_0x267:
+	RJMP _0x267
+_0x268:
 ;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
 	RCALL _checkTouch
 	CPI  R30,0
-	BREQ _0x26A
+	BREQ _0x26B
 	RCALL _checkDisplNum
 ;}
-_0x26A:
+_0x26B:
 	RJMP _0x20C0002
 ; .FEND
 
 	.DSEG
-_0x264:
+_0x265:
 	.BYTE 0xC
 ;
 ;//------------------------------ РЕЛЕЙНЫЕ ВЫХОДЫ --------------------------------------------
@@ -6181,13 +6159,13 @@ _displ_2:
 ;    if(newSetButt){
 	TST  R7
 	BRNE PC+2
-	RJMP _0x26B
+	RJMP _0x26C
 ;        newSetButt = 0;
 	CLR  R7
 ;        ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x45
-	CALL SUBOPT_0x46
+	CALL SUBOPT_0x41
+	CALL SUBOPT_0x42
 ;        initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
 ;        //---------- фон ------- рамкa --- текст - номер -текст ---------
 ;        drawButton(WHITE, WHITE, BLACK, 0, "Повытря");
@@ -6195,23 +6173,23 @@ _displ_2:
 	CALL SUBOPT_0x16
 	LDI  R30,LOW(65535)
 	LDI  R31,HIGH(65535)
-	CALL SUBOPT_0x3E
-	CALL SUBOPT_0x48
+	CALL SUBOPT_0x3B
+	CALL SUBOPT_0x44
 ;        drawButton(WHITE, WHITE, BLACK, 1, "Грунт");
 	CALL SUBOPT_0x16
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x49
+	CALL SUBOPT_0x45
 	LDI  R30,LOW(1)
 	ST   -Y,R30
 	__POINTW2FN _0x0,208
 	RCALL _drawButton
 ;        drawButton(fillWindow, fillWindow, bordWindow, 2, "Управл");
+	CALL SUBOPT_0x43
 	CALL SUBOPT_0x47
-	CALL SUBOPT_0x4B
 ;        drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x49
-	CALL SUBOPT_0x4C
+	CALL SUBOPT_0x45
+	CALL SUBOPT_0x48
 ;        //--
 ;        initializePlus(pointY+25, 8, 16);
 	MOV  R30,R9
@@ -6223,83 +6201,80 @@ _displ_2:
 	RCALL _initializePlus
 ;        for (i=0;i<plusCount;i++) drawPlus(i, fillWindow);
 	LDI  R17,LOW(0)
-_0x26D:
+_0x26E:
 	LDS  R30,_plusCount
-	CALL SUBOPT_0x5D
+	CALL SUBOPT_0x59
 	LDI  R31,0
 	CP   R26,R30
 	CPC  R27,R31
-	BRGE _0x26E
+	BRGE _0x26F
 	ST   -Y,R17
 	MOVW R26,R18
 	RCALL _drawPlus
 	SUBI R17,-1
-	RJMP _0x26D
-_0x26E:
+	RJMP _0x26E
+_0x26F:
 	LDI  R30,LOW(90)
 	LDI  R31,HIGH(90)
-	CALL SUBOPT_0x55
+	CALL SUBOPT_0x52
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x26F,0
-	CALL SUBOPT_0x2F
-	CALL SUBOPT_0x54
+	__POINTW1MN _0x270,0
+	CALL SUBOPT_0x2E
+	CALL SUBOPT_0x51
 ;    }
 ;//***************************** проверим кнопки управления реле ***************************************
 ;    if(checkTouch()){
-_0x26B:
+_0x26C:
 	RCALL _checkTouch
 	CPI  R30,0
 	BRNE PC+2
-	RJMP _0x270
-;//      sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
-;//      ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
+	RJMP _0x271
+;//sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
+;//ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
 ;      if(point_X>220&&point_Y<100){
-	CALL SUBOPT_0x35
-	CPI  R26,LOW(0xDD)
-	LDI  R30,HIGH(0xDD)
-	CPC  R27,R30
-	BRLO _0x272
-	CALL SUBOPT_0x37
+	CALL SUBOPT_0x5A
+	BRLO _0x273
+	CALL SUBOPT_0x40
 	CPI  R26,LOW(0x64)
 	LDI  R30,HIGH(0x64)
 	CPC  R27,R30
-	BRLO _0x273
-_0x272:
-	RJMP _0x271
+	BRLO _0x274
 _0x273:
+	RJMP _0x272
+_0x274:
 ;        for (i=0; i<8; i++){if(containsPlus(i)) break;}// проверка верхней половины кнопок
 	LDI  R17,LOW(0)
-_0x275:
+_0x276:
 	CPI  R17,8
-	BRGE _0x276
+	BRGE _0x277
 	MOV  R26,R17
 	RCALL _containsPlus
 	CPI  R30,0
-	BRNE _0x276
+	BRNE _0x277
 	SUBI R17,-1
-	RJMP _0x275
-_0x276:
+	RJMP _0x276
+_0x277:
 ;        if(i<8){
 	CPI  R17,8
-	BRGE _0x278
+	BRGE _0x279
 ;            BeepT = 20;
 	LDI  R30,LOW(20)
 	MOV  R5,R30
 ;            if(i%2) x=-1; else x=1;   // кнопка "+" или кнопка "-"
-	CALL SUBOPT_0x5D
+	CALL SUBOPT_0x59
 	LDI  R30,LOW(2)
 	LDI  R31,HIGH(2)
 	CALL __MODW21
 	SBIW R30,0
-	BREQ _0x279
+	BREQ _0x27A
 	LDI  R16,LOW(255)
-	RJMP _0x27A
-_0x279:
+	RJMP _0x27B
+_0x27A:
 	LDI  R16,LOW(1)
 ;            i /= 2;
-_0x27A:
-	CALL SUBOPT_0x5D
+_0x27B:
+	CALL SUBOPT_0x59
 	LDI  R30,LOW(2)
 	LDI  R31,HIGH(2)
 	CALL __DIVW21
@@ -6312,48 +6287,48 @@ _0x27A:
 	LD   R30,X
 	ADD  R30,R16
 	ST   X,R30
-	CALL SUBOPT_0x5E
+	CALL SUBOPT_0x5B
 	LD   R26,Z
 	CPI  R26,LOW(0x3)
-	BRLT _0x27B
-	CALL SUBOPT_0x5E
+	BRLT _0x27C
+	CALL SUBOPT_0x5B
 	LDI  R26,LOW(0)
-	RJMP _0x2DC
-_0x27B:
-	CALL SUBOPT_0x5E
+	RJMP _0x2DD
+_0x27C:
+	CALL SUBOPT_0x5B
 	LD   R26,Z
 	CPI  R26,0
-	BRGE _0x27D
-	CALL SUBOPT_0x5E
+	BRGE _0x27E
+	CALL SUBOPT_0x5B
 	LDI  R26,LOW(2)
-_0x2DC:
+_0x2DD:
 	STD  Z+0,R26
-_0x27D:
+_0x27E:
 ;      }
-_0x278:
+_0x279:
 ;      else checkDisplNum();
-	RJMP _0x27E
-_0x271:
+	RJMP _0x27F
+_0x272:
 	RCALL _checkDisplNum
 ;    }
-_0x27E:
+_0x27F:
 ;//---- РЕЛЕЙНЫЕ ВЫХОДЫ ----
 ;    pointY += 20;
-_0x270:
+_0x271:
 	LDI  R30,LOW(20)
 	ADD  R9,R30
 ;    for (i=0;i<4;i++){
 	LDI  R17,LOW(0)
-_0x280:
+_0x281:
 	CPI  R17,4
 	BRLT PC+2
-	RJMP _0x281
+	RJMP _0x282
 ;    sprintf(buff,"РЕЛЕ  N%u: ",i+1);
-	CALL SUBOPT_0x29
+	CALL SUBOPT_0x28
 	__POINTW1FN _0x0,491
-	CALL SUBOPT_0x5F
+	CALL SUBOPT_0x5C
 ;    switch (relay[i]){
-	CALL SUBOPT_0x5E
+	CALL SUBOPT_0x5B
 	LD   R30,Z
 	LDI  R31,0
 	SBRC R30,7
@@ -6362,41 +6337,39 @@ _0x280:
 	CPI  R30,LOW(0x2)
 	LDI  R26,HIGH(0x2)
 	CPC  R31,R26
-	BRNE _0x285
-	CALL SUBOPT_0x29
-	__POINTW2MN _0x26F,16
+	BRNE _0x286
+	CALL SUBOPT_0x28
+	__POINTW2MN _0x270,16
 	CALL _strcat
-	RJMP _0x284
+	RJMP _0x285
 ;      case 1: strcat(buff,"ON "); relOut[i]=1; break;
-_0x285:
+_0x286:
 	CPI  R30,LOW(0x1)
 	LDI  R26,HIGH(0x1)
 	CPC  R31,R26
-	BRNE _0x286
-	CALL SUBOPT_0x29
-	__POINTW2MN _0x26F,20
-	CALL SUBOPT_0x60
+	BRNE _0x287
+	CALL SUBOPT_0x28
+	__POINTW2MN _0x270,20
+	CALL SUBOPT_0x5D
 	LDI  R26,LOW(1)
-	RJMP _0x2DD
+	RJMP _0x2DE
 ;      case 0: strcat(buff,"OFF"); relOut[i]=0; break;
-_0x286:
+_0x287:
 	SBIW R30,0
-	BRNE _0x284
-	CALL SUBOPT_0x29
-	__POINTW2MN _0x26F,24
-	CALL SUBOPT_0x60
+	BRNE _0x285
+	CALL SUBOPT_0x28
+	__POINTW2MN _0x270,24
+	CALL SUBOPT_0x5D
 	LDI  R26,LOW(0)
-_0x2DD:
+_0x2DE:
 	STD  Z+0,R26
 ;    };
-_0x284:
+_0x285:
 ;    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
-	CALL SUBOPT_0x40
-	MOV  R30,R9
-	LDI  R31,0
-	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x54
+	CALL SUBOPT_0x4F
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x51
 ;    if(relOut[i]) color_box=YELLOW; else color_box=BLACK;
 	MOV  R30,R17
 	LDI  R31,0
@@ -6404,20 +6377,20 @@ _0x284:
 	SBCI R31,HIGH(-_relOut)
 	LD   R30,Z
 	CPI  R30,0
-	BREQ _0x288
+	BREQ _0x289
 	LDI  R30,LOW(31)
 	LDI  R31,HIGH(31)
-	RJMP _0x2DE
-_0x288:
+	RJMP _0x2DF
+_0x289:
 	LDI  R30,LOW(65535)
 	LDI  R31,HIGH(65535)
-_0x2DE:
+_0x2DF:
 	STD  Y+6,R30
 	STD  Y+6+1,R31
 ;    ILI9341_FillRectangle(160,pointY,40,18,color_box);
 	LDI  R30,LOW(160)
 	LDI  R31,HIGH(160)
-	CALL SUBOPT_0x55
+	CALL SUBOPT_0x52
 	ST   -Y,R31
 	ST   -Y,R30
 	LDI  R30,LOW(40)
@@ -6436,127 +6409,96 @@ _0x2DE:
 	ADD  R9,R30
 ;    }
 	SUBI R17,-1
-	RJMP _0x280
-_0x281:
+	RJMP _0x281
+_0x282:
 ;
 ;//***************************** проверим кнопки управления 0-10v ***************************************
 ;    if(checkTouch()){
 	RCALL _checkTouch
 	CPI  R30,0
 	BRNE PC+2
-	RJMP _0x28A
-;      sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
-	CALL SUBOPT_0x29
-	__POINTW1FN _0x0,515
-	ST   -Y,R31
-	ST   -Y,R30
-	LDS  R30,_point_X
-	LDS  R31,_point_X+1
-	CLR  R22
-	CLR  R23
-	CALL __PUTPARD1
-	LDS  R30,_point_Y
-	LDS  R31,_point_Y+1
-	CLR  R22
-	CLR  R23
-	CALL __PUTPARD1
-	CALL SUBOPT_0x52
-;      ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
-	CALL SUBOPT_0x40
-	LDI  R30,LOW(140)
-	LDI  R31,HIGH(140)
-	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x16
-	CALL SUBOPT_0x61
+	RJMP _0x28B
+;//sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
+;//ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
 ;      if(point_X>220&&point_Y>100&&point_Y<200){
-	CALL SUBOPT_0x35
-	CPI  R26,LOW(0xDD)
-	LDI  R30,HIGH(0xDD)
-	CPC  R27,R30
-	BRLO _0x28C
-	CALL SUBOPT_0x37
+	CALL SUBOPT_0x5A
+	BRLO _0x28D
+	CALL SUBOPT_0x40
 	CPI  R26,LOW(0x65)
 	LDI  R30,HIGH(0x65)
 	CPC  R27,R30
-	BRLO _0x28C
-	CALL SUBOPT_0x37
+	BRLO _0x28D
+	CALL SUBOPT_0x40
 	CPI  R26,LOW(0xC8)
 	LDI  R30,HIGH(0xC8)
 	CPC  R27,R30
-	BRLO _0x28D
-_0x28C:
-	RJMP _0x28B
+	BRLO _0x28E
 _0x28D:
+	RJMP _0x28C
+_0x28E:
 ;        for (i=8; i<16; i++){if(containsPlus(i)) break;}// проверка нижней половины кнопок
 	LDI  R17,LOW(8)
-_0x28F:
+_0x290:
 	CPI  R17,16
-	BRGE _0x290
+	BRGE _0x291
 	MOV  R26,R17
 	RCALL _containsPlus
 	CPI  R30,0
-	BRNE _0x290
+	BRNE _0x291
 	SUBI R17,-1
-	RJMP _0x28F
-_0x290:
+	RJMP _0x290
+_0x291:
 ;        sprintf(buff,"i=%2u",i);
-	CALL SUBOPT_0x29
-	__POINTW1FN _0x0,526
-	CALL SUBOPT_0x62
-	CALL SUBOPT_0x63
+	CALL SUBOPT_0x28
+	__POINTW1FN _0x0,515
+	ST   -Y,R31
+	ST   -Y,R30
+	MOV  R30,R17
+	CALL __CBD1
+	CALL __PUTPARD1
+	CALL SUBOPT_0x5E
 ;        ILI9341_WriteString(5,TFTBUTTON-30,buff,Font_11x18,WHITE,BLACK,1);
-	CALL SUBOPT_0x40
+	LDI  R30,LOW(5)
+	LDI  R31,HIGH(5)
+	ST   -Y,R31
+	ST   -Y,R30
 	LDI  R30,LOW(170)
 	LDI  R31,HIGH(170)
-	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x61
+	LDI  R30,LOW(65535)
+	LDI  R31,HIGH(65535)
+	CALL SUBOPT_0x2C
 ;        if(i<16){
 	CPI  R17,16
-	BRLT PC+2
-	RJMP _0x292
+	BRGE _0x293
 ;            BeepT = 20;
 	LDI  R30,LOW(20)
 	MOV  R5,R30
 ;            if(i%2) x=-1; else x=1;   // кнопка "+" или кнопка "-"
-	CALL SUBOPT_0x5D
+	CALL SUBOPT_0x59
 	LDI  R30,LOW(2)
 	LDI  R31,HIGH(2)
 	CALL __MODW21
 	SBIW R30,0
-	BREQ _0x293
+	BREQ _0x294
 	LDI  R16,LOW(255)
-	RJMP _0x294
-_0x293:
+	RJMP _0x295
+_0x294:
 	LDI  R16,LOW(1)
 ;            i /= 2; i -= 4;
-_0x294:
-	CALL SUBOPT_0x5D
+_0x295:
+	CALL SUBOPT_0x59
 	LDI  R30,LOW(2)
 	LDI  R31,HIGH(2)
 	CALL __DIVW21
 	MOV  R17,R30
 	SUBI R17,LOW(4)
-;            sprintf(buff,"i=%2u; x=%2i",i,x);
-	CALL SUBOPT_0x29
-	__POINTW1FN _0x0,532
-	CALL SUBOPT_0x62
-	MOV  R30,R16
-	CALL __CBD1
-	CALL __PUTPARD1
-	CALL SUBOPT_0x52
-;            ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
-	CALL SUBOPT_0x40
-	LDI  R30,LOW(155)
-	LDI  R31,HIGH(155)
-	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x16
-	CALL SUBOPT_0x61
+;//sprintf(buff,"i=%2u; x=%2i",i,x);
+;//ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
 ;            analog[i]+=x*10; if(analog[i]>100) analog[i]=100; else if(analog[i]==9) analog[i]=10; else if(analog[i]<-1)  ...
-	CALL SUBOPT_0x64
+	CALL SUBOPT_0x5F
 	__PUTW1R 23,24
 	LD   R22,Z
 	LDI  R26,LOW(10)
@@ -6565,101 +6507,103 @@ _0x294:
 	ADD  R30,R22
 	__GETW2R 23,24
 	ST   X,R30
-	CALL SUBOPT_0x64
+	CALL SUBOPT_0x5F
 	LD   R26,Z
 	CPI  R26,LOW(0x65)
-	BRLT _0x295
-	CALL SUBOPT_0x64
+	BRLT _0x296
+	CALL SUBOPT_0x5F
 	LDI  R26,LOW(100)
-	RJMP _0x2DF
-_0x295:
-	CALL SUBOPT_0x64
+	RJMP _0x2E0
+_0x296:
+	CALL SUBOPT_0x5F
 	LD   R26,Z
 	CPI  R26,LOW(0x9)
-	BRNE _0x297
-	CALL SUBOPT_0x64
+	BRNE _0x298
+	CALL SUBOPT_0x5F
 	LDI  R26,LOW(10)
-	RJMP _0x2DF
-_0x297:
-	CALL SUBOPT_0x64
+	RJMP _0x2E0
+_0x298:
+	CALL SUBOPT_0x5F
 	LD   R26,Z
 	CPI  R26,LOW(0xFF)
-	BRGE _0x299
-	CALL SUBOPT_0x64
+	BRGE _0x29A
+	CALL SUBOPT_0x5F
 	LDI  R26,LOW(255)
-_0x2DF:
+_0x2E0:
 	STD  Z+0,R26
-_0x299:
+_0x29A:
 ;      }
-_0x292:
+_0x293:
 ;      else checkDisplNum();
-	RJMP _0x29A
-_0x28B:
+	RJMP _0x29B
+_0x28C:
 	RCALL _checkDisplNum
 ;    }
-_0x29A:
+_0x29B:
 ;//---- АНАЛОГОВЫЕ ВЫХОДЫ ----
 ;    for (i=0;i<4;i++){
-_0x28A:
+_0x28B:
 	LDI  R17,LOW(0)
-_0x29C:
+_0x29D:
 	CPI  R17,4
-	BRLT PC+2
-	RJMP _0x29D
+	BRGE _0x29E
 ;    sprintf(buff,"ВИХЫД N%u: ",i+1);
-	CALL SUBOPT_0x29
-	__POINTW1FN _0x0,545
-	CALL SUBOPT_0x5F
+	CALL SUBOPT_0x28
+	__POINTW1FN _0x0,521
+	CALL SUBOPT_0x5C
 ;    if(analog[i]==-1) strcat(buff,"АВТ"); else {strcat(buff,"РУЧ"); analogOut[i]=analog[i];}
-	CALL SUBOPT_0x64
+	CALL SUBOPT_0x5F
 	LD   R26,Z
 	CPI  R26,LOW(0xFF)
-	BRNE _0x29E
-	CALL SUBOPT_0x29
-	__POINTW2MN _0x26F,28
+	BRNE _0x29F
+	CALL SUBOPT_0x28
+	__POINTW2MN _0x270,28
 	CALL _strcat
-	RJMP _0x29F
-_0x29E:
-	CALL SUBOPT_0x29
-	__POINTW2MN _0x26F,32
+	RJMP _0x2A0
+_0x29F:
+	CALL SUBOPT_0x28
+	__POINTW2MN _0x270,32
 	CALL _strcat
-	CALL SUBOPT_0x65
+	CALL SUBOPT_0x60
 	LD   R30,Z
 	ST   X,R30
-_0x29F:
+_0x2A0:
 ;    sprintf(txt," %3u%% ",analogOut[i]);
 	LDI  R30,LOW(_txt)
 	LDI  R31,HIGH(_txt)
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1FN _0x0,561
+	__POINTW1FN _0x0,537
 	ST   -Y,R31
 	ST   -Y,R30
-	CALL SUBOPT_0x66
+	CALL SUBOPT_0x61
 	LD   R30,Z
-	CALL SUBOPT_0x4D
-	CALL SUBOPT_0x63
+	CALL SUBOPT_0x49
+	CALL SUBOPT_0x5E
 ;    strcat(buff,txt);
-	CALL SUBOPT_0x29
+	CALL SUBOPT_0x28
 	LDI  R26,LOW(_txt)
 	LDI  R27,HIGH(_txt)
 	CALL _strcat
 ;    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
-	CALL SUBOPT_0x40
-	MOV  R30,R9
-	LDI  R31,0
-	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
-	CALL SUBOPT_0x54
+	CALL SUBOPT_0x4F
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
+	CALL SUBOPT_0x51
 ;    pointY = pointY+22;
 	LDI  R30,LOW(22)
 	ADD  R9,R30
 ;    };
 	SUBI R17,-1
-	RJMP _0x29C
-_0x29D:
-;
+	RJMP _0x29D
+_0x29E:
+;   if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки **************************** ...
+	RCALL _checkTouch
+	CPI  R30,0
+	BREQ _0x2A1
+	RCALL _checkDisplNum
 ;}
+_0x2A1:
 _0x20C0002:
 	CALL __LOADLOCR6
 	ADIW R28,8
@@ -6667,85 +6611,31 @@ _0x20C0002:
 ; .FEND
 
 	.DSEG
-_0x26F:
+_0x270:
 	.BYTE 0x24
 ;
 ;void displ_3(void){
 
 	.CSEG
-_displ_3:
-; .FSTART _displ_3
 ; char item, X_left;
 ; signed char x;
 ; unsigned int fillWindow = GREEN1, bordWindow = BLACK, temp;
 ;  pointY=7;
-	SBIW R28,4
-	LDI  R30,LOW(255)
-	STD  Y+2,R30
-	STD  Y+3,R30
-	CALL __SAVELOCR6
 ;	item -> R17
 ;	X_left -> R16
 ;	x -> R19
 ;	fillWindow -> R20,R21
 ;	bordWindow -> Y+8
 ;	temp -> Y+6
-	__GETWRN 20,21,-1393
-	LDI  R30,LOW(7)
-	MOV  R9,R30
 ;  if (newSetButt){
-	TST  R7
-	BREQ _0x2A0
 ;//    drawButtEdit(fillWindow);
 ;    initializePlus(pointY+25, 4, 30);
-	SUBI R30,-LOW(25)
-	ST   -Y,R30
-	LDI  R30,LOW(4)
-	ST   -Y,R30
-	LDI  R26,LOW(30)
-	RCALL _initializePlus
 ;    for (item=0;item<plusCount;item++) drawPlus(item, fillWindow);
-	LDI  R17,LOW(0)
-_0x2A2:
-	LDS  R30,_plusCount
-	CP   R17,R30
-	BRSH _0x2A3
-	ST   -Y,R17
-	MOVW R26,R20
-	RCALL _drawPlus
-	SUBI R17,-1
-	RJMP _0x2A2
-_0x2A3:
-	CALL SUBOPT_0x29
-	__POINTW1FN _0x0,569
-	ST   -Y,R31
-	ST   -Y,R30
-	MOV  R30,R9
-	CALL SUBOPT_0x4D
-	CALL SUBOPT_0x63
 ;    ILI9341_WriteString(50,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
-	LDI  R30,LOW(50)
-	LDI  R31,HIGH(50)
-	CALL SUBOPT_0x55
-	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
-	LDD  R30,Y+18
-	LDD  R31,Y+18+1
-	ST   -Y,R31
-	ST   -Y,R30
-	ST   -Y,R21
-	ST   -Y,R20
-	LDI  R26,LOW(1)
-	CALL _ILI9341_WriteString
 ;  }
 ;  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;
 ;}
-_0x2A0:
-	CALL __LOADLOCR6
-	ADIW R28,10
-	RET
-; .FEND
 ;
 ;void display(void){
 _display:
@@ -6755,30 +6645,23 @@ _display:
 	LDI  R31,0
 ;    case 0: displ_0(); break;
 	SBIW R30,0
-	BREQ _0x2E0
+	BREQ _0x2E1
 ;    case 1: displ_1(); break;
 	CPI  R30,LOW(0x1)
 	LDI  R26,HIGH(0x1)
 	CPC  R31,R26
-	BRNE _0x2A8
+	BRNE _0x2AA
 	RCALL _displ_1
-	RJMP _0x2A6
+	RJMP _0x2A8
 ;    case 2: displ_2(); break;
-_0x2A8:
+_0x2AA:
 	CPI  R30,LOW(0x2)
 	LDI  R26,HIGH(0x2)
 	CPC  R31,R26
-	BRNE _0x2A9
+	BRNE _0x2AC
 	RCALL _displ_2
-	RJMP _0x2A6
-;    case 3: displ_3(); break;
-_0x2A9:
-	CPI  R30,LOW(0x3)
-	LDI  R26,HIGH(0x3)
-	CPC  R31,R26
-	BRNE _0x2AB
-	RCALL _displ_3
-	RJMP _0x2A6
+	RJMP _0x2A8
+;//    case 3: displ_3(); break;
 ;//    case 4: displ_4(); break;
 ;//    case 5: displ_5(); break;
 ;//    case 6: displ_6(); break;
@@ -6786,11 +6669,11 @@ _0x2A9:
 ;//    case 8: displ_8(); break;
 ;//    case 9: displ_9(); break;
 ;    default: displ_0(); break;
-_0x2AB:
-_0x2E0:
+_0x2AC:
+_0x2E1:
 	RCALL _displ_0
 ;  }
-_0x2A6:
+_0x2A8:
 ;}
 	RET
 ; .FEND
@@ -6810,7 +6693,7 @@ _ext_int0_isr:
 ; 0000 0068  count1++;
 	LDI  R26,LOW(_count1_S000002B000)
 	LDI  R27,HIGH(_count1_S000002B000)
-	CALL SUBOPT_0x67
+	CALL SUBOPT_0x62
 ; 0000 0069 }
 	LD   R30,Y+
 	OUT  SREG,R30
@@ -6979,11 +6862,11 @@ _main:
 	CALL _w1_search
 	MOV  R6,R30
 ;if((ds18b20+Dht)>MAX_DEVICES) ds18b20=(MAX_DEVICES-Dht);
-	CALL SUBOPT_0x68
+	CALL SUBOPT_0x63
 	ADD  R26,R30
 	ADC  R27,R31
 	SBIW R26,4
-	BRLT _0x2AC
+	BRLT _0x2AD
 	LDI  R30,0
 	SBRC R2,2
 	LDI  R30,1
@@ -6991,18 +6874,18 @@ _main:
 	SUB  R26,R30
 	MOV  R6,R26
 ;if(ds18b20)           // если датчики были найдены
-_0x2AC:
+_0x2AD:
 	TST  R6
-	BREQ _0x2AD
+	BREQ _0x2AE
 ; {
 ;   w1_init();      // 1 Wire Bus initialization
-	CALL SUBOPT_0x44
+	CALL SUBOPT_0x3F
 ;   w1_write(0xCC); // Load Skip ROM [CCH] command
 ;   w1_write(0x44); // Load Convert T [44H] command
 ; }
 ;//------------------------ once per second --------------------------------------
 ;clock_buffer[0] = 0;// EOSC=0 BBSQW=0 CONV=0 RS2=0 RS1=0 INTCN=0 A2IE=0 A1IE=0
-_0x2AD:
+_0x2AE:
 	LDI  R30,LOW(0)
 	STS  _clock_buffer,R30
 ;clock_buffer[1] = 0;//  EN32kHz=0 BSY=0 A2F=0 A1F=0
@@ -7034,7 +6917,7 @@ _0x2AD:
 ;//TFT_SetOrientation(3);  //0
 ;ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x45
+	CALL SUBOPT_0x41
 	LDS  R30,_max_Y
 	LDS  R31,_max_Y+1
 	ST   -Y,R31
@@ -7048,71 +6931,71 @@ _0x2AD:
 ;ILI9341_WriteString(60, pointY, "www.graviton.com.ua", Font_11x18, WHITE, fillScreen, 1);
 	LDI  R30,LOW(60)
 	LDI  R31,HIGH(60)
-	CALL SUBOPT_0x55
+	CALL SUBOPT_0x52
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x2AE,0
-	CALL SUBOPT_0x2F
+	__POINTW1MN _0x2AF,0
+	CALL SUBOPT_0x2E
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x69
-	CALL SUBOPT_0x2D
+	CALL SUBOPT_0x64
+	CALL SUBOPT_0x2C
 ;pointY += 30;
-	CALL SUBOPT_0x6A
+	CALL SUBOPT_0x65
 ;ILI9341_WriteString(80, pointY, "Розумна", Font_11x18, WHITE, fillScreen, 2);
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x2AE,20
-	CALL SUBOPT_0x2F
+	__POINTW1MN _0x2AF,20
+	CALL SUBOPT_0x2E
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x6B
+	CALL SUBOPT_0x66
 ;pointY += 30;
-	CALL SUBOPT_0x6A
+	CALL SUBOPT_0x65
 ;ILI9341_WriteString(80, pointY, "теплиця", Font_11x18, WHITE, fillScreen, 2);
 	ST   -Y,R31
 	ST   -Y,R30
-	__POINTW1MN _0x2AE,28
-	CALL SUBOPT_0x2F
+	__POINTW1MN _0x2AF,28
+	CALL SUBOPT_0x2E
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x6B
+	CALL SUBOPT_0x66
 ;pointY = pointY+45;
 	LDI  R30,LOW(45)
 	ADD  R9,R30
 ;sprintf(buff,"Датчикыв температури %u",ds18b20+Dht);    // количество датчиков
-	CALL SUBOPT_0x29
-	__POINTW1FN _0x0,621
+	CALL SUBOPT_0x28
+	__POINTW1FN _0x0,597
 	ST   -Y,R31
 	ST   -Y,R30
-	CALL SUBOPT_0x68
+	CALL SUBOPT_0x63
 	ADD  R30,R26
 	ADC  R31,R27
-	CALL SUBOPT_0x59
+	CALL SUBOPT_0x55
 ;ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
-	CALL SUBOPT_0x5A
 	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x69
-	CALL SUBOPT_0x2D
+	CALL SUBOPT_0x64
+	CALL SUBOPT_0x2C
 ;pointY = pointY+20;
 	LDI  R30,LOW(20)
 	ADD  R9,R30
 ;sprintf(buff,"Датчик вологосты %u",Dht);                // датчик AM2301
-	CALL SUBOPT_0x29
-	__POINTW1FN _0x0,645
+	CALL SUBOPT_0x28
+	__POINTW1FN _0x0,621
 	ST   -Y,R31
 	ST   -Y,R30
 	LDI  R30,0
 	SBRC R2,2
 	LDI  R30,1
-	CALL SUBOPT_0x4D
-	CALL SUBOPT_0x63
+	CALL SUBOPT_0x49
+	CALL SUBOPT_0x5E
 ;ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
-	CALL SUBOPT_0x5A
 	CALL SUBOPT_0x56
-	CALL SUBOPT_0x2C
+	CALL SUBOPT_0x50
+	CALL SUBOPT_0x2B
 	CALL SUBOPT_0x16
-	CALL SUBOPT_0x69
-	CALL SUBOPT_0x2D
+	CALL SUBOPT_0x64
+	CALL SUBOPT_0x2C
 ;//  pointY = pointY+20;
 ;
 ;newSetButt = 1;
@@ -7123,37 +7006,37 @@ _0x2AD:
 ;//display();
 ; 0000 0074 
 ; 0000 0075 while (1){
-_0x2AF:
+_0x2B0:
 ; 0000 0076    //----------- функция 1 секунда ---------------------------
 ; 0000 0077    if(Sec){
 	SBRS R2,0
-	RJMP _0x2B2
+	RJMP _0x2B3
 ; 0000 0078      Sec=0;
 	CLT
 	BLD  R2,0
 ; 0000 0079      if(ds18b20) temperature_check();
 	TST  R6
-	BREQ _0x2B3
+	BREQ _0x2B4
 	RCALL _temperature_check
 ; 0000 007A      if(Dht){                                         // присутствует датчик влажности
-_0x2B3:
+_0x2B4:
 	SBRS R2,2
-	RJMP _0x2B4
+	RJMP _0x2B5
 ; 0000 007B        if(readDHT()) DHTexist = 3;
 	CALL _readDHT
 	CPI  R30,0
-	BREQ _0x2B5
+	BREQ _0x2B6
 	LDI  R30,LOW(3)
 	MOV  R8,R30
 ; 0000 007C        else if(DHTexist) DHTexist--;                   // датчик влажности работает?
-	RJMP _0x2B6
-_0x2B5:
+	RJMP _0x2B7
+_0x2B6:
 	TST  R8
-	BREQ _0x2B7
+	BREQ _0x2B8
 	DEC  R8
 ; 0000 007D        else {pvT = 1900; pvRH = 190;}
-	RJMP _0x2B8
-_0x2B7:
+	RJMP _0x2B9
+_0x2B8:
 	LDI  R30,LOW(1900)
 	LDI  R31,HIGH(1900)
 	STS  _pvT,R30
@@ -7161,57 +7044,57 @@ _0x2B7:
 	LDI  R30,LOW(190)
 	LDI  R31,HIGH(190)
 	CALL SUBOPT_0x1D
-_0x2B8:
-_0x2B6:
+_0x2B9:
+_0x2B7:
 ; 0000 007E      }
 ; 0000 007F      for(byte=0; byte<4; byte++){if(relay[byte]<2) relOut[byte]=relay[byte];}
-_0x2B4:
+_0x2B5:
 	LDI  R17,LOW(0)
-_0x2BA:
+_0x2BB:
 	CPI  R17,4
-	BRSH _0x2BB
-	CALL SUBOPT_0x5E
+	BRSH _0x2BC
+	CALL SUBOPT_0x5B
 	LD   R26,Z
 	CPI  R26,LOW(0x2)
-	BRGE _0x2BC
+	BRGE _0x2BD
 	MOV  R26,R17
 	LDI  R27,0
 	SUBI R26,LOW(-_relOut)
 	SBCI R27,HIGH(-_relOut)
-	CALL SUBOPT_0x5E
+	CALL SUBOPT_0x5B
 	LD   R30,Z
 	ST   X,R30
-_0x2BC:
+_0x2BD:
 	SUBI R17,-1
-	RJMP _0x2BA
-_0x2BB:
+	RJMP _0x2BB
+_0x2BC:
 ; 0000 0080      for(byte=0; byte<4; byte++){
 	LDI  R17,LOW(0)
-_0x2BE:
+_0x2BF:
 	CPI  R17,4
-	BRSH _0x2BF
+	BRSH _0x2C0
 ; 0000 0081         if(analog[byte]>=0) analogOut[byte] = analog[byte]; else analogOut[byte] = 0; //??????????????
-	CALL SUBOPT_0x64
+	CALL SUBOPT_0x5F
 	LD   R26,Z
 	CPI  R26,0
-	BRLT _0x2C0
-	CALL SUBOPT_0x65
+	BRLT _0x2C1
+	CALL SUBOPT_0x60
 	LD   R30,Z
 	ST   X,R30
-	RJMP _0x2C1
-_0x2C0:
-	CALL SUBOPT_0x66
+	RJMP _0x2C2
+_0x2C1:
+	CALL SUBOPT_0x61
 	LDI  R26,LOW(0)
 	STD  Z+0,R26
 ; 0000 0082         dacU[byte] = adapt(analogOut[byte]);// конверсия для ЦАП
-_0x2C1:
+_0x2C2:
 	MOV  R30,R17
 	LDI  R31,0
 	SUBI R30,LOW(-_dacU)
 	SBCI R31,HIGH(-_dacU)
 	PUSH R31
 	PUSH R30
-	CALL SUBOPT_0x66
+	CALL SUBOPT_0x61
 	LD   R26,Z
 	RCALL _adapt
 	POP  R26
@@ -7219,8 +7102,8 @@ _0x2C1:
 	ST   X,R30
 ; 0000 0083      }
 	SUBI R17,-1
-	RJMP _0x2BE
-_0x2BF:
+	RJMP _0x2BF
+_0x2C0:
 ; 0000 0084  //    setDAC();                           // подать напряжение на аналоговые выходы
 ; 0000 0085      // --------КАНАЛ 1 ---------
 ; 0000 0086 //     if(Dht){
@@ -7246,19 +7129,19 @@ _0x2BF:
 ; 0000 009A //   if(newButton==100) display();
 ; 0000 009B //   else {touchpad(newButton); newButton=100; display();}
 ; 0000 009C     display();
-_0x2B2:
+_0x2B3:
 	RCALL _display
 ; 0000 009D //   sprintf(buff,"X%4u; Y%4u; D%u newB=%3u",point_X,point_Y, displ_num, newButton);
 ; 0000 009E //   ILI9341_WriteString(5,TFTBUTTON-10,buff,Font_11x18,WHITE,BLACK,1);
 ; 0000 009F  }
-	RJMP _0x2AF
+	RJMP _0x2B0
 ; 0000 00A0 }
-_0x2C2:
-	RJMP _0x2C2
+_0x2C3:
+	RJMP _0x2C3
 ; .FEND
 
 	.DSEG
-_0x2AE:
+_0x2AF:
 	.BYTE 0x24
 	#ifndef __SLEEP_DEFINED__
 	#define __SLEEP_DEFINED__
@@ -7302,7 +7185,7 @@ _0x2000012:
 	LDD  R26,Y+2
 	LDD  R27,Y+2+1
 	ADIW R26,2
-	CALL SUBOPT_0x67
+	CALL SUBOPT_0x62
 	SBIW R30,1
 	LDD  R26,Y+4
 	STD  Z+0,R26
@@ -7312,7 +7195,7 @@ _0x2000013:
 	CALL __GETW1P
 	TST  R31
 	BRMI _0x2000014
-	CALL SUBOPT_0x67
+	CALL SUBOPT_0x62
 _0x2000014:
 	RJMP _0x2000015
 _0x2000010:
@@ -7361,7 +7244,7 @@ _0x2000016:
 	LDI  R17,LOW(1)
 	RJMP _0x200001E
 _0x200001D:
-	CALL SUBOPT_0x6C
+	CALL SUBOPT_0x67
 _0x200001E:
 	RJMP _0x200001B
 _0x200001C:
@@ -7369,7 +7252,7 @@ _0x200001C:
 	BRNE _0x200001F
 	CPI  R18,37
 	BRNE _0x2000020
-	CALL SUBOPT_0x6C
+	CALL SUBOPT_0x67
 	RJMP _0x20000CC
 _0x2000020:
 	LDI  R17,LOW(2)
@@ -7426,32 +7309,32 @@ _0x2000029:
 	MOV  R30,R18
 	CPI  R30,LOW(0x63)
 	BRNE _0x200002F
-	CALL SUBOPT_0x6D
+	CALL SUBOPT_0x68
 	LDD  R30,Y+16
 	LDD  R31,Y+16+1
 	LDD  R26,Z+4
 	ST   -Y,R26
-	CALL SUBOPT_0x6E
+	CALL SUBOPT_0x69
 	RJMP _0x2000030
 _0x200002F:
 	CPI  R30,LOW(0x73)
 	BRNE _0x2000032
-	CALL SUBOPT_0x6D
+	CALL SUBOPT_0x68
 	LDD  R26,Y+16
 	LDD  R27,Y+16+1
 	ADIW R26,4
-	CALL SUBOPT_0x5C
+	CALL SUBOPT_0x58
 	CALL _strlen
 	MOV  R17,R30
 	RJMP _0x2000033
 _0x2000032:
 	CPI  R30,LOW(0x70)
 	BRNE _0x2000035
-	CALL SUBOPT_0x6D
+	CALL SUBOPT_0x68
 	LDD  R26,Y+16
 	LDD  R27,Y+16+1
 	ADIW R26,4
-	CALL SUBOPT_0x5C
+	CALL SUBOPT_0x58
 	CALL _strlenf
 	MOV  R17,R30
 	ORI  R16,LOW(8)
@@ -7496,8 +7379,8 @@ _0x2000040:
 _0x200003D:
 	SBRS R16,2
 	RJMP _0x2000042
-	CALL SUBOPT_0x6D
-	CALL SUBOPT_0x6F
+	CALL SUBOPT_0x68
+	CALL SUBOPT_0x6A
 	LDD  R26,Y+11
 	TST  R26
 	BRPL _0x2000043
@@ -7517,8 +7400,8 @@ _0x2000044:
 _0x2000045:
 	RJMP _0x2000046
 _0x2000042:
-	CALL SUBOPT_0x6D
-	CALL SUBOPT_0x6F
+	CALL SUBOPT_0x68
+	CALL SUBOPT_0x6A
 _0x2000046:
 _0x2000036:
 	SBRC R16,0
@@ -7541,7 +7424,7 @@ _0x200004D:
 _0x200004B:
 	LDI  R18,LOW(32)
 _0x200004E:
-	CALL SUBOPT_0x6C
+	CALL SUBOPT_0x67
 	SUBI R21,LOW(1)
 	RJMP _0x2000048
 _0x200004A:
@@ -7567,7 +7450,7 @@ _0x2000053:
 	STD  Y+6,R26
 	STD  Y+6+1,R27
 _0x2000054:
-	CALL SUBOPT_0x6C
+	CALL SUBOPT_0x67
 	CPI  R21,0
 	BREQ _0x2000055
 	SUBI R21,LOW(1)
@@ -7646,7 +7529,7 @@ _0x20000CD:
 	RJMP _0x200006A
 	ANDI R16,LOW(251)
 	ST   -Y,R20
-	CALL SUBOPT_0x6E
+	CALL SUBOPT_0x69
 	CPI  R21,0
 	BREQ _0x200006B
 	SUBI R21,LOW(1)
@@ -7654,7 +7537,7 @@ _0x200006B:
 _0x200006A:
 _0x2000069:
 _0x2000061:
-	CALL SUBOPT_0x6C
+	CALL SUBOPT_0x67
 	CPI  R21,0
 	BREQ _0x200006C
 	SUBI R21,LOW(1)
@@ -7676,7 +7559,7 @@ _0x200006E:
 	SUBI R21,LOW(1)
 	LDI  R30,LOW(32)
 	ST   -Y,R30
-	CALL SUBOPT_0x6E
+	CALL SUBOPT_0x69
 	RJMP _0x200006E
 _0x2000070:
 _0x200006D:
@@ -7700,7 +7583,7 @@ _sprintf:
 	MOV  R15,R24
 	SBIW R28,6
 	CALL __SAVELOCR4
-	CALL SUBOPT_0x70
+	CALL SUBOPT_0x6B
 	SBIW R30,0
 	BRNE _0x2000072
 	LDI  R30,LOW(65535)
@@ -7711,7 +7594,7 @@ _0x2000072:
 	ADIW R26,6
 	CALL __ADDW2R15
 	MOVW R16,R26
-	CALL SUBOPT_0x70
+	CALL SUBOPT_0x6B
 	STD  Y+6,R30
 	STD  Y+6+1,R31
 	LDI  R30,LOW(0)
@@ -8318,7 +8201,7 @@ _left_X:
 _buttons:
 	.BYTE 0x18
 _plus:
-	.BYTE 0x30
+	.BYTE 0x60
 _txt:
 	.BYTE 0xA
 _count1_S000002B000:
@@ -8555,7 +8438,7 @@ SUBOPT_0x15:
 	LDI  R26,LOW(0)
 	JMP  _ILI9341_WriteByte
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 39 TIMES, CODE SIZE REDUCTION:73 WORDS
+;OPTIMIZER ADDED SUBROUTINE, CALLED 37 TIMES, CODE SIZE REDUCTION:69 WORDS
 SUBOPT_0x16:
 	LDI  R30,LOW(0)
 	LDI  R31,HIGH(0)
@@ -8619,42 +8502,29 @@ SUBOPT_0x1E:
 	LDS  R27,_pvRH+1
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
+;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
 SUBOPT_0x1F:
-	MOVW R22,R30
-	MOV  R26,R17
-	CLR  R27
-	MOV  R30,R18
-	LDI  R31,0
-	ADIW R30,5
-	CALL __MULW12
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x20:
-	MOVW R26,R22
-	ST   X+,R30
-	ST   X,R31
+	STD  Z+0,R26
 	LDI  R26,LOW(6)
 	MUL  R19,R26
 	MOVW R30,R0
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x21:
+SUBOPT_0x20:
 	SBIW R28,2
 	CALL __SAVELOCR6
 	LDD  R30,Y+10
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 6 TIMES, CODE SIZE REDUCTION:7 WORDS
-SUBOPT_0x22:
+SUBOPT_0x21:
 	LDS  R30,_max_X
 	LDS  R31,_max_X+1
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x23:
+SUBOPT_0x22:
 	LD   R20,Z
 	CLR  R21
 	LDD  R30,Y+10
@@ -8664,7 +8534,7 @@ SUBOPT_0x23:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x24:
+SUBOPT_0x23:
 	LD   R30,Z
 	LDI  R31,0
 	STD  Y+6,R30
@@ -8676,7 +8546,7 @@ SUBOPT_0x24:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x25:
+SUBOPT_0x24:
 	LD   R16,Z
 	LDD  R17,Z+1
 	LDD  R30,Y+10
@@ -8686,7 +8556,7 @@ SUBOPT_0x25:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:15 WORDS
-SUBOPT_0x26:
+SUBOPT_0x25:
 	ST   -Y,R17
 	ST   -Y,R16
 	ST   -Y,R19
@@ -8696,7 +8566,7 @@ SUBOPT_0x26:
 	RJMP SUBOPT_0x10
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x27:
+SUBOPT_0x26:
 	MOVW R26,R20
 	LDI  R30,LOW(2)
 	LDI  R31,HIGH(2)
@@ -8706,7 +8576,7 @@ SUBOPT_0x27:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0x28:
+SUBOPT_0x27:
 	LDD  R26,Y+6
 	LDD  R27,Y+6+1
 	LDI  R30,LOW(2)
@@ -8718,8 +8588,8 @@ SUBOPT_0x28:
 	MOVW R18,R30
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 49 TIMES, CODE SIZE REDUCTION:93 WORDS
-SUBOPT_0x29:
+;OPTIMIZER ADDED SUBROUTINE, CALLED 43 TIMES, CODE SIZE REDUCTION:81 WORDS
+SUBOPT_0x28:
 	LDI  R30,LOW(_buff)
 	LDI  R31,HIGH(_buff)
 	ST   -Y,R31
@@ -8727,7 +8597,7 @@ SUBOPT_0x29:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:9 WORDS
-SUBOPT_0x2A:
+SUBOPT_0x29:
 	ST   -Y,R31
 	ST   -Y,R30
 	LDI  R24,0
@@ -8736,15 +8606,15 @@ SUBOPT_0x2A:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x2B:
+SUBOPT_0x2A:
 	ST   -Y,R17
 	ST   -Y,R16
 	ST   -Y,R19
 	ST   -Y,R18
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 36 TIMES, CODE SIZE REDUCTION:277 WORDS
-SUBOPT_0x2C:
+;OPTIMIZER ADDED SUBROUTINE, CALLED 33 TIMES, CODE SIZE REDUCTION:253 WORDS
+SUBOPT_0x2B:
 	LDS  R30,_Font_11x18
 	LDS  R31,_Font_11x18+1
 	LDS  R22,_Font_11x18+2
@@ -8752,15 +8622,15 @@ SUBOPT_0x2C:
 	CALL __PUTPARD1
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 9 TIMES, CODE SIZE REDUCTION:21 WORDS
-SUBOPT_0x2D:
+;OPTIMIZER ADDED SUBROUTINE, CALLED 7 TIMES, CODE SIZE REDUCTION:15 WORDS
+SUBOPT_0x2C:
 	ST   -Y,R31
 	ST   -Y,R30
 	LDI  R26,LOW(1)
 	JMP  _ILI9341_WriteString
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x2E:
+SUBOPT_0x2D:
 	LDD  R26,Y+10
 	CLR  R27
 	LDI  R30,LOW(2)
@@ -8770,25 +8640,25 @@ SUBOPT_0x2E:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 15 TIMES, CODE SIZE REDUCTION:25 WORDS
-SUBOPT_0x2F:
+SUBOPT_0x2E:
 	ST   -Y,R31
 	ST   -Y,R30
-	RJMP SUBOPT_0x2C
+	RJMP SUBOPT_0x2B
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x30:
+SUBOPT_0x2F:
 	CALL __SWAPW12
 	SUB  R30,R26
 	SBC  R31,R27
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x31:
+SUBOPT_0x30:
 	CALL __PUTD1S0
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x32:
+SUBOPT_0x31:
 	ST   -Y,R26
 	CALL __SAVELOCR4
 	LDD  R30,Y+4
@@ -8797,66 +8667,62 @@ SUBOPT_0x32:
 	MOVW R30,R0
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x33:
-	LD   R16,Z
-	LDD  R17,Z+1
-	LDD  R30,Y+4
-	LDI  R26,LOW(6)
-	MUL  R30,R26
-	MOVW R30,R0
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x34:
-	LD   R30,Z
-	LDI  R31,0
-	ADD  R30,R16
-	ADC  R31,R17
-	SBIW R30,3
-	MOVW R18,R30
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 6 TIMES, CODE SIZE REDUCTION:7 WORDS
-SUBOPT_0x35:
-	LDS  R26,_point_X
-	LDS  R27,_point_X+1
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x36:
-	LDD  R30,Y+4
-	LDI  R26,LOW(6)
-	MUL  R30,R26
-	MOVW R30,R0
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 8 TIMES, CODE SIZE REDUCTION:11 WORDS
-SUBOPT_0x37:
-	LDS  R26,_point_Y
-	LDS  R27,_point_Y+1
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x38:
+;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:18 WORDS
+SUBOPT_0x32:
 	MOVW R26,R30
 	CALL __GETW1P
 	SBIW R30,3
 	MOVW R16,R30
-	RJMP SUBOPT_0x36
+	LDD  R30,Y+4
+	LDI  R26,LOW(6)
+	MUL  R30,R26
+	MOVW R30,R0
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
+SUBOPT_0x33:
+	MOVW R18,R30
+	LDS  R26,_point_X
+	LDS  R27,_point_X+1
+	CP   R26,R16
+	CPC  R27,R17
+	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x39:
+SUBOPT_0x34:
+	LDS  R26,_point_X
+	LDS  R27,_point_X+1
+	CP   R18,R26
+	CPC  R19,R27
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x35:
 	LD   R30,Z
 	LDI  R31,0
 	ADD  R30,R16
 	ADC  R31,R17
-	ADIW R30,3
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
+SUBOPT_0x36:
 	MOVW R18,R30
+	LDS  R26,_point_Y
+	LDS  R27,_point_Y+1
+	CP   R26,R16
+	CPC  R27,R17
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x3A:
+SUBOPT_0x37:
+	LDS  R26,_point_Y
+	LDS  R27,_point_Y+1
+	CP   R18,R26
+	CPC  R19,R27
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
+SUBOPT_0x38:
 	MOV  R30,R17
 	LDI  R31,0
 	MOVW R26,R28
@@ -8864,7 +8730,7 @@ SUBOPT_0x3A:
 	RJMP SUBOPT_0xB
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0x3B:
+SUBOPT_0x39:
 	LDD  R26,Y+6
 	LDD  R27,Y+6+1
 	LDD  R30,Y+4
@@ -8877,7 +8743,7 @@ SUBOPT_0x3B:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0x3C:
+SUBOPT_0x3A:
 	LDD  R30,Y+6
 	LDD  R31,Y+6+1
 	LDD  R26,Y+4
@@ -8889,46 +8755,22 @@ SUBOPT_0x3C:
 	CALL __DIVW21
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x3D:
-	LDS  R30,_point_X
-	LDS  R31,_point_X+1
-	ST   -Y,R31
-	ST   -Y,R30
-	RET
-
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x3E:
+SUBOPT_0x3B:
 	ST   -Y,R31
 	ST   -Y,R30
 	LDI  R30,LOW(0)
 	ST   -Y,R30
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x3F:
-	LDS  R30,_point_Y
-	LDS  R31,_point_Y+1
-	ST   -Y,R31
-	ST   -Y,R30
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 12 TIMES, CODE SIZE REDUCTION:19 WORDS
-SUBOPT_0x40:
-	LDI  R30,LOW(5)
-	LDI  R31,HIGH(5)
-	ST   -Y,R31
-	ST   -Y,R30
-	RET
-
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x41:
+SUBOPT_0x3C:
 	STS  _ptr_char,R30
 	STS  _ptr_char+1,R31
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x42:
+SUBOPT_0x3D:
 	LDI  R26,LOW(_ptr_char)
 	LDI  R27,HIGH(_ptr_char)
 	LD   R30,X+
@@ -8940,7 +8782,7 @@ SUBOPT_0x42:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0x43:
+SUBOPT_0x3E:
 	MOVW R30,R16
 	LDI  R26,LOW(10)
 	LDI  R27,HIGH(10)
@@ -8952,22 +8794,28 @@ SUBOPT_0x43:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x44:
+SUBOPT_0x3F:
 	CALL _w1_init
 	LDI  R26,LOW(204)
 	CALL _w1_write
 	LDI  R26,LOW(68)
 	JMP  _w1_write
 
+;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:3 WORDS
+SUBOPT_0x40:
+	LDS  R26,_point_Y
+	LDS  R27,_point_Y+1
+	RET
+
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:9 WORDS
-SUBOPT_0x45:
-	RCALL SUBOPT_0x22
+SUBOPT_0x41:
+	RCALL SUBOPT_0x21
 	ST   -Y,R31
 	ST   -Y,R30
 	RJMP SUBOPT_0x16
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:25 WORDS
-SUBOPT_0x46:
+SUBOPT_0x42:
 	LDS  R30,_max_Y
 	LDS  R31,_max_Y+1
 	ST   -Y,R31
@@ -8982,7 +8830,7 @@ SUBOPT_0x46:
 	JMP  _initializeButtons
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0x47:
+SUBOPT_0x43:
 	ST   -Y,R19
 	ST   -Y,R18
 	ST   -Y,R19
@@ -8992,12 +8840,12 @@ SUBOPT_0x47:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x48:
+SUBOPT_0x44:
 	__POINTW2FN _0x0,200
 	JMP  _drawButton
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 8 TIMES, CODE SIZE REDUCTION:11 WORDS
-SUBOPT_0x49:
+SUBOPT_0x45:
 	LDI  R30,LOW(65535)
 	LDI  R31,HIGH(65535)
 	ST   -Y,R31
@@ -9005,7 +8853,7 @@ SUBOPT_0x49:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x4A:
+SUBOPT_0x46:
 	LDI  R30,LOW(1)
 	ST   -Y,R30
 	__POINTW2FN _0x0,208
@@ -9013,7 +8861,7 @@ SUBOPT_0x4A:
 	RJMP SUBOPT_0x16
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:9 WORDS
-SUBOPT_0x4B:
+SUBOPT_0x47:
 	LDI  R30,LOW(2)
 	ST   -Y,R30
 	__POINTW2FN _0x0,214
@@ -9021,14 +8869,14 @@ SUBOPT_0x4B:
 	RJMP SUBOPT_0x16
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0x4C:
+SUBOPT_0x48:
 	LDI  R30,LOW(3)
 	ST   -Y,R30
 	__POINTW2FN _0x0,221
 	JMP  _drawButton
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 16 TIMES, CODE SIZE REDUCTION:42 WORDS
-SUBOPT_0x4D:
+;OPTIMIZER ADDED SUBROUTINE, CALLED 15 TIMES, CODE SIZE REDUCTION:39 WORDS
+SUBOPT_0x49:
 	CLR  R31
 	CLR  R22
 	CLR  R23
@@ -9036,7 +8884,7 @@ SUBOPT_0x4D:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:21 WORDS
-SUBOPT_0x4E:
+SUBOPT_0x4A:
 	LDI  R30,LOW(70)
 	LDI  R31,HIGH(70)
 	ST   -Y,R31
@@ -9045,10 +8893,10 @@ SUBOPT_0x4E:
 	LDI  R31,0
 	ST   -Y,R31
 	ST   -Y,R30
-	RJMP SUBOPT_0x29
+	RJMP SUBOPT_0x28
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0x4F:
+SUBOPT_0x4B:
 	LDI  R30,LOW(31)
 	LDI  R31,HIGH(31)
 	ST   -Y,R31
@@ -9058,39 +8906,46 @@ SUBOPT_0x4F:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:9 WORDS
-SUBOPT_0x50:
+SUBOPT_0x4C:
 	STD  Y+6,R30
 	STD  Y+6+1,R31
 	LDD  R26,Y+6
 	LDD  R27,Y+6+1
 	CALL _fraction
-	RJMP SUBOPT_0x29
+	RJMP SUBOPT_0x28
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:6 WORDS
-SUBOPT_0x51:
+SUBOPT_0x4D:
 	ST   -Y,R31
 	ST   -Y,R30
 	MOV  R30,R10
-	RJMP SUBOPT_0x4D
+	RJMP SUBOPT_0x49
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 6 TIMES, CODE SIZE REDUCTION:7 WORDS
-SUBOPT_0x52:
+;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:3 WORDS
+SUBOPT_0x4E:
 	LDI  R24,8
 	CALL _sprintf
 	ADIW R28,12
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x53:
-	MOV  R30,R9
-	LDI  R31,0
-	ADIW R30,5
+;OPTIMIZER ADDED SUBROUTINE, CALLED 7 TIMES, CODE SIZE REDUCTION:21 WORDS
+SUBOPT_0x4F:
+	LDI  R30,LOW(5)
+	LDI  R31,HIGH(5)
 	ST   -Y,R31
 	ST   -Y,R30
-	RJMP SUBOPT_0x29
+	MOV  R30,R9
+	LDI  R31,0
+	RET
+
+;OPTIMIZER ADDED SUBROUTINE, CALLED 13 TIMES, CODE SIZE REDUCTION:21 WORDS
+SUBOPT_0x50:
+	ST   -Y,R31
+	ST   -Y,R30
+	RJMP SUBOPT_0x28
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 11 TIMES, CODE SIZE REDUCTION:47 WORDS
-SUBOPT_0x54:
+SUBOPT_0x51:
 	ST   -Y,R21
 	ST   -Y,R20
 	ST   -Y,R19
@@ -9098,22 +8953,16 @@ SUBOPT_0x54:
 	LDI  R26,LOW(1)
 	JMP  _ILI9341_WriteString
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 22 TIMES, CODE SIZE REDUCTION:39 WORDS
-SUBOPT_0x55:
+;OPTIMIZER ADDED SUBROUTINE, CALLED 21 TIMES, CODE SIZE REDUCTION:37 WORDS
+SUBOPT_0x52:
 	ST   -Y,R31
 	ST   -Y,R30
 	MOV  R30,R9
 	LDI  R31,0
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 14 TIMES, CODE SIZE REDUCTION:23 WORDS
-SUBOPT_0x56:
-	ST   -Y,R31
-	ST   -Y,R30
-	RJMP SUBOPT_0x29
-
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x57:
+SUBOPT_0x53:
 	ST   -Y,R21
 	ST   -Y,R20
 	ST   -Y,R19
@@ -9122,7 +8971,7 @@ SUBOPT_0x57:
 	JMP  _ILI9341_WriteString
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:10 WORDS
-SUBOPT_0x58:
+SUBOPT_0x54:
 	ADIW R30,2
 	ST   -Y,R31
 	ST   -Y,R30
@@ -9139,7 +8988,7 @@ SUBOPT_0x58:
 	JMP  _ILI9341_FillRectangle
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 7 TIMES, CODE SIZE REDUCTION:33 WORDS
-SUBOPT_0x59:
+SUBOPT_0x55:
 	CALL __CWD1
 	CALL __PUTPARD1
 	LDI  R24,4
@@ -9148,13 +8997,13 @@ SUBOPT_0x59:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 6 TIMES, CODE SIZE REDUCTION:7 WORDS
-SUBOPT_0x5A:
+SUBOPT_0x56:
 	LDI  R30,LOW(10)
 	LDI  R31,HIGH(10)
-	RJMP SUBOPT_0x55
+	RJMP SUBOPT_0x52
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0x5B:
+SUBOPT_0x57:
 	ST   -Y,R21
 	ST   -Y,R20
 	ST   -Y,R19
@@ -9162,7 +9011,7 @@ SUBOPT_0x5B:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0x5C:
+SUBOPT_0x58:
 	CALL __GETW1P
 	STD  Y+6,R30
 	STD  Y+6+1,R31
@@ -9171,15 +9020,24 @@ SUBOPT_0x5C:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0x5D:
+SUBOPT_0x59:
 	MOV  R26,R17
 	LDI  R27,0
 	SBRC R26,7
 	SER  R27
 	RET
 
+;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
+SUBOPT_0x5A:
+	LDS  R26,_point_X
+	LDS  R27,_point_X+1
+	CPI  R26,LOW(0xDD)
+	LDI  R30,HIGH(0xDD)
+	CPC  R27,R30
+	RET
+
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 7 TIMES, CODE SIZE REDUCTION:9 WORDS
-SUBOPT_0x5E:
+SUBOPT_0x5B:
 	MOV  R30,R17
 	LDI  R31,0
 	SUBI R30,LOW(-_relay)
@@ -9187,7 +9045,7 @@ SUBOPT_0x5E:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:4 WORDS
-SUBOPT_0x5F:
+SUBOPT_0x5C:
 	ST   -Y,R31
 	ST   -Y,R30
 	MOV  R30,R17
@@ -9195,10 +9053,10 @@ SUBOPT_0x5F:
 	SBRC R30,7
 	SER  R31
 	ADIW R30,1
-	RJMP SUBOPT_0x59
+	RJMP SUBOPT_0x55
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x60:
+SUBOPT_0x5D:
 	CALL _strcat
 	MOV  R30,R17
 	LDI  R31,0
@@ -9207,29 +9065,14 @@ SUBOPT_0x60:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x61:
-	LDI  R30,LOW(65535)
-	LDI  R31,HIGH(65535)
-	RJMP SUBOPT_0x2D
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x62:
-	ST   -Y,R31
-	ST   -Y,R30
-	MOV  R30,R17
-	CALL __CBD1
-	CALL __PUTPARD1
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 4 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x63:
+SUBOPT_0x5E:
 	LDI  R24,4
 	CALL _sprintf
 	ADIW R28,8
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 11 TIMES, CODE SIZE REDUCTION:17 WORDS
-SUBOPT_0x64:
+SUBOPT_0x5F:
 	MOV  R30,R17
 	LDI  R31,0
 	SUBI R30,LOW(-_analog)
@@ -9237,15 +9080,15 @@ SUBOPT_0x64:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x65:
+SUBOPT_0x60:
 	MOV  R26,R17
 	LDI  R27,0
 	SUBI R26,LOW(-_analogOut)
 	SBCI R27,HIGH(-_analogOut)
-	RJMP SUBOPT_0x64
+	RJMP SUBOPT_0x5F
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x66:
+SUBOPT_0x61:
 	MOV  R30,R17
 	LDI  R31,0
 	SUBI R30,LOW(-_analogOut)
@@ -9253,7 +9096,7 @@ SUBOPT_0x66:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x67:
+SUBOPT_0x62:
 	LD   R30,X+
 	LD   R31,X+
 	ADIW R30,1
@@ -9262,7 +9105,7 @@ SUBOPT_0x67:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x68:
+SUBOPT_0x63:
 	MOV  R26,R6
 	CLR  R27
 	LDI  R30,0
@@ -9272,29 +9115,29 @@ SUBOPT_0x68:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:5 WORDS
-SUBOPT_0x69:
+SUBOPT_0x64:
 	LDS  R30,_fillScreen
 	LDS  R31,_fillScreen+1
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x6A:
+SUBOPT_0x65:
 	LDI  R30,LOW(30)
 	ADD  R9,R30
 	LDI  R30,LOW(80)
 	LDI  R31,HIGH(80)
-	RJMP SUBOPT_0x55
+	RJMP SUBOPT_0x52
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x6B:
-	RCALL SUBOPT_0x69
+SUBOPT_0x66:
+	RCALL SUBOPT_0x64
 	ST   -Y,R31
 	ST   -Y,R30
 	LDI  R26,LOW(2)
 	JMP  _ILI9341_WriteString
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:13 WORDS
-SUBOPT_0x6C:
+SUBOPT_0x67:
 	ST   -Y,R18
 	LDD  R26,Y+13
 	LDD  R27,Y+13+1
@@ -9304,7 +9147,7 @@ SUBOPT_0x6C:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:9 WORDS
-SUBOPT_0x6D:
+SUBOPT_0x68:
 	LDD  R30,Y+16
 	LDD  R31,Y+16+1
 	SBIW R30,4
@@ -9313,7 +9156,7 @@ SUBOPT_0x6D:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:3 WORDS
-SUBOPT_0x6E:
+SUBOPT_0x69:
 	LDD  R26,Y+13
 	LDD  R27,Y+13+1
 	LDD  R30,Y+15
@@ -9322,7 +9165,7 @@ SUBOPT_0x6E:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x6F:
+SUBOPT_0x6A:
 	LDD  R26,Y+16
 	LDD  R27,Y+16+1
 	ADIW R26,4
@@ -9332,7 +9175,7 @@ SUBOPT_0x6F:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x70:
+SUBOPT_0x6B:
 	MOVW R26,R28
 	ADIW R26,12
 	CALL __ADDW2R15

@@ -2202,8 +2202,8 @@
 ;
 ;unsigned char buttonCount, plusCount;
 ;unsigned int point_X, point_Y, point_Z, bottom_Y, left_X;
-;struct ram_structure {int x,y; char w,h;} buttons[4];// Global structure located in RAM
-;struct {int x,y; char w,h;} plus[8];// Global structure located in RAM
+;struct {int x,y; char w,h;} buttons[4];// Global structure located in RAM
+;struct {int x,y; char w,h;} plus[16];  // Global structure located in RAM
 ;
 ;// Read the AD conversion result
 ;unsigned int read_adc(unsigned char adc_input)
@@ -2247,39 +2247,36 @@
 ;void initializePlus(char y, char row, char h){// высота кнопки
 ;PCODE: $000005C3 VOL: 0
 ;PCODE: $000005C4 VOL: 0
-; char i,j,indx, w=40, col=2;
+; char i,j,indx=0;
 ; unsigned int x;
-;  if(h<14) h=14;
+;    if(h<14) h=14;
 ;PCODE: $000005C5 VOL: 0
 ;PCODE: $000005C6 VOL: 0
-;PCODE: $000005C7 VOL: 0
-;	y -> Y+10
-;	row -> Y+9
-;	h -> Y+8
+;	y -> Y+8
+;	row -> Y+7
+;	h -> Y+6
 ;	i -> R17
 ;	j -> R16
 ;	indx -> R19
-;	w -> R18
-;	col -> R21
-;	x -> Y+6
+;	x -> R20,R21
+;PCODE: $000005C7 VOL: 0
 ;PCODE: $000005C8 VOL: 0
 ;PCODE: $000005C9 VOL: 0
 ;PCODE: $000005CA VOL: 0
 ;PCODE: $000005CB VOL: 0
 ;PCODE: $000005CC VOL: 0
 ;PCODE: $000005CD VOL: 0
+;    if(y>3)  y-=4;  // Y начало контура кнопки
 ;PCODE: $000005CE VOL: 0
 ;PCODE: $000005CF VOL: 0
 ;PCODE: $000005D0 VOL: 0
-;  y = y - 4;      // Y начало контура кнопки
 ;PCODE: $000005D1 VOL: 0
 ;PCODE: $000005D2 VOL: 0
 ;PCODE: $000005D3 VOL: 0
 ;PCODE: $000005D4 VOL: 0
-;  indx = 0;
+;    for (j=0; j<row; j++){
 ;PCODE: $000005D5 VOL: 0
 ;PCODE: $000005D6 VOL: 0
-;  for (j=0; j<row; j++){
 ;PCODE: $000005D7 VOL: 0
 ;PCODE: $000005D8 VOL: 0
 ;PCODE: $000005D9 VOL: 0
@@ -2288,12 +2285,11 @@
 ;PCODE: $000005DC VOL: 0
 ;PCODE: $000005DD VOL: 0
 ;PCODE: $000005DE VOL: 0
-;PCODE: $000005DF VOL: 0
 ;    x = TFTWIDTH-90;// X начало 1 кнопки
+;PCODE: $000005DF VOL: 0
 ;PCODE: $000005E0 VOL: 0
+;    for (i=0; i<2; i++){
 ;PCODE: $000005E1 VOL: 0
-;#pragma warn-
-;    for (i=0; i<col; i++){
 ;PCODE: $000005E2 VOL: 0
 ;PCODE: $000005E3 VOL: 0
 ;PCODE: $000005E4 VOL: 0
@@ -2302,8 +2298,8 @@
 ;PCODE: $000005E7 VOL: 0
 ;PCODE: $000005E8 VOL: 0
 ;PCODE: $000005E9 VOL: 0
+;        plus[indx].x = (int)x+i*45;// интервал между кнопками
 ;PCODE: $000005EA VOL: 0
-;        plus[indx].x = x+i*(w+5);// интервал между кнопками
 ;PCODE: $000005EB VOL: 0
 ;PCODE: $000005EC VOL: 0
 ;PCODE: $000005ED VOL: 0
@@ -2311,79 +2307,72 @@
 ;PCODE: $000005EF VOL: 0
 ;PCODE: $000005F0 VOL: 0
 ;PCODE: $000005F1 VOL: 0
+;        plus[indx].w = 40;
 ;PCODE: $000005F2 VOL: 0
 ;PCODE: $000005F3 VOL: 0
 ;PCODE: $000005F4 VOL: 0
 ;PCODE: $000005F5 VOL: 0
 ;PCODE: $000005F6 VOL: 0
 ;PCODE: $000005F7 VOL: 0
+;        plus[indx].h = h;
 ;PCODE: $000005F8 VOL: 0
-;        plus[indx].w = w;
 ;PCODE: $000005F9 VOL: 0
 ;PCODE: $000005FA VOL: 0
 ;PCODE: $000005FB VOL: 0
 ;PCODE: $000005FC VOL: 0
 ;PCODE: $000005FD VOL: 0
-;        plus[indx].h = h;
+;        plus[indx].y = y;
 ;PCODE: $000005FE VOL: 0
 ;PCODE: $000005FF VOL: 0
 ;PCODE: $00000600 VOL: 0
 ;PCODE: $00000601 VOL: 0
 ;PCODE: $00000602 VOL: 0
 ;PCODE: $00000603 VOL: 0
-;        plus[indx].y = y;
 ;PCODE: $00000604 VOL: 0
 ;PCODE: $00000605 VOL: 0
+;        indx++;
 ;PCODE: $00000606 VOL: 0
 ;PCODE: $00000607 VOL: 0
+;    }
 ;PCODE: $00000608 VOL: 0
 ;PCODE: $00000609 VOL: 0
 ;PCODE: $0000060A VOL: 0
 ;PCODE: $0000060B VOL: 0
-;        indx++;
 ;PCODE: $0000060C VOL: 0
+;    y += (h+6);// интервал между кнопками
 ;PCODE: $0000060D VOL: 0
-;    }
 ;PCODE: $0000060E VOL: 0
 ;PCODE: $0000060F VOL: 0
 ;PCODE: $00000610 VOL: 0
 ;PCODE: $00000611 VOL: 0
+;    }
 ;PCODE: $00000612 VOL: 0
-;    y += (h+6);// интервал между кнопками
 ;PCODE: $00000613 VOL: 0
 ;PCODE: $00000614 VOL: 0
 ;PCODE: $00000615 VOL: 0
 ;PCODE: $00000616 VOL: 0
+;    left_X = x;// левая граница до которой можно закрашивать экран
 ;PCODE: $00000617 VOL: 0
-;#pragma warn+
-;  }
 ;PCODE: $00000618 VOL: 0
+;    plusCount = row*2;// обшее количество кнопок
 ;PCODE: $00000619 VOL: 0
 ;PCODE: $0000061A VOL: 0
 ;PCODE: $0000061B VOL: 0
+;}
 ;PCODE: $0000061C VOL: 0
-;  left_X = x;// левая граница до которой можно закрашивать экран
 ;PCODE: $0000061D VOL: 0
 ;PCODE: $0000061E VOL: 0
-;  plusCount = col * row;// обшее количество кнопок
 ;PCODE: $0000061F VOL: 0
+;
+;void initializeButtons(char col, char row, char h){// высота кнопки
 ;PCODE: $00000620 VOL: 0
 ;PCODE: $00000621 VOL: 0
-;}
+; char i,j,indx, w;
+; unsigned int x,y;
+;    switch (col){                  // ширина кнопки зависит от кол-ва кнопок в строке
 ;PCODE: $00000622 VOL: 0
 ;PCODE: $00000623 VOL: 0
 ;PCODE: $00000624 VOL: 0
-;PCODE: $00000625 VOL: 0
-;
-;void initializeButtons(char col, char row, char h){// высота кнопки
-;PCODE: $00000626 VOL: 0
-;PCODE: $00000627 VOL: 0
-; char i,j,indx, w;
-; unsigned int x,y;
-;  switch (col)                  // ширина кнопки зависит от кол-ва кнопок в строке
-;PCODE: $00000628 VOL: 0
-;PCODE: $00000629 VOL: 0
-;PCODE: $0000062A VOL: 0
 ;	col -> Y+10
 ;	row -> Y+9
 ;	h -> Y+8
@@ -2393,85 +2382,89 @@
 ;	w -> R18
 ;	x -> R20,R21
 ;	y -> Y+6
+;PCODE: $00000625 VOL: 0
+;PCODE: $00000626 VOL: 0
+;        case 4:  w = max_X/4-6; break;  // 72
+;PCODE: $00000627 VOL: 0
+;PCODE: $00000628 VOL: 0
+;PCODE: $00000629 VOL: 0
+;PCODE: $0000062A VOL: 0
 ;PCODE: $0000062B VOL: 0
 ;PCODE: $0000062C VOL: 0
-;   {
-;    case 4: w = max_X/4-6; break;  // 72
 ;PCODE: $0000062D VOL: 0
+;        case 3:  w = max_X/3-6; break;  // 100
 ;PCODE: $0000062E VOL: 0
 ;PCODE: $0000062F VOL: 0
 ;PCODE: $00000630 VOL: 0
 ;PCODE: $00000631 VOL: 0
 ;PCODE: $00000632 VOL: 0
 ;PCODE: $00000633 VOL: 0
-;    case 3: w = max_X/3-6; break;  // 100
 ;PCODE: $00000634 VOL: 0
 ;PCODE: $00000635 VOL: 0
 ;PCODE: $00000636 VOL: 0
+;        case 2:  w = max_X/2-9; break;  // 150
 ;PCODE: $00000637 VOL: 0
 ;PCODE: $00000638 VOL: 0
 ;PCODE: $00000639 VOL: 0
 ;PCODE: $0000063A VOL: 0
 ;PCODE: $0000063B VOL: 0
 ;PCODE: $0000063C VOL: 0
-;    case 2: w = max_X/2-9; break;  // 150
 ;PCODE: $0000063D VOL: 0
 ;PCODE: $0000063E VOL: 0
+;        default: w = max_X-6;
 ;PCODE: $0000063F VOL: 0
 ;PCODE: $00000640 VOL: 0
 ;PCODE: $00000641 VOL: 0
 ;PCODE: $00000642 VOL: 0
+;    };
 ;PCODE: $00000643 VOL: 0
+;    if(h<20) h=20;
 ;PCODE: $00000644 VOL: 0
-;    default: w = max_X-6;
 ;PCODE: $00000645 VOL: 0
 ;PCODE: $00000646 VOL: 0
 ;PCODE: $00000647 VOL: 0
 ;PCODE: $00000648 VOL: 0
-;   };
+;    y = max_Y - h - 4;      // начало контура кнопки
 ;PCODE: $00000649 VOL: 0
-;  if(h<20) h=20;
 ;PCODE: $0000064A VOL: 0
 ;PCODE: $0000064B VOL: 0
 ;PCODE: $0000064C VOL: 0
 ;PCODE: $0000064D VOL: 0
 ;PCODE: $0000064E VOL: 0
-;  y = max_Y - h - 4;      // начало контура кнопки
 ;PCODE: $0000064F VOL: 0
+;    indx = 0;
 ;PCODE: $00000650 VOL: 0
 ;PCODE: $00000651 VOL: 0
+;    for (j=0; j<row; j++){
 ;PCODE: $00000652 VOL: 0
 ;PCODE: $00000653 VOL: 0
 ;PCODE: $00000654 VOL: 0
 ;PCODE: $00000655 VOL: 0
-;  indx = 0;
 ;PCODE: $00000656 VOL: 0
 ;PCODE: $00000657 VOL: 0
-;  for (j=0; j<row; j++){
 ;PCODE: $00000658 VOL: 0
 ;PCODE: $00000659 VOL: 0
 ;PCODE: $0000065A VOL: 0
+;        x = 4;// начало 1 кнопки
 ;PCODE: $0000065B VOL: 0
 ;PCODE: $0000065C VOL: 0
+;        for (i=0; i<col; i++){
 ;PCODE: $0000065D VOL: 0
 ;PCODE: $0000065E VOL: 0
 ;PCODE: $0000065F VOL: 0
 ;PCODE: $00000660 VOL: 0
-;    x = 4;// начало 1 кнопки
 ;PCODE: $00000661 VOL: 0
 ;PCODE: $00000662 VOL: 0
-;    #pragma warn-
-;    for (i=0; i<col; i++){
 ;PCODE: $00000663 VOL: 0
 ;PCODE: $00000664 VOL: 0
 ;PCODE: $00000665 VOL: 0
+;            buttons[indx].x = (int)x+i*(w+5);// интервал между кнопками
 ;PCODE: $00000666 VOL: 0
 ;PCODE: $00000667 VOL: 0
 ;PCODE: $00000668 VOL: 0
 ;PCODE: $00000669 VOL: 0
 ;PCODE: $0000066A VOL: 0
 ;PCODE: $0000066B VOL: 0
-;        buttons[indx].x = x+i*(w+5);// интервал между кнопками
 ;PCODE: $0000066C VOL: 0
 ;PCODE: $0000066D VOL: 0
 ;PCODE: $0000066E VOL: 0
@@ -2479,77 +2472,70 @@
 ;PCODE: $00000670 VOL: 0
 ;PCODE: $00000671 VOL: 0
 ;PCODE: $00000672 VOL: 0
+;            buttons[indx].w = w;
 ;PCODE: $00000673 VOL: 0
 ;PCODE: $00000674 VOL: 0
 ;PCODE: $00000675 VOL: 0
 ;PCODE: $00000676 VOL: 0
 ;PCODE: $00000677 VOL: 0
+;            buttons[indx].h = h;
 ;PCODE: $00000678 VOL: 0
-;        buttons[indx].w = w;
 ;PCODE: $00000679 VOL: 0
 ;PCODE: $0000067A VOL: 0
 ;PCODE: $0000067B VOL: 0
 ;PCODE: $0000067C VOL: 0
 ;PCODE: $0000067D VOL: 0
-;        buttons[indx].h = h;
+;            buttons[indx].y = y;
 ;PCODE: $0000067E VOL: 0
 ;PCODE: $0000067F VOL: 0
 ;PCODE: $00000680 VOL: 0
 ;PCODE: $00000681 VOL: 0
 ;PCODE: $00000682 VOL: 0
 ;PCODE: $00000683 VOL: 0
-;        buttons[indx].y = y;
+;            indx++;
 ;PCODE: $00000684 VOL: 0
 ;PCODE: $00000685 VOL: 0
+;        }
 ;PCODE: $00000686 VOL: 0
 ;PCODE: $00000687 VOL: 0
 ;PCODE: $00000688 VOL: 0
 ;PCODE: $00000689 VOL: 0
-;        indx++;
 ;PCODE: $0000068A VOL: 0
+;        y -= (h+5);// интервал между кнопками
 ;PCODE: $0000068B VOL: 0
-;    }
 ;PCODE: $0000068C VOL: 0
 ;PCODE: $0000068D VOL: 0
 ;PCODE: $0000068E VOL: 0
 ;PCODE: $0000068F VOL: 0
 ;PCODE: $00000690 VOL: 0
-;    y -= (h+5);// интервал между кнопками
+;    }
 ;PCODE: $00000691 VOL: 0
 ;PCODE: $00000692 VOL: 0
 ;PCODE: $00000693 VOL: 0
 ;PCODE: $00000694 VOL: 0
 ;PCODE: $00000695 VOL: 0
+;    bottom_Y = y;// верхняя граница меню до которой можно закрашивать экран
 ;PCODE: $00000696 VOL: 0
-;    #pragma warn+
-;  }
 ;PCODE: $00000697 VOL: 0
+;    buttonCount = col * row;// обшее количество кнопок
 ;PCODE: $00000698 VOL: 0
 ;PCODE: $00000699 VOL: 0
 ;PCODE: $0000069A VOL: 0
 ;PCODE: $0000069B VOL: 0
-;  bottom_Y = y;// верхняя граница меню до которой можно закрашивать экран
+;}
 ;PCODE: $0000069C VOL: 0
 ;PCODE: $0000069D VOL: 0
-;  buttonCount = col * row;// обшее количество кнопок
 ;PCODE: $0000069E VOL: 0
 ;PCODE: $0000069F VOL: 0
+;//---------------- цвет фона ------- цвет рамки -------- цвет текста --- номер --- текст ---------
+;void drawButton(unsigned int fill, unsigned int bord, unsigned int text, char b, char flash *str){
 ;PCODE: $000006A0 VOL: 0
 ;PCODE: $000006A1 VOL: 0
-;}
+; int x, y, w, h;
+;   w = buttons[b].w;      // ширина кнопки
 ;PCODE: $000006A2 VOL: 0
 ;PCODE: $000006A3 VOL: 0
 ;PCODE: $000006A4 VOL: 0
-;PCODE: $000006A5 VOL: 0
-;//---------------- цвет фона ------- цвет рамки -------- цвет текста --- номер --- текст ---------
-;void drawButton(unsigned int fill, unsigned int bord, unsigned int text, char b, char flash *str){
-;PCODE: $000006A6 VOL: 0
-;PCODE: $000006A7 VOL: 0
-; int x, y, w, h;//, r;
-;   w = buttons[b].w;      // ширина кнопки
-;PCODE: $000006A8 VOL: 0
-;PCODE: $000006A9 VOL: 0
-;PCODE: $000006AA VOL: 0
 ;	fill -> Y+15
 ;	bord -> Y+13
 ;	text -> Y+11
@@ -2559,77 +2545,82 @@
 ;	y -> R18,R19
 ;	w -> R20,R21
 ;	h -> Y+6
+;PCODE: $000006A5 VOL: 0
+;PCODE: $000006A6 VOL: 0
+;PCODE: $000006A7 VOL: 0
+;PCODE: $000006A8 VOL: 0
+;PCODE: $000006A9 VOL: 0
+;PCODE: $000006AA VOL: 0
 ;PCODE: $000006AB VOL: 0
+;   h = buttons[b].h;      // высота кнопки
 ;PCODE: $000006AC VOL: 0
 ;PCODE: $000006AD VOL: 0
 ;PCODE: $000006AE VOL: 0
 ;PCODE: $000006AF VOL: 0
 ;PCODE: $000006B0 VOL: 0
 ;PCODE: $000006B1 VOL: 0
-;   h = buttons[b].h;      // высота кнопки
 ;PCODE: $000006B2 VOL: 0
 ;PCODE: $000006B3 VOL: 0
+;   x = buttons[b].x;      // начало контура кнопки
 ;PCODE: $000006B4 VOL: 0
 ;PCODE: $000006B5 VOL: 0
 ;PCODE: $000006B6 VOL: 0
 ;PCODE: $000006B7 VOL: 0
 ;PCODE: $000006B8 VOL: 0
+;   y = buttons[b].y;      // начало контура кнопки
 ;PCODE: $000006B9 VOL: 0
-;   x = buttons[b].x;      // начало контура кнопки
 ;PCODE: $000006BA VOL: 0
 ;PCODE: $000006BB VOL: 0
 ;PCODE: $000006BC VOL: 0
 ;PCODE: $000006BD VOL: 0
 ;PCODE: $000006BE VOL: 0
-;   y = buttons[b].y;      // начало контура кнопки
+;   //TFT_FillRoundRect(x, y, w, h, r, fill);
+;   ILI9341_FillRectangle(x, y, w, h, fill);
 ;PCODE: $000006BF VOL: 0
 ;PCODE: $000006C0 VOL: 0
 ;PCODE: $000006C1 VOL: 0
 ;PCODE: $000006C2 VOL: 0
 ;PCODE: $000006C3 VOL: 0
 ;PCODE: $000006C4 VOL: 0
-;//   r = min(w,h)/4;
-;   //TFT_FillRoundRect(x, y, w, h, r, fill);
-;   ILI9341_FillRectangle(x, y, w, h, fill);
 ;PCODE: $000006C5 VOL: 0
+;   //TFT_DrawRoundRect(x, y, w, h, r, bord);
+;   ILI9341_DrawRectangle(x, y, w, h, bord);
 ;PCODE: $000006C6 VOL: 0
 ;PCODE: $000006C7 VOL: 0
 ;PCODE: $000006C8 VOL: 0
 ;PCODE: $000006C9 VOL: 0
 ;PCODE: $000006CA VOL: 0
 ;PCODE: $000006CB VOL: 0
-;   //TFT_DrawRoundRect(x, y, w, h, r, bord);
-;   ILI9341_DrawRectangle(x, y, w, h, bord);
 ;PCODE: $000006CC VOL: 0
+;#pragma warn-
+;   x = x + w/2 - strlenf(str)*5;
 ;PCODE: $000006CD VOL: 0
 ;PCODE: $000006CE VOL: 0
 ;PCODE: $000006CF VOL: 0
 ;PCODE: $000006D0 VOL: 0
 ;PCODE: $000006D1 VOL: 0
 ;PCODE: $000006D2 VOL: 0
-;#pragma warn-
-;   x = x + w/2 - strlenf(str)*5;
 ;PCODE: $000006D3 VOL: 0
 ;PCODE: $000006D4 VOL: 0
 ;PCODE: $000006D5 VOL: 0
 ;PCODE: $000006D6 VOL: 0
 ;PCODE: $000006D7 VOL: 0
 ;PCODE: $000006D8 VOL: 0
+;   y = y + h/2 - 8;
 ;PCODE: $000006D9 VOL: 0
 ;PCODE: $000006DA VOL: 0
 ;PCODE: $000006DB VOL: 0
 ;PCODE: $000006DC VOL: 0
 ;PCODE: $000006DD VOL: 0
 ;PCODE: $000006DE VOL: 0
-;   y = y + h/2 - 8;
+;#pragma warn+
+;   sprintf(buff,str); ILI9341_WriteString(x, y, buff, Font_11x18, text, fill, 1);
 ;PCODE: $000006DF VOL: 0
 ;PCODE: $000006E0 VOL: 0
 ;PCODE: $000006E1 VOL: 0
 ;PCODE: $000006E2 VOL: 0
 ;PCODE: $000006E3 VOL: 0
 ;PCODE: $000006E4 VOL: 0
-;#pragma warn+
-;   sprintf(buff,str); ILI9341_WriteString(x, y, buff, Font_11x18, text, fill, 1);
 ;PCODE: $000006E5 VOL: 0
 ;PCODE: $000006E6 VOL: 0
 ;PCODE: $000006E7 VOL: 0
@@ -2644,62 +2635,62 @@
 ;PCODE: $000006F0 VOL: 0
 ;PCODE: $000006F1 VOL: 0
 ;PCODE: $000006F2 VOL: 0
+;}
 ;PCODE: $000006F3 VOL: 0
 ;PCODE: $000006F4 VOL: 0
 ;PCODE: $000006F5 VOL: 0
 ;PCODE: $000006F6 VOL: 0
+;
+;void drawPlus(char i, unsigned int fill){
 ;PCODE: $000006F7 VOL: 0
 ;PCODE: $000006F8 VOL: 0
-;}
+; int x, y, w, h;
+;   w = plus[i].w;      // ширина кнопки
 ;PCODE: $000006F9 VOL: 0
 ;PCODE: $000006FA VOL: 0
 ;PCODE: $000006FB VOL: 0
-;PCODE: $000006FC VOL: 0
-;
-;void drawPlus(char i, unsigned int fill){
-;PCODE: $000006FD VOL: 0
-;PCODE: $000006FE VOL: 0
-; int x, y, w, h;
-;   w = plus[i].w;      // ширина кнопки
-;PCODE: $000006FF VOL: 0
-;PCODE: $00000700 VOL: 0
-;PCODE: $00000701 VOL: 0
 ;	i -> Y+10
 ;	fill -> Y+8
 ;	x -> R16,R17
 ;	y -> R18,R19
 ;	w -> R20,R21
 ;	h -> Y+6
+;PCODE: $000006FC VOL: 0
+;PCODE: $000006FD VOL: 0
+;PCODE: $000006FE VOL: 0
+;PCODE: $000006FF VOL: 0
+;PCODE: $00000700 VOL: 0
+;PCODE: $00000701 VOL: 0
 ;PCODE: $00000702 VOL: 0
+;   h = plus[i].h;      // высота кнопки
 ;PCODE: $00000703 VOL: 0
 ;PCODE: $00000704 VOL: 0
 ;PCODE: $00000705 VOL: 0
 ;PCODE: $00000706 VOL: 0
 ;PCODE: $00000707 VOL: 0
 ;PCODE: $00000708 VOL: 0
-;   h = plus[i].h;      // высота кнопки
 ;PCODE: $00000709 VOL: 0
 ;PCODE: $0000070A VOL: 0
+;   x = plus[i].x;      // начало контура кнопки
 ;PCODE: $0000070B VOL: 0
 ;PCODE: $0000070C VOL: 0
 ;PCODE: $0000070D VOL: 0
 ;PCODE: $0000070E VOL: 0
 ;PCODE: $0000070F VOL: 0
+;   y = plus[i].y;      // начало контура кнопки
 ;PCODE: $00000710 VOL: 0
-;   x = plus[i].x;      // начало контура кнопки
 ;PCODE: $00000711 VOL: 0
 ;PCODE: $00000712 VOL: 0
 ;PCODE: $00000713 VOL: 0
 ;PCODE: $00000714 VOL: 0
 ;PCODE: $00000715 VOL: 0
-;   y = plus[i].y;      // начало контура кнопки
+;   if(i%2) ILI9341_DrawRectangle(x, y, w, h, BLUE);
 ;PCODE: $00000716 VOL: 0
 ;PCODE: $00000717 VOL: 0
 ;PCODE: $00000718 VOL: 0
 ;PCODE: $00000719 VOL: 0
 ;PCODE: $0000071A VOL: 0
 ;PCODE: $0000071B VOL: 0
-;   if(i%2) ILI9341_DrawRectangle(x, y, w, h, BLUE);
 ;PCODE: $0000071C VOL: 0
 ;PCODE: $0000071D VOL: 0
 ;PCODE: $0000071E VOL: 0
@@ -2707,40 +2698,40 @@
 ;PCODE: $00000720 VOL: 0
 ;PCODE: $00000721 VOL: 0
 ;PCODE: $00000722 VOL: 0
+;   else ILI9341_DrawRectangle(x, y, w, h, RED);
 ;PCODE: $00000723 VOL: 0
 ;PCODE: $00000724 VOL: 0
 ;PCODE: $00000725 VOL: 0
 ;PCODE: $00000726 VOL: 0
 ;PCODE: $00000727 VOL: 0
 ;PCODE: $00000728 VOL: 0
-;   else ILI9341_DrawRectangle(x, y, w, h, RED);
 ;PCODE: $00000729 VOL: 0
 ;PCODE: $0000072A VOL: 0
 ;PCODE: $0000072B VOL: 0
+;#pragma warn-
 ;PCODE: $0000072C VOL: 0
+;   x = x + w/2 - 5;
 ;PCODE: $0000072D VOL: 0
 ;PCODE: $0000072E VOL: 0
 ;PCODE: $0000072F VOL: 0
 ;PCODE: $00000730 VOL: 0
 ;PCODE: $00000731 VOL: 0
-;#pragma warn-
 ;PCODE: $00000732 VOL: 0
-;   x = x + w/2 - 5;
+;   y = y + h/2 - 8;
 ;PCODE: $00000733 VOL: 0
 ;PCODE: $00000734 VOL: 0
 ;PCODE: $00000735 VOL: 0
 ;PCODE: $00000736 VOL: 0
 ;PCODE: $00000737 VOL: 0
 ;PCODE: $00000738 VOL: 0
-;   y = y + h/2 - 8;
+;#pragma warn+
+;   if(i%2) ILI9341_WriteString(x, y, "-", Font_11x18, BLUE, fill, 1);
 ;PCODE: $00000739 VOL: 0
 ;PCODE: $0000073A VOL: 0
 ;PCODE: $0000073B VOL: 0
 ;PCODE: $0000073C VOL: 0
 ;PCODE: $0000073D VOL: 0
 ;PCODE: $0000073E VOL: 0
-;#pragma warn+
-;   if(i%2) ILI9341_WriteString(x, y, "-", Font_11x18, BLUE, fill, 1);
 ;PCODE: $0000073F VOL: 0
 ;PCODE: $00000740 VOL: 0
 ;PCODE: $00000741 VOL: 0
@@ -2754,13 +2745,13 @@
 ;PCODE: $00000749 VOL: 0
 ;PCODE: $0000074A VOL: 0
 ;PCODE: $0000074B VOL: 0
+;   else ILI9341_WriteString(x, y, "+", Font_11x18, RED, fill, 1);
 ;PCODE: $0000074C VOL: 0
 ;PCODE: $0000074D VOL: 0
 ;PCODE: $0000074E VOL: 0
 ;PCODE: $0000074F VOL: 0
 ;PCODE: $00000750 VOL: 0
 ;PCODE: $00000751 VOL: 0
-;   else ILI9341_WriteString(x, y, "+", Font_11x18, RED, fill, 1);
 ;PCODE: $00000752 VOL: 0
 ;PCODE: $00000753 VOL: 0
 ;PCODE: $00000754 VOL: 0
@@ -2770,21 +2761,15 @@
 ;PCODE: $00000758 VOL: 0
 ;PCODE: $00000759 VOL: 0
 ;PCODE: $0000075A VOL: 0
+;}
 ;PCODE: $0000075B VOL: 0
 ;PCODE: $0000075C VOL: 0
 ;PCODE: $0000075D VOL: 0
 ;PCODE: $0000075E VOL: 0
 ;PCODE: $0000075F VOL: 0
-;PCODE: $00000760 VOL: 0
-;}
-;PCODE: $00000761 VOL: 0
-;PCODE: $00000762 VOL: 0
-;PCODE: $00000763 VOL: 0
-;PCODE: $00000764 VOL: 0
-;PCODE: $00000765 VOL: 0
 
 	.DSEG
-_0xB5:
+_0xB6:
 	.BYTE 0x4
 ;
 ;//x:    переменная, значение которой необходимо преобразовать
@@ -2792,22 +2777,27 @@ _0xB5:
 ;//in_max: верхний предел текущего диапазона переменной value
 ;//out_min:    нижний предел нового диапазона переменной value
 ;//out_max:   верхний предел нового диапазона переменной value
-;unsigned int map(unsigned int x, char in_min, unsigned int in_max, char out_min, unsigned int out_max)
-;{
+;unsigned int map(unsigned int x, char in_min, unsigned int in_max, char out_min, unsigned int out_max){
 
 	.CSEG
-;PCODE: $00000766 VOL: 0
-;PCODE: $00000767 VOL: 0
-;long val;
-; val = (x - in_min); val *= (out_max - out_min); val /= (in_max - in_min); val += out_min;
-;PCODE: $00000768 VOL: 0
-;PCODE: $00000769 VOL: 0
+;PCODE: $00000760 VOL: 0
+;PCODE: $00000761 VOL: 0
+; long val;
+;    val = (x - in_min); val *= (out_max - out_min); val /= (in_max - in_min); val += out_min;
+;PCODE: $00000762 VOL: 0
+;PCODE: $00000763 VOL: 0
 ;	x -> Y+10
 ;	in_min -> Y+9
 ;	in_max -> Y+7
 ;	out_min -> Y+6
 ;	out_max -> Y+4
 ;	val -> Y+0
+;PCODE: $00000764 VOL: 0
+;PCODE: $00000765 VOL: 0
+;PCODE: $00000766 VOL: 0
+;PCODE: $00000767 VOL: 0
+;PCODE: $00000768 VOL: 0
+;PCODE: $00000769 VOL: 0
 ;PCODE: $0000076A VOL: 0
 ;PCODE: $0000076B VOL: 0
 ;PCODE: $0000076C VOL: 0
@@ -2833,47 +2823,46 @@ _0xB5:
 ;PCODE: $00000780 VOL: 0
 ;PCODE: $00000781 VOL: 0
 ;PCODE: $00000782 VOL: 0
+;    return val;
 ;PCODE: $00000783 VOL: 0
 ;PCODE: $00000784 VOL: 0
 ;PCODE: $00000785 VOL: 0
+;}
 ;PCODE: $00000786 VOL: 0
+;
+;char contains(char b){// проверка попадания пересчитаной координаты в область кнопки.
 ;PCODE: $00000787 VOL: 0
 ;PCODE: $00000788 VOL: 0
-; return val;
+; int beg, end;
+;    beg = buttons[b].x-3;
 ;PCODE: $00000789 VOL: 0
 ;PCODE: $0000078A VOL: 0
-;PCODE: $0000078B VOL: 0
-;}
-;PCODE: $0000078C VOL: 0
-;
-;char contains(char b)// проверка попадания пересчитаной координаты в область кнопки.
-; {
-;PCODE: $0000078D VOL: 0
-;PCODE: $0000078E VOL: 0
-; int beg, end;
-;   beg = buttons[b].x;
-;PCODE: $0000078F VOL: 0
-;PCODE: $00000790 VOL: 0
 ;	b -> Y+4
 ;	beg -> R16,R17
 ;	end -> R18,R19
+;PCODE: $0000078B VOL: 0
+;PCODE: $0000078C VOL: 0
+;PCODE: $0000078D VOL: 0
+;PCODE: $0000078E VOL: 0
+;PCODE: $0000078F VOL: 0
+;PCODE: $00000790 VOL: 0
 ;PCODE: $00000791 VOL: 0
 ;PCODE: $00000792 VOL: 0
+;    end = beg + buttons[b].w;
 ;PCODE: $00000793 VOL: 0
 ;PCODE: $00000794 VOL: 0
 ;PCODE: $00000795 VOL: 0
-;   end = beg + buttons[b].w-3;
 ;PCODE: $00000796 VOL: 0
 ;PCODE: $00000797 VOL: 0
 ;PCODE: $00000798 VOL: 0
 ;PCODE: $00000799 VOL: 0
 ;PCODE: $0000079A VOL: 0
 ;PCODE: $0000079B VOL: 0
+;    if ((point_X < beg)||(point_X > end)) return 0;
 ;PCODE: $0000079C VOL: 0
 ;PCODE: $0000079D VOL: 0
 ;PCODE: $0000079E VOL: 0
 ;PCODE: $0000079F VOL: 0
-;   if ((point_X < beg)||(point_X > end)) return 0;
 ;PCODE: $000007A0 VOL: 0
 ;PCODE: $000007A1 VOL: 0
 ;PCODE: $000007A2 VOL: 0
@@ -2882,19 +2871,19 @@ _0xB5:
 ;PCODE: $000007A5 VOL: 0
 ;PCODE: $000007A6 VOL: 0
 ;PCODE: $000007A7 VOL: 0
+;    beg = buttons[b].y-3;
 ;PCODE: $000007A8 VOL: 0
 ;PCODE: $000007A9 VOL: 0
 ;PCODE: $000007AA VOL: 0
 ;PCODE: $000007AB VOL: 0
-;   beg = buttons[b].y;
 ;PCODE: $000007AC VOL: 0
 ;PCODE: $000007AD VOL: 0
 ;PCODE: $000007AE VOL: 0
 ;PCODE: $000007AF VOL: 0
 ;PCODE: $000007B0 VOL: 0
 ;PCODE: $000007B1 VOL: 0
+;    end = beg + buttons[b].h;
 ;PCODE: $000007B2 VOL: 0
-;   end = beg + buttons[b].h-3;
 ;PCODE: $000007B3 VOL: 0
 ;PCODE: $000007B4 VOL: 0
 ;PCODE: $000007B5 VOL: 0
@@ -2903,9 +2892,9 @@ _0xB5:
 ;PCODE: $000007B8 VOL: 0
 ;PCODE: $000007B9 VOL: 0
 ;PCODE: $000007BA VOL: 0
+;    if ((point_Y < beg)||(point_Y > end)) return 0;
 ;PCODE: $000007BB VOL: 0
 ;PCODE: $000007BC VOL: 0
-;   if ((point_Y < beg)||(point_Y > end)) return 0;
 ;PCODE: $000007BD VOL: 0
 ;PCODE: $000007BE VOL: 0
 ;PCODE: $000007BF VOL: 0
@@ -2916,37 +2905,37 @@ _0xB5:
 ;PCODE: $000007C4 VOL: 0
 ;PCODE: $000007C5 VOL: 0
 ;PCODE: $000007C6 VOL: 0
+;    return 1;
 ;PCODE: $000007C7 VOL: 0
 ;PCODE: $000007C8 VOL: 0
-;   return 1;
 ;PCODE: $000007C9 VOL: 0
 ;PCODE: $000007CA VOL: 0
 ;PCODE: $000007CB VOL: 0
-;PCODE: $000007CC VOL: 0
-;PCODE: $000007CD VOL: 0
 ; }
-;PCODE: $000007CE VOL: 0
+;PCODE: $000007CC VOL: 0
 ;
 ;char containsPlus(char b)// проверка попадания пересчитаной координаты в область кнопки.
 ; {
-;PCODE: $000007CF VOL: 0
-;PCODE: $000007D0 VOL: 0
+;PCODE: $000007CD VOL: 0
+;PCODE: $000007CE VOL: 0
 ; int beg, end;
 ;   beg = plus[b].x-3;
-;PCODE: $000007D1 VOL: 0
-;PCODE: $000007D2 VOL: 0
+;PCODE: $000007CF VOL: 0
+;PCODE: $000007D0 VOL: 0
 ;	b -> Y+4
 ;	beg -> R16,R17
 ;	end -> R18,R19
+;PCODE: $000007D1 VOL: 0
+;PCODE: $000007D2 VOL: 0
 ;PCODE: $000007D3 VOL: 0
 ;PCODE: $000007D4 VOL: 0
 ;PCODE: $000007D5 VOL: 0
 ;PCODE: $000007D6 VOL: 0
 ;PCODE: $000007D7 VOL: 0
 ;PCODE: $000007D8 VOL: 0
+;   end = beg + plus[b].w+3;
 ;PCODE: $000007D9 VOL: 0
 ;PCODE: $000007DA VOL: 0
-;   end = beg + plus[b].w+3;
 ;PCODE: $000007DB VOL: 0
 ;PCODE: $000007DC VOL: 0
 ;PCODE: $000007DD VOL: 0
@@ -2955,9 +2944,9 @@ _0xB5:
 ;PCODE: $000007E0 VOL: 0
 ;PCODE: $000007E1 VOL: 0
 ;PCODE: $000007E2 VOL: 0
+;   if ((point_X < beg)||(point_X > end)) return 0;
 ;PCODE: $000007E3 VOL: 0
 ;PCODE: $000007E4 VOL: 0
-;   if ((point_X < beg)||(point_X > end)) return 0;
 ;PCODE: $000007E5 VOL: 0
 ;PCODE: $000007E6 VOL: 0
 ;PCODE: $000007E7 VOL: 0
@@ -2968,9 +2957,9 @@ _0xB5:
 ;PCODE: $000007EC VOL: 0
 ;PCODE: $000007ED VOL: 0
 ;PCODE: $000007EE VOL: 0
+;   beg = plus[b].y-3;
 ;PCODE: $000007EF VOL: 0
 ;PCODE: $000007F0 VOL: 0
-;   beg = plus[b].y-3;
 ;PCODE: $000007F1 VOL: 0
 ;PCODE: $000007F2 VOL: 0
 ;PCODE: $000007F3 VOL: 0
@@ -2979,9 +2968,9 @@ _0xB5:
 ;PCODE: $000007F6 VOL: 0
 ;PCODE: $000007F7 VOL: 0
 ;PCODE: $000007F8 VOL: 0
+;   end = beg + plus[b].h+3;
 ;PCODE: $000007F9 VOL: 0
 ;PCODE: $000007FA VOL: 0
-;   end = beg + plus[b].h+3;
 ;PCODE: $000007FB VOL: 0
 ;PCODE: $000007FC VOL: 0
 ;PCODE: $000007FD VOL: 0
@@ -2990,9 +2979,9 @@ _0xB5:
 ;PCODE: $00000800 VOL: 0
 ;PCODE: $00000801 VOL: 0
 ;PCODE: $00000802 VOL: 0
+;   if ((point_Y < beg)||(point_Y > end)) return 0;
 ;PCODE: $00000803 VOL: 0
 ;PCODE: $00000804 VOL: 0
-;   if ((point_Y < beg)||(point_Y > end)) return 0;
 ;PCODE: $00000805 VOL: 0
 ;PCODE: $00000806 VOL: 0
 ;PCODE: $00000807 VOL: 0
@@ -3003,116 +2992,115 @@ _0xB5:
 ;PCODE: $0000080C VOL: 0
 ;PCODE: $0000080D VOL: 0
 ;PCODE: $0000080E VOL: 0
+;   return 1;
 ;PCODE: $0000080F VOL: 0
 ;PCODE: $00000810 VOL: 0
-;   return 1;
 ;PCODE: $00000811 VOL: 0
 ;PCODE: $00000812 VOL: 0
 ;PCODE: $00000813 VOL: 0
-;PCODE: $00000814 VOL: 0
-;PCODE: $00000815 VOL: 0
 ; }
-;PCODE: $00000816 VOL: 0
+;PCODE: $00000814 VOL: 0
 ;
 ;char checkTouch(void)// вычисление кординаты касания резистивной матрицы (point_Y, point_X)
 ;{
-;PCODE: $00000817 VOL: 0
-;PCODE: $00000818 VOL: 0
+;PCODE: $00000815 VOL: 0
+;PCODE: $00000816 VOL: 0
 ;char i;
 ;int val, samples[2];
 ;//------- Set X+ to ground --------------------
 ;  XP_DIR = OUTPUT; // DDRC.6 ??????????????????
-;PCODE: $00000819 VOL: 0
-;PCODE: $0000081A VOL: 0
+;PCODE: $00000817 VOL: 0
+;PCODE: $00000818 VOL: 0
 ;	i -> R17
 ;	val -> R18,R19
 ;	samples -> Y+4
+;PCODE: $00000819 VOL: 0
+;PCODE: $0000081A VOL: 0
+;  XP_PORT = LOW;   // DDRC.6
 ;PCODE: $0000081B VOL: 0
 ;PCODE: $0000081C VOL: 0
-;  XP_PORT = LOW;   // DDRC.6
-;PCODE: $0000081D VOL: 0
-;PCODE: $0000081E VOL: 0
 ;//------- Set Y- to VCC -----------------------
 ;  YM_DIR = OUTPUT; // DDRC.7 ??????????????????
+;PCODE: $0000081D VOL: 0
+;PCODE: $0000081E VOL: 0
+;  YM_PORT = HIGH;  // DDRC.7 ??????????????????
 ;PCODE: $0000081F VOL: 0
 ;PCODE: $00000820 VOL: 0
-;  YM_PORT = HIGH;  // DDRC.7 ??????????????????
-;PCODE: $00000821 VOL: 0
-;PCODE: $00000822 VOL: 0
 ;//------- Hi-Z X- and Y+ ----------------------
 ;  YP_DIR = INPUT;  // TFT_WRX
+;PCODE: $00000821 VOL: 0
+;PCODE: $00000822 VOL: 0
+;  YP_PORT = LOW;   // TFT_WRX
 ;PCODE: $00000823 VOL: 0
 ;PCODE: $00000824 VOL: 0
-;  YP_PORT = LOW;   // TFT_WRX
+;  XM_DIR = INPUT;  // TFT_DCX
 ;PCODE: $00000825 VOL: 0
 ;PCODE: $00000826 VOL: 0
-;  XM_DIR = INPUT;  // TFT_DCX
+;  XM_PORT = LOW;   // TFT_DCX
 ;PCODE: $00000827 VOL: 0
 ;PCODE: $00000828 VOL: 0
-;  XM_PORT = LOW;   // TFT_DCX
+;  val = read_adc(YP_PIN);  // y
 ;PCODE: $00000829 VOL: 0
 ;PCODE: $0000082A VOL: 0
-;  val = read_adc(YP_PIN);  // y
 ;PCODE: $0000082B VOL: 0
+;  val-= read_adc(XM_PIN);  //(y-x)
 ;PCODE: $0000082C VOL: 0
 ;PCODE: $0000082D VOL: 0
-;  val-= read_adc(XM_PIN);  //(y-x)
 ;PCODE: $0000082E VOL: 0
 ;PCODE: $0000082F VOL: 0
+;  val = 1023-val;          // z
 ;PCODE: $00000830 VOL: 0
 ;PCODE: $00000831 VOL: 0
-;  val = 1023-val;          // z
 ;PCODE: $00000832 VOL: 0
+;  point_Z = val;
 ;PCODE: $00000833 VOL: 0
 ;PCODE: $00000834 VOL: 0
-;  point_Z = val;
-;PCODE: $00000835 VOL: 0
-;PCODE: $00000836 VOL: 0
 ;
 ;  if(val < 200){
+;PCODE: $00000835 VOL: 0
+;PCODE: $00000836 VOL: 0
 ;PCODE: $00000837 VOL: 0
-;PCODE: $00000838 VOL: 0
-;PCODE: $00000839 VOL: 0
 ;    InitInterface();
-;PCODE: $0000083A VOL: 0
-;//    sprintf(buff,"слабое нажатие v=%3u",val);
-;//    ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
+;PCODE: $00000838 VOL: 0
+;//sprintf(buff,"слабое нажатие v=%3u",val);
+;//ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
 ;    return 0;         // если слабое нажатие то выход
+;PCODE: $00000839 VOL: 0
+;PCODE: $0000083A VOL: 0
 ;PCODE: $0000083B VOL: 0
 ;PCODE: $0000083C VOL: 0
-;PCODE: $0000083D VOL: 0
-;PCODE: $0000083E VOL: 0
 ;  }
-;  else                // иначе определяем координаты
+;  else{                // иначе определяем координаты
+;PCODE: $0000083D VOL: 0
+;     YP_DIR = INPUT;   // TFT_WRX
+;PCODE: $0000083E VOL: 0
 ;PCODE: $0000083F VOL: 0
-;   {
-;     YP_DIR = INPUT;   // TFT_WRX ?????????????
+;     YP_PORT = LOW;    // TFT_WRX
 ;PCODE: $00000840 VOL: 0
 ;PCODE: $00000841 VOL: 0
-;     YP_PORT = LOW;    // TFT_WRX ?????????????
+;     YM_DIR = INPUT;   // DDRC.7
 ;PCODE: $00000842 VOL: 0
 ;PCODE: $00000843 VOL: 0
-;     YM_DIR = INPUT;   // DDRC.7
+;     YM_PORT = LOW;    // DDRC.7
 ;PCODE: $00000844 VOL: 0
 ;PCODE: $00000845 VOL: 0
-;     YM_PORT = LOW;    // DDRC.7
+;     XP_DIR = OUTPUT;  // DDRC.6
 ;PCODE: $00000846 VOL: 0
 ;PCODE: $00000847 VOL: 0
-;     XP_DIR = OUTPUT;  // DDRC.6  ?????????????
+;     XP_PORT = HIGH;   // DDRC.6
 ;PCODE: $00000848 VOL: 0
 ;PCODE: $00000849 VOL: 0
-;     XP_PORT = HIGH;   // DDRC.6
+;     XM_DIR = OUTPUT;  // TFT_DCX
 ;PCODE: $0000084A VOL: 0
 ;PCODE: $0000084B VOL: 0
-;     XM_DIR = OUTPUT;  // TFT_DCX
+;     XM_PORT = LOW;    // TFT_DCX
 ;PCODE: $0000084C VOL: 0
 ;PCODE: $0000084D VOL: 0
-;     XM_PORT = LOW;    // TFT_DCX ?????????????
-;PCODE: $0000084E VOL: 0
-;PCODE: $0000084F VOL: 0
 ;     do{
-;PCODE: $00000850 VOL: 0
+;PCODE: $0000084E VOL: 0
 ;        for (i=0; i<2; i++){samples[i] = read_adc(YP_PIN);}
+;PCODE: $0000084F VOL: 0
+;PCODE: $00000850 VOL: 0
 ;PCODE: $00000851 VOL: 0
 ;PCODE: $00000852 VOL: 0
 ;PCODE: $00000853 VOL: 0
@@ -3135,58 +3123,58 @@ _0xB5:
 ;PCODE: $00000864 VOL: 0
 ;PCODE: $00000865 VOL: 0
 ;PCODE: $00000866 VOL: 0
+;        val = abs(samples[0]-samples[1]);
 ;PCODE: $00000867 VOL: 0
 ;PCODE: $00000868 VOL: 0
-;        val = abs(samples[0]-samples[1]);
 ;PCODE: $00000869 VOL: 0
 ;PCODE: $0000086A VOL: 0
 ;PCODE: $0000086B VOL: 0
 ;PCODE: $0000086C VOL: 0
+;     } while (val>4);
 ;PCODE: $0000086D VOL: 0
 ;PCODE: $0000086E VOL: 0
-;       } while (val>4);
 ;PCODE: $0000086F VOL: 0
 ;PCODE: $00000870 VOL: 0
 ;PCODE: $00000871 VOL: 0
 ;PCODE: $00000872 VOL: 0
-;PCODE: $00000873 VOL: 0
-;PCODE: $00000874 VOL: 0
 ;    //point_Y = (1023-(samples[0]+samples[1])/2);  // Orientation=0
 ;     point_X = (samples[0]+samples[1])/2;           // Orientation=3
+;PCODE: $00000873 VOL: 0
+;PCODE: $00000874 VOL: 0
 ;PCODE: $00000875 VOL: 0
 ;PCODE: $00000876 VOL: 0
 ;PCODE: $00000877 VOL: 0
 ;PCODE: $00000878 VOL: 0
-;PCODE: $00000879 VOL: 0
-;PCODE: $0000087A VOL: 0
 ;
 ;     XP_DIR = INPUT;  // DDRC.6
+;PCODE: $00000879 VOL: 0
+;PCODE: $0000087A VOL: 0
+;     XP_PORT = LOW;   // DDRC.6
 ;PCODE: $0000087B VOL: 0
 ;PCODE: $0000087C VOL: 0
-;     XP_PORT = LOW;   // DDRC.6
+;     XM_DIR = INPUT;  // TFT_DCX
 ;PCODE: $0000087D VOL: 0
 ;PCODE: $0000087E VOL: 0
-;     XM_DIR = INPUT;  // TFT_DCX
+;     XM_PORT = LOW;   // TFT_DCX
 ;PCODE: $0000087F VOL: 0
 ;PCODE: $00000880 VOL: 0
-;     XM_PORT = LOW;   // TFT_DCX ?????????????
+;     YP_DIR = OUTPUT; // TFT_WRX
 ;PCODE: $00000881 VOL: 0
 ;PCODE: $00000882 VOL: 0
-;     YP_DIR = OUTPUT; // TFT_WRX
+;     YP_PORT = HIGH;  // TFT_WRX
 ;PCODE: $00000883 VOL: 0
 ;PCODE: $00000884 VOL: 0
-;     YP_PORT = HIGH;  // TFT_WRX
+;     YM_DIR = OUTPUT; // DDRC.7
 ;PCODE: $00000885 VOL: 0
 ;PCODE: $00000886 VOL: 0
-;     YM_DIR = OUTPUT; // DDRC.7
+;     YM_PORT = LOW;   // DDRC.7
 ;PCODE: $00000887 VOL: 0
 ;PCODE: $00000888 VOL: 0
-;     YM_PORT = LOW;   // DDRC.7  ?????????????
-;PCODE: $00000889 VOL: 0
-;PCODE: $0000088A VOL: 0
 ;     do{
-;PCODE: $0000088B VOL: 0
+;PCODE: $00000889 VOL: 0
 ;        for (i=0; i<2; i++){samples[i] = read_adc(XM_PIN);}
+;PCODE: $0000088A VOL: 0
+;PCODE: $0000088B VOL: 0
 ;PCODE: $0000088C VOL: 0
 ;PCODE: $0000088D VOL: 0
 ;PCODE: $0000088E VOL: 0
@@ -3209,36 +3197,36 @@ _0xB5:
 ;PCODE: $0000089F VOL: 0
 ;PCODE: $000008A0 VOL: 0
 ;PCODE: $000008A1 VOL: 0
+;        val = abs(samples[0]-samples[1]);
 ;PCODE: $000008A2 VOL: 0
 ;PCODE: $000008A3 VOL: 0
-;        val = abs(samples[0]-samples[1]);
 ;PCODE: $000008A4 VOL: 0
 ;PCODE: $000008A5 VOL: 0
 ;PCODE: $000008A6 VOL: 0
 ;PCODE: $000008A7 VOL: 0
+;     } while (val>4);
 ;PCODE: $000008A8 VOL: 0
 ;PCODE: $000008A9 VOL: 0
-;       } while (val>4);
 ;PCODE: $000008AA VOL: 0
 ;PCODE: $000008AB VOL: 0
 ;PCODE: $000008AC VOL: 0
 ;PCODE: $000008AD VOL: 0
-;PCODE: $000008AE VOL: 0
-;PCODE: $000008AF VOL: 0
 ;     //point_X = (1023-(samples[0]+samples[1])/2);   // Orientation=0
 ;     point_Y = (1023-(samples[0]+samples[1])/2);     // Orientation=3
+;PCODE: $000008AE VOL: 0
+;PCODE: $000008AF VOL: 0
 ;PCODE: $000008B0 VOL: 0
 ;PCODE: $000008B1 VOL: 0
 ;PCODE: $000008B2 VOL: 0
 ;PCODE: $000008B3 VOL: 0
 ;PCODE: $000008B4 VOL: 0
 ;PCODE: $000008B5 VOL: 0
-;PCODE: $000008B6 VOL: 0
-;PCODE: $000008B7 VOL: 0
 ;
 ;     InitInterface();
-;PCODE: $000008B8 VOL: 0
+;PCODE: $000008B6 VOL: 0
 ;     point_X = map(point_X, TS_MINX, TS_MAXX, 0, max_X);// пересчет координаты резистивной матрицы на пиксельную метрицу
+;PCODE: $000008B7 VOL: 0
+;PCODE: $000008B8 VOL: 0
 ;PCODE: $000008B9 VOL: 0
 ;PCODE: $000008BA VOL: 0
 ;PCODE: $000008BB VOL: 0
@@ -3248,9 +3236,9 @@ _0xB5:
 ;PCODE: $000008BF VOL: 0
 ;PCODE: $000008C0 VOL: 0
 ;PCODE: $000008C1 VOL: 0
+;     point_Y = map(point_Y, TS_MINY, TS_MAXY, 0, max_Y);// пересчет координаты резистивной матрицы на пиксельную метрицу
 ;PCODE: $000008C2 VOL: 0
 ;PCODE: $000008C3 VOL: 0
-;     point_Y = map(point_Y, TS_MINY, TS_MAXY, 0, max_Y);// пересчет координаты резистивной матрицы на пиксельную метрицу
 ;PCODE: $000008C4 VOL: 0
 ;PCODE: $000008C5 VOL: 0
 ;PCODE: $000008C6 VOL: 0
@@ -3260,71 +3248,71 @@ _0xB5:
 ;PCODE: $000008CA VOL: 0
 ;PCODE: $000008CB VOL: 0
 ;PCODE: $000008CC VOL: 0
+;//ILI9341_FillRectangle(point_X, point_Y, 5, 5, RED);
+;//sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
+;//ILI9341_WriteString(5,TFTBUTTON-15,buff,Font_11x18,WHITE,BLACK,1);
+;     return 1;
 ;PCODE: $000008CD VOL: 0
 ;PCODE: $000008CE VOL: 0
-;ILI9341_FillRectangle(point_X, point_Y, 5, 5, RED);
 ;PCODE: $000008CF VOL: 0
 ;PCODE: $000008D0 VOL: 0
+;  }
 ;PCODE: $000008D1 VOL: 0
+;}
 ;PCODE: $000008D2 VOL: 0
 ;PCODE: $000008D3 VOL: 0
 ;PCODE: $000008D4 VOL: 0
 ;PCODE: $000008D5 VOL: 0
-;PCODE: $000008D6 VOL: 0
-;PCODE: $000008D7 VOL: 0
-;PCODE: $000008D8 VOL: 0
-;//sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
-;//ILI9341_WriteString(5,TFTBUTTON-15,buff,Font_11x18,WHITE,BLACK,1);
-;     return 1;
-;PCODE: $000008D9 VOL: 0
-;PCODE: $000008DA VOL: 0
-;PCODE: $000008DB VOL: 0
-;PCODE: $000008DC VOL: 0
-;   }
-;PCODE: $000008DD VOL: 0
-;}
-;PCODE: $000008DE VOL: 0
-;PCODE: $000008DF VOL: 0
-;PCODE: $000008E0 VOL: 0
-;PCODE: $000008E1 VOL: 0
 ;
 ;#include "proc.c"
 ;#define TUNING    170
 ;
 ;void temperature_check(void)
 ; 0000 0061 {
-;PCODE: $000008E2 VOL: 0
-;PCODE: $000008E3 VOL: 0
+;PCODE: $000008D6 VOL: 0
+;PCODE: $000008D7 VOL: 0
 ; int val;
 ; unsigned char item, byte, crc, try=0;
 ;  for (item=0; item < ds18b20;)
-;PCODE: $000008E4 VOL: 0
+;PCODE: $000008D8 VOL: 0
 ;	val -> R16,R17
 ;	item -> R19
 ;	byte -> R18
 ;	crc -> R21
 ;	try -> R20
+;PCODE: $000008D9 VOL: 0
+;PCODE: $000008DA VOL: 0
+;PCODE: $000008DB VOL: 0
+;PCODE: $000008DC VOL: 0
+;PCODE: $000008DD VOL: 0
+;PCODE: $000008DE VOL: 0
+;PCODE: $000008DF VOL: 0
+;PCODE: $000008E0 VOL: 0
+;PCODE: $000008E1 VOL: 0
+;   {
+;     w1_init();                 // 1 Wire Bus initialization
+;PCODE: $000008E2 VOL: 0
+;     w1_write(0x55);            // Load MATCH ROM [55H] comand
+;PCODE: $000008E3 VOL: 0
+;PCODE: $000008E4 VOL: 0
+;     ptr_char = &familycode[item][0];
 ;PCODE: $000008E5 VOL: 0
 ;PCODE: $000008E6 VOL: 0
 ;PCODE: $000008E7 VOL: 0
 ;PCODE: $000008E8 VOL: 0
+;     for (byte=0; byte < 8; byte++) w1_write(*ptr_char++);
 ;PCODE: $000008E9 VOL: 0
 ;PCODE: $000008EA VOL: 0
 ;PCODE: $000008EB VOL: 0
 ;PCODE: $000008EC VOL: 0
 ;PCODE: $000008ED VOL: 0
-;   {
-;     w1_init();                 // 1 Wire Bus initialization
 ;PCODE: $000008EE VOL: 0
-;     w1_write(0x55);            // Load MATCH ROM [55H] comand
 ;PCODE: $000008EF VOL: 0
 ;PCODE: $000008F0 VOL: 0
-;     ptr_char = &familycode[item][0];
 ;PCODE: $000008F1 VOL: 0
 ;PCODE: $000008F2 VOL: 0
 ;PCODE: $000008F3 VOL: 0
 ;PCODE: $000008F4 VOL: 0
-;     for (byte=0; byte < 8; byte++) w1_write(*ptr_char++);
 ;PCODE: $000008F5 VOL: 0
 ;PCODE: $000008F6 VOL: 0
 ;PCODE: $000008F7 VOL: 0
@@ -3336,8 +3324,10 @@ _0xB5:
 ;PCODE: $000008FD VOL: 0
 ;PCODE: $000008FE VOL: 0
 ;PCODE: $000008FF VOL: 0
+;     w1_write(0xBE);            // Read Scratchpad command [BE]
 ;PCODE: $00000900 VOL: 0
 ;PCODE: $00000901 VOL: 0
+;     for (byte=0; byte < 8; byte++) *ptr_char++ = w1_read(); // Read cont. byte
 ;PCODE: $00000902 VOL: 0
 ;PCODE: $00000903 VOL: 0
 ;PCODE: $00000904 VOL: 0
@@ -3348,10 +3338,8 @@ _0xB5:
 ;PCODE: $00000909 VOL: 0
 ;PCODE: $0000090A VOL: 0
 ;PCODE: $0000090B VOL: 0
-;     w1_write(0xBE);            // Read Scratchpad command [BE]
 ;PCODE: $0000090C VOL: 0
 ;PCODE: $0000090D VOL: 0
-;     for (byte=0; byte < 8; byte++) *ptr_char++ = w1_read(); // Read cont. byte
 ;PCODE: $0000090E VOL: 0
 ;PCODE: $0000090F VOL: 0
 ;PCODE: $00000910 VOL: 0
@@ -3365,37 +3353,38 @@ _0xB5:
 ;PCODE: $00000918 VOL: 0
 ;PCODE: $00000919 VOL: 0
 ;PCODE: $0000091A VOL: 0
+;     ptr_char = ds.buffer;
 ;PCODE: $0000091B VOL: 0
 ;PCODE: $0000091C VOL: 0
+;     if (w1_dow_crc8(ptr_char, 8)==crc){
 ;PCODE: $0000091D VOL: 0
 ;PCODE: $0000091E VOL: 0
 ;PCODE: $0000091F VOL: 0
 ;PCODE: $00000920 VOL: 0
 ;PCODE: $00000921 VOL: 0
 ;PCODE: $00000922 VOL: 0
+;       try = 0; val = ds.pvT;
 ;PCODE: $00000923 VOL: 0
 ;PCODE: $00000924 VOL: 0
 ;PCODE: $00000925 VOL: 0
 ;PCODE: $00000926 VOL: 0
-;     ptr_char = ds.buffer;
+;       if (val<0) {val=-val; val = val*10/16; val=-val;} // перевод в десятичное значение !!
 ;PCODE: $00000927 VOL: 0
 ;PCODE: $00000928 VOL: 0
-;     if (w1_dow_crc8(ptr_char, 8)==crc){
 ;PCODE: $00000929 VOL: 0
 ;PCODE: $0000092A VOL: 0
 ;PCODE: $0000092B VOL: 0
 ;PCODE: $0000092C VOL: 0
 ;PCODE: $0000092D VOL: 0
 ;PCODE: $0000092E VOL: 0
-;       try = 0; val = ds.pvT;
 ;PCODE: $0000092F VOL: 0
 ;PCODE: $00000930 VOL: 0
 ;PCODE: $00000931 VOL: 0
 ;PCODE: $00000932 VOL: 0
-;       if (val<0) {val=-val; val = val*10/16; val=-val;} // перевод в десятичное значение !!
 ;PCODE: $00000933 VOL: 0
 ;PCODE: $00000934 VOL: 0
 ;PCODE: $00000935 VOL: 0
+;       else val = val*10/16; // перевод в десятичное значение !!
 ;PCODE: $00000936 VOL: 0
 ;PCODE: $00000937 VOL: 0
 ;PCODE: $00000938 VOL: 0
@@ -3405,10 +3394,11 @@ _0xB5:
 ;PCODE: $0000093C VOL: 0
 ;PCODE: $0000093D VOL: 0
 ;PCODE: $0000093E VOL: 0
+;       //----- Коректировка датчика DS18B20 ----------
+;       if(ds.buffer[2]==TUNING) val +=(signed char)ds.buffer[3]; // корекция показаний датчика
 ;PCODE: $0000093F VOL: 0
 ;PCODE: $00000940 VOL: 0
 ;PCODE: $00000941 VOL: 0
-;       else val = val*10/16; // перевод в десятичное значение !!
 ;PCODE: $00000942 VOL: 0
 ;PCODE: $00000943 VOL: 0
 ;PCODE: $00000944 VOL: 0
@@ -3416,10 +3406,10 @@ _0xB5:
 ;PCODE: $00000946 VOL: 0
 ;PCODE: $00000947 VOL: 0
 ;PCODE: $00000948 VOL: 0
+;     }
 ;PCODE: $00000949 VOL: 0
+;     else if (++try > 2) {val = 1990; try = 0;}// (199.0) если ошибка более X раз то больше не опрашиваем
 ;PCODE: $0000094A VOL: 0
-;       //----- Коректировка датчика DS18B20 ----------
-;       if(ds.buffer[2]==TUNING) val +=(signed char)ds.buffer[3]; // корекция показаний датчика
 ;PCODE: $0000094B VOL: 0
 ;PCODE: $0000094C VOL: 0
 ;PCODE: $0000094D VOL: 0
@@ -3430,9 +3420,8 @@ _0xB5:
 ;PCODE: $00000952 VOL: 0
 ;PCODE: $00000953 VOL: 0
 ;PCODE: $00000954 VOL: 0
-;     }
+;     t.point[item] = val;
 ;PCODE: $00000955 VOL: 0
-;     else if (++try > 2) {val = 1990; try = 0;}// (199.0) если ошибка более X раз то больше не опрашиваем
 ;PCODE: $00000956 VOL: 0
 ;PCODE: $00000957 VOL: 0
 ;PCODE: $00000958 VOL: 0
@@ -3440,66 +3429,70 @@ _0xB5:
 ;PCODE: $0000095A VOL: 0
 ;PCODE: $0000095B VOL: 0
 ;PCODE: $0000095C VOL: 0
+;     if (try==0) item++;
 ;PCODE: $0000095D VOL: 0
 ;PCODE: $0000095E VOL: 0
 ;PCODE: $0000095F VOL: 0
 ;PCODE: $00000960 VOL: 0
-;     t.point[item] = val;
+;   }
 ;PCODE: $00000961 VOL: 0
 ;PCODE: $00000962 VOL: 0
 ;PCODE: $00000963 VOL: 0
 ;PCODE: $00000964 VOL: 0
+;  w1_init();                    // 1 Wire Bus initialization
 ;PCODE: $00000965 VOL: 0
+;  w1_write(0xCC);               // Load Skip ROM [CCH] command
 ;PCODE: $00000966 VOL: 0
 ;PCODE: $00000967 VOL: 0
+;  w1_write(0x44);               // Load Convert T [44H] command
 ;PCODE: $00000968 VOL: 0
-;     if (try==0) item++;
 ;PCODE: $00000969 VOL: 0
+;}
 ;PCODE: $0000096A VOL: 0
 ;PCODE: $0000096B VOL: 0
 ;PCODE: $0000096C VOL: 0
-;   }
 ;PCODE: $0000096D VOL: 0
-;PCODE: $0000096E VOL: 0
-;PCODE: $0000096F VOL: 0
-;PCODE: $00000970 VOL: 0
-;  w1_init();                    // 1 Wire Bus initialization
-;PCODE: $00000971 VOL: 0
-;  w1_write(0xCC);               // Load Skip ROM [CCH] command
-;PCODE: $00000972 VOL: 0
-;PCODE: $00000973 VOL: 0
-;  w1_write(0x44);               // Load Convert T [44H] command
-;PCODE: $00000974 VOL: 0
-;PCODE: $00000975 VOL: 0
-;}
-;PCODE: $00000976 VOL: 0
-;PCODE: $00000977 VOL: 0
-;PCODE: $00000978 VOL: 0
-;PCODE: $00000979 VOL: 0
 ;
 ;unsigned char module_check(unsigned char fc)
 ;{
-;PCODE: $0000097A VOL: 0
-;PCODE: $0000097B VOL: 0
+;PCODE: $0000096E VOL: 0
+;PCODE: $0000096F VOL: 0
 ; unsigned char *p, try, byte;
 ;  p = out.buffer;
-;PCODE: $0000097C VOL: 0
-;PCODE: $0000097D VOL: 0
+;PCODE: $00000970 VOL: 0
+;PCODE: $00000971 VOL: 0
 ;	fc -> Y+4
 ;	*p -> R16,R17
 ;	try -> R19
 ;	byte -> R18
+;PCODE: $00000972 VOL: 0
+;PCODE: $00000973 VOL: 0
+;  out.buffer[3]=w1_dow_crc8(p,3);// контрольная сумма
+;PCODE: $00000974 VOL: 0
+;PCODE: $00000975 VOL: 0
+;PCODE: $00000976 VOL: 0
+;PCODE: $00000977 VOL: 0
+;PCODE: $00000978 VOL: 0
+;  for (try=0; try<3; try++)
+;PCODE: $00000979 VOL: 0
+;PCODE: $0000097A VOL: 0
+;PCODE: $0000097B VOL: 0
+;PCODE: $0000097C VOL: 0
+;PCODE: $0000097D VOL: 0
 ;PCODE: $0000097E VOL: 0
 ;PCODE: $0000097F VOL: 0
-;  out.buffer[3]=w1_dow_crc8(p,3);// контрольная сумма
 ;PCODE: $00000980 VOL: 0
 ;PCODE: $00000981 VOL: 0
+;   {
+;    w1_init();            // 1 Wire Bus initialization
 ;PCODE: $00000982 VOL: 0
+;    w1_write(fc);         // Family code
 ;PCODE: $00000983 VOL: 0
 ;PCODE: $00000984 VOL: 0
-;  for (try=0; try<3; try++)
+;    p = out.buffer;
 ;PCODE: $00000985 VOL: 0
 ;PCODE: $00000986 VOL: 0
+;    for (byte=0; byte<4; byte++) w1_write(*p++);
 ;PCODE: $00000987 VOL: 0
 ;PCODE: $00000988 VOL: 0
 ;PCODE: $00000989 VOL: 0
@@ -3507,16 +3500,11 @@ _0xB5:
 ;PCODE: $0000098B VOL: 0
 ;PCODE: $0000098C VOL: 0
 ;PCODE: $0000098D VOL: 0
-;   {
-;    w1_init();            // 1 Wire Bus initialization
 ;PCODE: $0000098E VOL: 0
-;    w1_write(fc);         // Family code
 ;PCODE: $0000098F VOL: 0
 ;PCODE: $00000990 VOL: 0
-;    p = out.buffer;
 ;PCODE: $00000991 VOL: 0
 ;PCODE: $00000992 VOL: 0
-;    for (byte=0; byte<4; byte++) w1_write(*p++);
 ;PCODE: $00000993 VOL: 0
 ;PCODE: $00000994 VOL: 0
 ;PCODE: $00000995 VOL: 0
@@ -3525,8 +3513,10 @@ _0xB5:
 ;PCODE: $00000998 VOL: 0
 ;PCODE: $00000999 VOL: 0
 ;PCODE: $0000099A VOL: 0
+;    p = in.buffer;
 ;PCODE: $0000099B VOL: 0
 ;PCODE: $0000099C VOL: 0
+;    for (byte=0; byte<4; byte++) *p++ = w1_read();// Read 4 byte
 ;PCODE: $0000099D VOL: 0
 ;PCODE: $0000099E VOL: 0
 ;PCODE: $0000099F VOL: 0
@@ -3537,10 +3527,8 @@ _0xB5:
 ;PCODE: $000009A4 VOL: 0
 ;PCODE: $000009A5 VOL: 0
 ;PCODE: $000009A6 VOL: 0
-;    p = in.buffer;
 ;PCODE: $000009A7 VOL: 0
 ;PCODE: $000009A8 VOL: 0
-;    for (byte=0; byte<4; byte++) *p++ = w1_read();// Read 4 byte
 ;PCODE: $000009A9 VOL: 0
 ;PCODE: $000009AA VOL: 0
 ;PCODE: $000009AB VOL: 0
@@ -3551,57 +3539,45 @@ _0xB5:
 ;PCODE: $000009B0 VOL: 0
 ;PCODE: $000009B1 VOL: 0
 ;PCODE: $000009B2 VOL: 0
+;    p = in.buffer;
 ;PCODE: $000009B3 VOL: 0
 ;PCODE: $000009B4 VOL: 0
+;    if(byte==w1_dow_crc8(p,4)) break;
 ;PCODE: $000009B5 VOL: 0
 ;PCODE: $000009B6 VOL: 0
 ;PCODE: $000009B7 VOL: 0
 ;PCODE: $000009B8 VOL: 0
 ;PCODE: $000009B9 VOL: 0
 ;PCODE: $000009BA VOL: 0
+;    delay_ms(10);
 ;PCODE: $000009BB VOL: 0
 ;PCODE: $000009BC VOL: 0
 ;PCODE: $000009BD VOL: 0
 ;PCODE: $000009BE VOL: 0
-;    p = in.buffer;
+;   };
 ;PCODE: $000009BF VOL: 0
 ;PCODE: $000009C0 VOL: 0
-;    if(byte==w1_dow_crc8(p,4)) break;
 ;PCODE: $000009C1 VOL: 0
 ;PCODE: $000009C2 VOL: 0
 ;PCODE: $000009C3 VOL: 0
+;  if(try>2) byte=0; else byte=1;
 ;PCODE: $000009C4 VOL: 0
 ;PCODE: $000009C5 VOL: 0
 ;PCODE: $000009C6 VOL: 0
-;    delay_ms(10);
 ;PCODE: $000009C7 VOL: 0
 ;PCODE: $000009C8 VOL: 0
 ;PCODE: $000009C9 VOL: 0
 ;PCODE: $000009CA VOL: 0
-;   };
 ;PCODE: $000009CB VOL: 0
 ;PCODE: $000009CC VOL: 0
+;  return byte;
 ;PCODE: $000009CD VOL: 0
 ;PCODE: $000009CE VOL: 0
 ;PCODE: $000009CF VOL: 0
-;  if(try>2) byte=0; else byte=1;
 ;PCODE: $000009D0 VOL: 0
 ;PCODE: $000009D1 VOL: 0
-;PCODE: $000009D2 VOL: 0
-;PCODE: $000009D3 VOL: 0
-;PCODE: $000009D4 VOL: 0
-;PCODE: $000009D5 VOL: 0
-;PCODE: $000009D6 VOL: 0
-;PCODE: $000009D7 VOL: 0
-;PCODE: $000009D8 VOL: 0
-;  return byte;
-;PCODE: $000009D9 VOL: 0
-;PCODE: $000009DA VOL: 0
-;PCODE: $000009DB VOL: 0
-;PCODE: $000009DC VOL: 0
-;PCODE: $000009DD VOL: 0
 ;}
-;PCODE: $000009DE VOL: 0
+;PCODE: $000009D2 VOL: 0
 ;
 ;//#define ID_CO2          0xF5    // идентификатор блока
 ;//#define DATAREAD        0xA1    // Read Scratchpad
@@ -3623,32 +3599,53 @@ _0xB5:
 ;
 ;//- Converts a 2 digit decimal to BCD format. ---------
 ;char ByteToBcd2(char Value){
-;PCODE: $000009DF VOL: 0
-;PCODE: $000009E0 VOL: 0
+;PCODE: $000009D3 VOL: 0
+;PCODE: $000009D4 VOL: 0
 ; char bcdhigh = 0;
 ;  while (Value >= 10){
-;PCODE: $000009E1 VOL: 0
-;PCODE: $000009E2 VOL: 0
+;PCODE: $000009D5 VOL: 0
+;PCODE: $000009D6 VOL: 0
 ;	Value -> Y+1
 ;	bcdhigh -> R17
+;PCODE: $000009D7 VOL: 0
+;PCODE: $000009D8 VOL: 0
+;PCODE: $000009D9 VOL: 0
+;PCODE: $000009DA VOL: 0
+;PCODE: $000009DB VOL: 0
+;PCODE: $000009DC VOL: 0
+;    bcdhigh++;
+;PCODE: $000009DD VOL: 0
+;PCODE: $000009DE VOL: 0
+;    Value -= 10;
+;PCODE: $000009DF VOL: 0
+;PCODE: $000009E0 VOL: 0
+;PCODE: $000009E1 VOL: 0
+;  }
+;PCODE: $000009E2 VOL: 0
 ;PCODE: $000009E3 VOL: 0
+;  return ((bcdhigh << 4U) | Value);
 ;PCODE: $000009E4 VOL: 0
 ;PCODE: $000009E5 VOL: 0
 ;PCODE: $000009E6 VOL: 0
 ;PCODE: $000009E7 VOL: 0
 ;PCODE: $000009E8 VOL: 0
-;    bcdhigh++;
 ;PCODE: $000009E9 VOL: 0
 ;PCODE: $000009EA VOL: 0
-;    Value -= 10;
 ;PCODE: $000009EB VOL: 0
+;}
 ;PCODE: $000009EC VOL: 0
+;
+;// - Converts from 2 digit BCD to Binary. -----------
+;char Bcd2ToByte(char Value)
+;{
 ;PCODE: $000009ED VOL: 0
-;  }
 ;PCODE: $000009EE VOL: 0
+;  char tmp = 0;
+;  tmp = ((Value & 0xF0) >> 0x4) * 10;
 ;PCODE: $000009EF VOL: 0
-;  return ((bcdhigh << 4U) | Value);
 ;PCODE: $000009F0 VOL: 0
+;	Value -> Y+1
+;	tmp -> R17
 ;PCODE: $000009F1 VOL: 0
 ;PCODE: $000009F2 VOL: 0
 ;PCODE: $000009F3 VOL: 0
@@ -3656,39 +3653,18 @@ _0xB5:
 ;PCODE: $000009F5 VOL: 0
 ;PCODE: $000009F6 VOL: 0
 ;PCODE: $000009F7 VOL: 0
-;}
 ;PCODE: $000009F8 VOL: 0
-;
-;// - Converts from 2 digit BCD to Binary. -----------
-;char Bcd2ToByte(char Value)
-;{
 ;PCODE: $000009F9 VOL: 0
+;  return (tmp + (Value & 0x0F));
 ;PCODE: $000009FA VOL: 0
-;  char tmp = 0;
-;  tmp = ((Value & 0xF0) >> 0x4) * 10;
 ;PCODE: $000009FB VOL: 0
 ;PCODE: $000009FC VOL: 0
-;	Value -> Y+1
-;	tmp -> R17
 ;PCODE: $000009FD VOL: 0
 ;PCODE: $000009FE VOL: 0
 ;PCODE: $000009FF VOL: 0
 ;PCODE: $00000A00 VOL: 0
-;PCODE: $00000A01 VOL: 0
-;PCODE: $00000A02 VOL: 0
-;PCODE: $00000A03 VOL: 0
-;PCODE: $00000A04 VOL: 0
-;PCODE: $00000A05 VOL: 0
-;  return (tmp + (Value & 0x0F));
-;PCODE: $00000A06 VOL: 0
-;PCODE: $00000A07 VOL: 0
-;PCODE: $00000A08 VOL: 0
-;PCODE: $00000A09 VOL: 0
-;PCODE: $00000A0A VOL: 0
-;PCODE: $00000A0B VOL: 0
-;PCODE: $00000A0C VOL: 0
 ;}
-;PCODE: $00000A0D VOL: 0
+;PCODE: $00000A01 VOL: 0
 ;
 ;//signed int LowPassF2(signed int t,unsigned char i)
 ;//{
@@ -3701,154 +3677,168 @@ _0xB5:
 ;
 ;void setDAC(void) // V = Vref x (255/256)
 ;{
-;PCODE: $00000A0E VOL: 0
-;PCODE: $00000A0F VOL: 0
+;PCODE: $00000A02 VOL: 0
+;PCODE: $00000A03 VOL: 0
 ;unsigned char i, val;
 ;  for (i=0; i<4; i++){
-;PCODE: $00000A10 VOL: 0
-;PCODE: $00000A11 VOL: 0
+;PCODE: $00000A04 VOL: 0
+;PCODE: $00000A05 VOL: 0
 ;	i -> R17
 ;	val -> R16
+;PCODE: $00000A06 VOL: 0
+;PCODE: $00000A07 VOL: 0
+;PCODE: $00000A08 VOL: 0
+;PCODE: $00000A09 VOL: 0
+;PCODE: $00000A0A VOL: 0
+;PCODE: $00000A0B VOL: 0
+;PCODE: $00000A0C VOL: 0
+;PCODE: $00000A0D VOL: 0
+;PCODE: $00000A0E VOL: 0
+;     switch (i){
+;PCODE: $00000A0F VOL: 0
+;PCODE: $00000A10 VOL: 0
+;        case 0: CSDAC1 = 0; break;
+;PCODE: $00000A11 VOL: 0
 ;PCODE: $00000A12 VOL: 0
 ;PCODE: $00000A13 VOL: 0
 ;PCODE: $00000A14 VOL: 0
 ;PCODE: $00000A15 VOL: 0
+;        case 1: CSDAC2 = 0; break;
 ;PCODE: $00000A16 VOL: 0
 ;PCODE: $00000A17 VOL: 0
 ;PCODE: $00000A18 VOL: 0
 ;PCODE: $00000A19 VOL: 0
 ;PCODE: $00000A1A VOL: 0
-;     switch (i){
 ;PCODE: $00000A1B VOL: 0
+;        case 2: CSDAC3 = 0; break;
 ;PCODE: $00000A1C VOL: 0
-;        case 0: CSDAC1 = 0; break;
 ;PCODE: $00000A1D VOL: 0
 ;PCODE: $00000A1E VOL: 0
 ;PCODE: $00000A1F VOL: 0
 ;PCODE: $00000A20 VOL: 0
 ;PCODE: $00000A21 VOL: 0
-;        case 1: CSDAC2 = 0; break;
+;        case 3: CSDAC4 = 0; break;
 ;PCODE: $00000A22 VOL: 0
 ;PCODE: $00000A23 VOL: 0
 ;PCODE: $00000A24 VOL: 0
 ;PCODE: $00000A25 VOL: 0
 ;PCODE: $00000A26 VOL: 0
 ;PCODE: $00000A27 VOL: 0
-;        case 2: CSDAC3 = 0; break;
+;     }
 ;PCODE: $00000A28 VOL: 0
+;     SPCR = SPI_MOUD_FL;// SPI port enabled
 ;PCODE: $00000A29 VOL: 0
 ;PCODE: $00000A2A VOL: 0
+;     val = dacU[i]>>4;
 ;PCODE: $00000A2B VOL: 0
 ;PCODE: $00000A2C VOL: 0
 ;PCODE: $00000A2D VOL: 0
-;        case 3: CSDAC4 = 0; break;
 ;PCODE: $00000A2E VOL: 0
 ;PCODE: $00000A2F VOL: 0
 ;PCODE: $00000A30 VOL: 0
+;     SPDR = val & 0x0F; // Load Register to DAC
 ;PCODE: $00000A31 VOL: 0
 ;PCODE: $00000A32 VOL: 0
 ;PCODE: $00000A33 VOL: 0
-;     }
+;     while (!(SPSR & (1<<SPIF)));     // ожидаем конца передачи по SPI Opcode
 ;PCODE: $00000A34 VOL: 0
-;     SPCR = SPI_MOUD_FL;// SPI port enabled
 ;PCODE: $00000A35 VOL: 0
 ;PCODE: $00000A36 VOL: 0
-;     val = dacU[i]>>4;
 ;PCODE: $00000A37 VOL: 0
 ;PCODE: $00000A38 VOL: 0
 ;PCODE: $00000A39 VOL: 0
+;     val = dacU[i]<<4;
 ;PCODE: $00000A3A VOL: 0
 ;PCODE: $00000A3B VOL: 0
 ;PCODE: $00000A3C VOL: 0
-;     SPDR = val & 0x0F; // Load Register to DAC
 ;PCODE: $00000A3D VOL: 0
 ;PCODE: $00000A3E VOL: 0
 ;PCODE: $00000A3F VOL: 0
-;     while (!(SPSR & (1<<SPIF)));     // ожидаем конца передачи по SPI Opcode
+;     SPDR = val & 0xF0;
 ;PCODE: $00000A40 VOL: 0
 ;PCODE: $00000A41 VOL: 0
 ;PCODE: $00000A42 VOL: 0
+;     while (!(SPSR & (1<<SPIF)));     // ожидаем конца передачи по SPI Opcode
 ;PCODE: $00000A43 VOL: 0
 ;PCODE: $00000A44 VOL: 0
 ;PCODE: $00000A45 VOL: 0
-;     val = dacU[i]<<4;
 ;PCODE: $00000A46 VOL: 0
 ;PCODE: $00000A47 VOL: 0
 ;PCODE: $00000A48 VOL: 0
+;     PORTD|=0xF0;       // INSTRUCTION EXECUTED
 ;PCODE: $00000A49 VOL: 0
 ;PCODE: $00000A4A VOL: 0
 ;PCODE: $00000A4B VOL: 0
-;     SPDR = val & 0xF0;
+;  };
 ;PCODE: $00000A4C VOL: 0
 ;PCODE: $00000A4D VOL: 0
 ;PCODE: $00000A4E VOL: 0
-;     while (!(SPSR & (1<<SPIF)));     // ожидаем конца передачи по SPI Opcode
 ;PCODE: $00000A4F VOL: 0
 ;PCODE: $00000A50 VOL: 0
+;  SPCR = 0;             //disable SPI
 ;PCODE: $00000A51 VOL: 0
 ;PCODE: $00000A52 VOL: 0
+;}
 ;PCODE: $00000A53 VOL: 0
 ;PCODE: $00000A54 VOL: 0
-;     PORTD|=0xF0;       // INSTRUCTION EXECUTED
 ;PCODE: $00000A55 VOL: 0
+;
+;unsigned char adapt(unsigned char n)
+;{
 ;PCODE: $00000A56 VOL: 0
 ;PCODE: $00000A57 VOL: 0
-;  };
+;  if (n>100) n=100;
 ;PCODE: $00000A58 VOL: 0
+;	n -> Y+0
 ;PCODE: $00000A59 VOL: 0
 ;PCODE: $00000A5A VOL: 0
 ;PCODE: $00000A5B VOL: 0
 ;PCODE: $00000A5C VOL: 0
-;  SPCR = 0;             //disable SPI
 ;PCODE: $00000A5D VOL: 0
+;  n <<= 1; n += ZERO;
 ;PCODE: $00000A5E VOL: 0
-;}
 ;PCODE: $00000A5F VOL: 0
 ;PCODE: $00000A60 VOL: 0
 ;PCODE: $00000A61 VOL: 0
-;
-;unsigned char adapt(unsigned char n)
-;{
 ;PCODE: $00000A62 VOL: 0
 ;PCODE: $00000A63 VOL: 0
-;  if (n>100) n=100;
 ;PCODE: $00000A64 VOL: 0
-;	n -> Y+0
+;  return n;
 ;PCODE: $00000A65 VOL: 0
 ;PCODE: $00000A66 VOL: 0
 ;PCODE: $00000A67 VOL: 0
+;}
 ;PCODE: $00000A68 VOL: 0
+;#include "touchpad.c"
+;void touchpad(char byte){
+; 0000 0062 void touchpad(char byte){
 ;PCODE: $00000A69 VOL: 0
-;  n <<= 1; n += ZERO;
 ;PCODE: $00000A6A VOL: 0
+;  char max = MAX_SET-1;
+;     switch (displ_num){
 ;PCODE: $00000A6B VOL: 0
 ;PCODE: $00000A6C VOL: 0
+;	byte -> Y+1
+;	max -> R17
 ;PCODE: $00000A6D VOL: 0
 ;PCODE: $00000A6E VOL: 0
 ;PCODE: $00000A6F VOL: 0
 ;PCODE: $00000A70 VOL: 0
-;  return n;
+;        case 0: if(byte<buttonCount){displ_num = byte; newSetButt = 1;} break;
 ;PCODE: $00000A71 VOL: 0
 ;PCODE: $00000A72 VOL: 0
 ;PCODE: $00000A73 VOL: 0
-;}
 ;PCODE: $00000A74 VOL: 0
-;#include "touchpad.c"
-;void touchpad(char byte){
-; 0000 0062 void touchpad(char byte){
 ;PCODE: $00000A75 VOL: 0
 ;PCODE: $00000A76 VOL: 0
-;  char max = MAX_SET-1;
-;     switch (displ_num){
 ;PCODE: $00000A77 VOL: 0
 ;PCODE: $00000A78 VOL: 0
-;	byte -> Y+1
-;	max -> R17
 ;PCODE: $00000A79 VOL: 0
 ;PCODE: $00000A7A VOL: 0
 ;PCODE: $00000A7B VOL: 0
 ;PCODE: $00000A7C VOL: 0
-;        case 0: if(byte<buttonCount){displ_num = byte; newSetButt = 1;} break;
+;        //- АНАЛОГОВЫЕ ВЫХОДЫ -
+;        case 1: if(byte<buttonCount){displ_num = byte; newSetButt = 1;}
 ;PCODE: $00000A7D VOL: 0
 ;PCODE: $00000A7E VOL: 0
 ;PCODE: $00000A7F VOL: 0
@@ -3860,69 +3850,68 @@ _0xB5:
 ;PCODE: $00000A85 VOL: 0
 ;PCODE: $00000A86 VOL: 0
 ;PCODE: $00000A87 VOL: 0
+;                if(displ_num==3) displ_num = 6;
 ;PCODE: $00000A88 VOL: 0
-;        //- АНАЛОГОВЫЕ ВЫХОДЫ -
-;        case 1: if(byte<buttonCount){displ_num = byte; newSetButt = 1;}
 ;PCODE: $00000A89 VOL: 0
 ;PCODE: $00000A8A VOL: 0
 ;PCODE: $00000A8B VOL: 0
 ;PCODE: $00000A8C VOL: 0
 ;PCODE: $00000A8D VOL: 0
+;        break;
 ;PCODE: $00000A8E VOL: 0
 ;PCODE: $00000A8F VOL: 0
+;        //- РЕЛЕЙНЫЕ ВЫХОДЫ -
+;        case 2: if(byte<buttonCount){displ_num = byte; newSetButt = 1;}
 ;PCODE: $00000A90 VOL: 0
 ;PCODE: $00000A91 VOL: 0
 ;PCODE: $00000A92 VOL: 0
 ;PCODE: $00000A93 VOL: 0
-;                if(displ_num==3) displ_num = 6;
 ;PCODE: $00000A94 VOL: 0
 ;PCODE: $00000A95 VOL: 0
 ;PCODE: $00000A96 VOL: 0
 ;PCODE: $00000A97 VOL: 0
 ;PCODE: $00000A98 VOL: 0
 ;PCODE: $00000A99 VOL: 0
-;        break;
 ;PCODE: $00000A9A VOL: 0
+;                if(displ_num==3) displ_num = 7;
 ;PCODE: $00000A9B VOL: 0
-;        //- РЕЛЕЙНЫЕ ВЫХОДЫ -
-;        case 2: if(byte<buttonCount){displ_num = byte; newSetButt = 1;}
 ;PCODE: $00000A9C VOL: 0
 ;PCODE: $00000A9D VOL: 0
 ;PCODE: $00000A9E VOL: 0
 ;PCODE: $00000A9F VOL: 0
 ;PCODE: $00000AA0 VOL: 0
+;        break;
 ;PCODE: $00000AA1 VOL: 0
 ;PCODE: $00000AA2 VOL: 0
+;        //- Общий список Установок -
+;        case 3:
 ;PCODE: $00000AA3 VOL: 0
 ;PCODE: $00000AA4 VOL: 0
 ;PCODE: $00000AA5 VOL: 0
+;          switch (byte){
 ;PCODE: $00000AA6 VOL: 0
-;                if(displ_num==3) displ_num = 7;
 ;PCODE: $00000AA7 VOL: 0
+;            case 0: displ_num = 0; newSetButt = 1; break;
 ;PCODE: $00000AA8 VOL: 0
 ;PCODE: $00000AA9 VOL: 0
 ;PCODE: $00000AAA VOL: 0
 ;PCODE: $00000AAB VOL: 0
 ;PCODE: $00000AAC VOL: 0
-;        break;
 ;PCODE: $00000AAD VOL: 0
+;            case 1: if (--numMenu<0) numMenu = 0;    break;
 ;PCODE: $00000AAE VOL: 0
-;        //- Общий список Установок -
-;        case 3:
 ;PCODE: $00000AAF VOL: 0
 ;PCODE: $00000AB0 VOL: 0
 ;PCODE: $00000AB1 VOL: 0
-;          switch (byte){
 ;PCODE: $00000AB2 VOL: 0
 ;PCODE: $00000AB3 VOL: 0
-;            case 0: displ_num = 0; newSetButt = 1; break;
 ;PCODE: $00000AB4 VOL: 0
 ;PCODE: $00000AB5 VOL: 0
 ;PCODE: $00000AB6 VOL: 0
 ;PCODE: $00000AB7 VOL: 0
 ;PCODE: $00000AB8 VOL: 0
 ;PCODE: $00000AB9 VOL: 0
-;            case 1: if (--numMenu<0) numMenu = 0;    break;
+;            case 2: if (++numMenu>MAX_MENU-1) numMenu = MAX_MENU-1;    break;
 ;PCODE: $00000ABA VOL: 0
 ;PCODE: $00000ABB VOL: 0
 ;PCODE: $00000ABC VOL: 0
@@ -3935,7 +3924,7 @@ _0xB5:
 ;PCODE: $00000AC3 VOL: 0
 ;PCODE: $00000AC4 VOL: 0
 ;PCODE: $00000AC5 VOL: 0
-;            case 2: if (++numMenu>MAX_MENU-1) numMenu = MAX_MENU-1;    break;
+;            case 3: displ_num = 4; newSetButt = 1; break;
 ;PCODE: $00000AC6 VOL: 0
 ;PCODE: $00000AC7 VOL: 0
 ;PCODE: $00000AC8 VOL: 0
@@ -3944,42 +3933,42 @@ _0xB5:
 ;PCODE: $00000ACB VOL: 0
 ;PCODE: $00000ACC VOL: 0
 ;PCODE: $00000ACD VOL: 0
+;          }
 ;PCODE: $00000ACE VOL: 0
+;          byte = 10;
 ;PCODE: $00000ACF VOL: 0
 ;PCODE: $00000AD0 VOL: 0
+;        break;
 ;PCODE: $00000AD1 VOL: 0
-;            case 3: displ_num = 4; newSetButt = 1; break;
+;        //- Установки пунктов -
+;        case 4:
 ;PCODE: $00000AD2 VOL: 0
 ;PCODE: $00000AD3 VOL: 0
 ;PCODE: $00000AD4 VOL: 0
+;          if (numMenu==4) max++;
 ;PCODE: $00000AD5 VOL: 0
 ;PCODE: $00000AD6 VOL: 0
 ;PCODE: $00000AD7 VOL: 0
 ;PCODE: $00000AD8 VOL: 0
 ;PCODE: $00000AD9 VOL: 0
-;          }
+;          switch (byte){
 ;PCODE: $00000ADA VOL: 0
-;          byte = 10;
 ;PCODE: $00000ADB VOL: 0
 ;PCODE: $00000ADC VOL: 0
-;        break;
+;            case 0: displ_num = 3; newSetButt = 1; break;
 ;PCODE: $00000ADD VOL: 0
-;        //- Установки пунктов -
-;        case 4:
 ;PCODE: $00000ADE VOL: 0
 ;PCODE: $00000ADF VOL: 0
 ;PCODE: $00000AE0 VOL: 0
-;          if (numMenu==4) max++;
 ;PCODE: $00000AE1 VOL: 0
 ;PCODE: $00000AE2 VOL: 0
 ;PCODE: $00000AE3 VOL: 0
+;            case 1: if (--numSet<0) numSet = 0;    break;
 ;PCODE: $00000AE4 VOL: 0
 ;PCODE: $00000AE5 VOL: 0
-;          switch (byte){
 ;PCODE: $00000AE6 VOL: 0
 ;PCODE: $00000AE7 VOL: 0
 ;PCODE: $00000AE8 VOL: 0
-;            case 0: displ_num = 3; newSetButt = 1; break;
 ;PCODE: $00000AE9 VOL: 0
 ;PCODE: $00000AEA VOL: 0
 ;PCODE: $00000AEB VOL: 0
@@ -3987,7 +3976,7 @@ _0xB5:
 ;PCODE: $00000AED VOL: 0
 ;PCODE: $00000AEE VOL: 0
 ;PCODE: $00000AEF VOL: 0
-;            case 1: if (--numSet<0) numSet = 0;    break;
+;            case 2: if (++numSet>max) numSet = max;    break;
 ;PCODE: $00000AF0 VOL: 0
 ;PCODE: $00000AF1 VOL: 0
 ;PCODE: $00000AF2 VOL: 0
@@ -4000,10 +3989,10 @@ _0xB5:
 ;PCODE: $00000AF9 VOL: 0
 ;PCODE: $00000AFA VOL: 0
 ;PCODE: $00000AFB VOL: 0
-;            case 2: if (++numSet>max) numSet = max;    break;
 ;PCODE: $00000AFC VOL: 0
 ;PCODE: $00000AFD VOL: 0
 ;PCODE: $00000AFE VOL: 0
+;            case 3: displ_num = 5; newSetButt = 1;
 ;PCODE: $00000AFF VOL: 0
 ;PCODE: $00000B00 VOL: 0
 ;PCODE: $00000B01 VOL: 0
@@ -4011,12 +4000,13 @@ _0xB5:
 ;PCODE: $00000B03 VOL: 0
 ;PCODE: $00000B04 VOL: 0
 ;PCODE: $00000B05 VOL: 0
+;              switch (numMenu){
 ;PCODE: $00000B06 VOL: 0
 ;PCODE: $00000B07 VOL: 0
+;                case 0: for (byte=0;byte<MAX_SET;byte++) newval[byte] = set[0][byte]; break; // "Температура"
 ;PCODE: $00000B08 VOL: 0
 ;PCODE: $00000B09 VOL: 0
 ;PCODE: $00000B0A VOL: 0
-;            case 3: displ_num = 5; newSetButt = 1;
 ;PCODE: $00000B0B VOL: 0
 ;PCODE: $00000B0C VOL: 0
 ;PCODE: $00000B0D VOL: 0
@@ -4024,10 +4014,8 @@ _0xB5:
 ;PCODE: $00000B0F VOL: 0
 ;PCODE: $00000B10 VOL: 0
 ;PCODE: $00000B11 VOL: 0
-;              switch (numMenu){
 ;PCODE: $00000B12 VOL: 0
 ;PCODE: $00000B13 VOL: 0
-;                case 0: for (byte=0;byte<MAX_SET;byte++) newval[byte] = set[0][byte]; break; // "Температура"
 ;PCODE: $00000B14 VOL: 0
 ;PCODE: $00000B15 VOL: 0
 ;PCODE: $00000B16 VOL: 0
@@ -4049,6 +4037,7 @@ _0xB5:
 ;PCODE: $00000B26 VOL: 0
 ;PCODE: $00000B27 VOL: 0
 ;PCODE: $00000B28 VOL: 0
+;                case 1: for (byte=0;byte<MAX_SET;byte++){                                     // "Влажность"
 ;PCODE: $00000B29 VOL: 0
 ;PCODE: $00000B2A VOL: 0
 ;PCODE: $00000B2B VOL: 0
@@ -4061,8 +4050,8 @@ _0xB5:
 ;PCODE: $00000B32 VOL: 0
 ;PCODE: $00000B33 VOL: 0
 ;PCODE: $00000B34 VOL: 0
-;                case 1: for (byte=0;byte<MAX_SET;byte++){                                     // "Влажность"
 ;PCODE: $00000B35 VOL: 0
+;                            if (Dht) newval[byte] = set[1][byte];
 ;PCODE: $00000B36 VOL: 0
 ;PCODE: $00000B37 VOL: 0
 ;PCODE: $00000B38 VOL: 0
@@ -4075,13 +4064,13 @@ _0xB5:
 ;PCODE: $00000B3F VOL: 0
 ;PCODE: $00000B40 VOL: 0
 ;PCODE: $00000B41 VOL: 0
-;                            if (Dht) newval[byte] = set[1][byte];
 ;PCODE: $00000B42 VOL: 0
 ;PCODE: $00000B43 VOL: 0
 ;PCODE: $00000B44 VOL: 0
 ;PCODE: $00000B45 VOL: 0
 ;PCODE: $00000B46 VOL: 0
 ;PCODE: $00000B47 VOL: 0
+;                            else newval[byte] = set[2][byte];
 ;PCODE: $00000B48 VOL: 0
 ;PCODE: $00000B49 VOL: 0
 ;PCODE: $00000B4A VOL: 0
@@ -4094,12 +4083,12 @@ _0xB5:
 ;PCODE: $00000B51 VOL: 0
 ;PCODE: $00000B52 VOL: 0
 ;PCODE: $00000B53 VOL: 0
-;                            else newval[byte] = set[2][byte];
 ;PCODE: $00000B54 VOL: 0
 ;PCODE: $00000B55 VOL: 0
 ;PCODE: $00000B56 VOL: 0
 ;PCODE: $00000B57 VOL: 0
 ;PCODE: $00000B58 VOL: 0
+;                        }
 ;PCODE: $00000B59 VOL: 0
 ;PCODE: $00000B5A VOL: 0
 ;PCODE: $00000B5B VOL: 0
@@ -4107,12 +4096,13 @@ _0xB5:
 ;PCODE: $00000B5D VOL: 0
 ;PCODE: $00000B5E VOL: 0
 ;PCODE: $00000B5F VOL: 0
+;                  break;
 ;PCODE: $00000B60 VOL: 0
+;                case 2: for (byte=0;byte<MAX_SET;byte++) newval[byte] = set[3][byte]; break; // "Таймер"
 ;PCODE: $00000B61 VOL: 0
 ;PCODE: $00000B62 VOL: 0
 ;PCODE: $00000B63 VOL: 0
 ;PCODE: $00000B64 VOL: 0
-;                        }
 ;PCODE: $00000B65 VOL: 0
 ;PCODE: $00000B66 VOL: 0
 ;PCODE: $00000B67 VOL: 0
@@ -4120,9 +4110,7 @@ _0xB5:
 ;PCODE: $00000B69 VOL: 0
 ;PCODE: $00000B6A VOL: 0
 ;PCODE: $00000B6B VOL: 0
-;                  break;
 ;PCODE: $00000B6C VOL: 0
-;                case 2: for (byte=0;byte<MAX_SET;byte++) newval[byte] = set[3][byte]; break; // "Таймер"
 ;PCODE: $00000B6D VOL: 0
 ;PCODE: $00000B6E VOL: 0
 ;PCODE: $00000B6F VOL: 0
@@ -4146,6 +4134,7 @@ _0xB5:
 ;PCODE: $00000B81 VOL: 0
 ;PCODE: $00000B82 VOL: 0
 ;PCODE: $00000B83 VOL: 0
+;                case 3: for (byte=0;byte<MAX_SET;byte++) newval[byte] = set[4][byte]; break; // "Настройки"
 ;PCODE: $00000B84 VOL: 0
 ;PCODE: $00000B85 VOL: 0
 ;PCODE: $00000B86 VOL: 0
@@ -4158,7 +4147,6 @@ _0xB5:
 ;PCODE: $00000B8D VOL: 0
 ;PCODE: $00000B8E VOL: 0
 ;PCODE: $00000B8F VOL: 0
-;                case 3: for (byte=0;byte<MAX_SET;byte++) newval[byte] = set[4][byte]; break; // "Настройки"
 ;PCODE: $00000B90 VOL: 0
 ;PCODE: $00000B91 VOL: 0
 ;PCODE: $00000B92 VOL: 0
@@ -4182,6 +4170,7 @@ _0xB5:
 ;PCODE: $00000BA4 VOL: 0
 ;PCODE: $00000BA5 VOL: 0
 ;PCODE: $00000BA6 VOL: 0
+;                case 4: for (byte=0;byte<2;byte++) newval[byte] = Bcd2ToByte(clock_buffer[byte+1]);
 ;PCODE: $00000BA7 VOL: 0
 ;PCODE: $00000BA8 VOL: 0
 ;PCODE: $00000BA9 VOL: 0
@@ -4194,7 +4183,6 @@ _0xB5:
 ;PCODE: $00000BB0 VOL: 0
 ;PCODE: $00000BB1 VOL: 0
 ;PCODE: $00000BB2 VOL: 0
-;                case 4: for (byte=0;byte<2;byte++) newval[byte] = Bcd2ToByte(clock_buffer[byte+1]);
 ;PCODE: $00000BB3 VOL: 0
 ;PCODE: $00000BB4 VOL: 0
 ;PCODE: $00000BB5 VOL: 0
@@ -4249,67 +4237,67 @@ _0xB5:
 ;PCODE: $00000BE6 VOL: 0
 ;PCODE: $00000BE7 VOL: 0
 ;PCODE: $00000BE8 VOL: 0
+;              };
 ;PCODE: $00000BE9 VOL: 0
+;            break;
 ;PCODE: $00000BEA VOL: 0
+;          }
 ;PCODE: $00000BEB VOL: 0
+;          byte = 10;
 ;PCODE: $00000BEC VOL: 0
 ;PCODE: $00000BED VOL: 0
+;        break;
 ;PCODE: $00000BEE VOL: 0
+;        //- РЕДАКТИРОВАНИЕ -
+;        case 5:
 ;PCODE: $00000BEF VOL: 0
 ;PCODE: $00000BF0 VOL: 0
 ;PCODE: $00000BF1 VOL: 0
+;          switch (byte){
 ;PCODE: $00000BF2 VOL: 0
 ;PCODE: $00000BF3 VOL: 0
+;               case 0: displ_num = 4; newSetButt = 1; break;
 ;PCODE: $00000BF4 VOL: 0
-;              };
 ;PCODE: $00000BF5 VOL: 0
-;            break;
 ;PCODE: $00000BF6 VOL: 0
-;          }
 ;PCODE: $00000BF7 VOL: 0
-;          byte = 10;
 ;PCODE: $00000BF8 VOL: 0
 ;PCODE: $00000BF9 VOL: 0
-;        break;
 ;PCODE: $00000BFA VOL: 0
-;        //- РЕДАКТИРОВАНИЕ -
-;        case 5:
+;            case 1: ++newval[numSet];
 ;PCODE: $00000BFB VOL: 0
 ;PCODE: $00000BFC VOL: 0
 ;PCODE: $00000BFD VOL: 0
-;          switch (byte){
 ;PCODE: $00000BFE VOL: 0
 ;PCODE: $00000BFF VOL: 0
-;               case 0: displ_num = 4; newSetButt = 1; break;
 ;PCODE: $00000C00 VOL: 0
 ;PCODE: $00000C01 VOL: 0
 ;PCODE: $00000C02 VOL: 0
 ;PCODE: $00000C03 VOL: 0
 ;PCODE: $00000C04 VOL: 0
 ;PCODE: $00000C05 VOL: 0
+;                 switch (numMenu) {
 ;PCODE: $00000C06 VOL: 0
-;            case 1: ++newval[numSet];
 ;PCODE: $00000C07 VOL: 0
+;                    case 0:  // Температура
 ;PCODE: $00000C08 VOL: 0
 ;PCODE: $00000C09 VOL: 0
+;                        switch (numSet) {
 ;PCODE: $00000C0A VOL: 0
 ;PCODE: $00000C0B VOL: 0
+;                            case 0: if(newval[numSet]>1200) newval[numSet]=1200; break;   // Задание
 ;PCODE: $00000C0C VOL: 0
 ;PCODE: $00000C0D VOL: 0
 ;PCODE: $00000C0E VOL: 0
 ;PCODE: $00000C0F VOL: 0
 ;PCODE: $00000C10 VOL: 0
 ;PCODE: $00000C11 VOL: 0
-;                 switch (numMenu) {
 ;PCODE: $00000C12 VOL: 0
 ;PCODE: $00000C13 VOL: 0
-;                    case 0:  // Температура
 ;PCODE: $00000C14 VOL: 0
 ;PCODE: $00000C15 VOL: 0
-;                        switch (numSet) {
 ;PCODE: $00000C16 VOL: 0
 ;PCODE: $00000C17 VOL: 0
-;                            case 0: if(newval[numSet]>1200) newval[numSet]=1200; break;   // Задание
 ;PCODE: $00000C18 VOL: 0
 ;PCODE: $00000C19 VOL: 0
 ;PCODE: $00000C1A VOL: 0
@@ -4317,6 +4305,7 @@ _0xB5:
 ;PCODE: $00000C1C VOL: 0
 ;PCODE: $00000C1D VOL: 0
 ;PCODE: $00000C1E VOL: 0
+;                            case 1: if(newval[numSet]>500) newval[numSet]=500; break;   // Отклонение
 ;PCODE: $00000C1F VOL: 0
 ;PCODE: $00000C20 VOL: 0
 ;PCODE: $00000C21 VOL: 0
@@ -4329,7 +4318,6 @@ _0xB5:
 ;PCODE: $00000C28 VOL: 0
 ;PCODE: $00000C29 VOL: 0
 ;PCODE: $00000C2A VOL: 0
-;                            case 1: if(newval[numSet]>500) newval[numSet]=500; break;   // Отклонение
 ;PCODE: $00000C2B VOL: 0
 ;PCODE: $00000C2C VOL: 0
 ;PCODE: $00000C2D VOL: 0
@@ -4338,6 +4326,7 @@ _0xB5:
 ;PCODE: $00000C30 VOL: 0
 ;PCODE: $00000C31 VOL: 0
 ;PCODE: $00000C32 VOL: 0
+;                            case 2: if(newval[numSet]>100) newval[numSet]=100; break;   // Гистерезис
 ;PCODE: $00000C33 VOL: 0
 ;PCODE: $00000C34 VOL: 0
 ;PCODE: $00000C35 VOL: 0
@@ -4350,7 +4339,6 @@ _0xB5:
 ;PCODE: $00000C3C VOL: 0
 ;PCODE: $00000C3D VOL: 0
 ;PCODE: $00000C3E VOL: 0
-;                            case 2: if(newval[numSet]>100) newval[numSet]=100; break;   // Гистерезис
 ;PCODE: $00000C3F VOL: 0
 ;PCODE: $00000C40 VOL: 0
 ;PCODE: $00000C41 VOL: 0
@@ -4359,6 +4347,7 @@ _0xB5:
 ;PCODE: $00000C44 VOL: 0
 ;PCODE: $00000C45 VOL: 0
 ;PCODE: $00000C46 VOL: 0
+;                            case 3: if(newval[numSet]>1)  newval[numSet]=1;    break;   // Режим
 ;PCODE: $00000C47 VOL: 0
 ;PCODE: $00000C48 VOL: 0
 ;PCODE: $00000C49 VOL: 0
@@ -4371,7 +4360,6 @@ _0xB5:
 ;PCODE: $00000C50 VOL: 0
 ;PCODE: $00000C51 VOL: 0
 ;PCODE: $00000C52 VOL: 0
-;                            case 3: if(newval[numSet]>1)  newval[numSet]=1;    break;   // Режим
 ;PCODE: $00000C53 VOL: 0
 ;PCODE: $00000C54 VOL: 0
 ;PCODE: $00000C55 VOL: 0
@@ -4380,34 +4368,34 @@ _0xB5:
 ;PCODE: $00000C58 VOL: 0
 ;PCODE: $00000C59 VOL: 0
 ;PCODE: $00000C5A VOL: 0
+;                        };
 ;PCODE: $00000C5B VOL: 0
+;                    break;
 ;PCODE: $00000C5C VOL: 0
+;                    case 1:  // Влажность
 ;PCODE: $00000C5D VOL: 0
 ;PCODE: $00000C5E VOL: 0
 ;PCODE: $00000C5F VOL: 0
+;                        if (Dht){
 ;PCODE: $00000C60 VOL: 0
 ;PCODE: $00000C61 VOL: 0
 ;PCODE: $00000C62 VOL: 0
+;                            switch (numSet) {
 ;PCODE: $00000C63 VOL: 0
 ;PCODE: $00000C64 VOL: 0
+;                                case 0: if(newval[numSet]>100) newval[numSet]=100; break;   // Задание
 ;PCODE: $00000C65 VOL: 0
 ;PCODE: $00000C66 VOL: 0
-;                        };
 ;PCODE: $00000C67 VOL: 0
-;                    break;
 ;PCODE: $00000C68 VOL: 0
-;                    case 1:  // Влажность
 ;PCODE: $00000C69 VOL: 0
 ;PCODE: $00000C6A VOL: 0
 ;PCODE: $00000C6B VOL: 0
-;                        if (Dht){
 ;PCODE: $00000C6C VOL: 0
 ;PCODE: $00000C6D VOL: 0
 ;PCODE: $00000C6E VOL: 0
-;                            switch (numSet) {
 ;PCODE: $00000C6F VOL: 0
 ;PCODE: $00000C70 VOL: 0
-;                                case 0: if(newval[numSet]>100) newval[numSet]=100; break;   // Задание
 ;PCODE: $00000C71 VOL: 0
 ;PCODE: $00000C72 VOL: 0
 ;PCODE: $00000C73 VOL: 0
@@ -4415,6 +4403,7 @@ _0xB5:
 ;PCODE: $00000C75 VOL: 0
 ;PCODE: $00000C76 VOL: 0
 ;PCODE: $00000C77 VOL: 0
+;                                case 1: if(newval[numSet]>90) newval[numSet]=90; break;   // Отклонение
 ;PCODE: $00000C78 VOL: 0
 ;PCODE: $00000C79 VOL: 0
 ;PCODE: $00000C7A VOL: 0
@@ -4427,7 +4416,6 @@ _0xB5:
 ;PCODE: $00000C81 VOL: 0
 ;PCODE: $00000C82 VOL: 0
 ;PCODE: $00000C83 VOL: 0
-;                                case 1: if(newval[numSet]>90) newval[numSet]=90; break;   // Отклонение
 ;PCODE: $00000C84 VOL: 0
 ;PCODE: $00000C85 VOL: 0
 ;PCODE: $00000C86 VOL: 0
@@ -4436,6 +4424,7 @@ _0xB5:
 ;PCODE: $00000C89 VOL: 0
 ;PCODE: $00000C8A VOL: 0
 ;PCODE: $00000C8B VOL: 0
+;                                case 2: if(newval[numSet]>50) newval[numSet]=50; break;   // Гистерезис
 ;PCODE: $00000C8C VOL: 0
 ;PCODE: $00000C8D VOL: 0
 ;PCODE: $00000C8E VOL: 0
@@ -4448,7 +4437,6 @@ _0xB5:
 ;PCODE: $00000C95 VOL: 0
 ;PCODE: $00000C96 VOL: 0
 ;PCODE: $00000C97 VOL: 0
-;                                case 2: if(newval[numSet]>50) newval[numSet]=50; break;   // Гистерезис
 ;PCODE: $00000C98 VOL: 0
 ;PCODE: $00000C99 VOL: 0
 ;PCODE: $00000C9A VOL: 0
@@ -4457,6 +4445,7 @@ _0xB5:
 ;PCODE: $00000C9D VOL: 0
 ;PCODE: $00000C9E VOL: 0
 ;PCODE: $00000C9F VOL: 0
+;                                case 3: if(newval[numSet]>1)  newval[numSet]=1;  break;   // Режим
 ;PCODE: $00000CA0 VOL: 0
 ;PCODE: $00000CA1 VOL: 0
 ;PCODE: $00000CA2 VOL: 0
@@ -4469,7 +4458,6 @@ _0xB5:
 ;PCODE: $00000CA9 VOL: 0
 ;PCODE: $00000CAA VOL: 0
 ;PCODE: $00000CAB VOL: 0
-;                                case 3: if(newval[numSet]>1)  newval[numSet]=1;  break;   // Режим
 ;PCODE: $00000CAC VOL: 0
 ;PCODE: $00000CAD VOL: 0
 ;PCODE: $00000CAE VOL: 0
@@ -4478,11 +4466,16 @@ _0xB5:
 ;PCODE: $00000CB1 VOL: 0
 ;PCODE: $00000CB2 VOL: 0
 ;PCODE: $00000CB3 VOL: 0
+;                            };
 ;PCODE: $00000CB4 VOL: 0
+;                        }
+;                        else {
 ;PCODE: $00000CB5 VOL: 0
 ;PCODE: $00000CB6 VOL: 0
+;                            switch (numSet) {
 ;PCODE: $00000CB7 VOL: 0
 ;PCODE: $00000CB8 VOL: 0
+;                                case 0: if(newval[numSet]>1200) newval[numSet]=1200; break;   // Задание
 ;PCODE: $00000CB9 VOL: 0
 ;PCODE: $00000CBA VOL: 0
 ;PCODE: $00000CBB VOL: 0
@@ -4490,16 +4483,11 @@ _0xB5:
 ;PCODE: $00000CBD VOL: 0
 ;PCODE: $00000CBE VOL: 0
 ;PCODE: $00000CBF VOL: 0
-;                            };
 ;PCODE: $00000CC0 VOL: 0
-;                        }
-;                        else {
 ;PCODE: $00000CC1 VOL: 0
 ;PCODE: $00000CC2 VOL: 0
-;                            switch (numSet) {
 ;PCODE: $00000CC3 VOL: 0
 ;PCODE: $00000CC4 VOL: 0
-;                                case 0: if(newval[numSet]>1200) newval[numSet]=1200; break;   // Задание
 ;PCODE: $00000CC5 VOL: 0
 ;PCODE: $00000CC6 VOL: 0
 ;PCODE: $00000CC7 VOL: 0
@@ -4507,6 +4495,7 @@ _0xB5:
 ;PCODE: $00000CC9 VOL: 0
 ;PCODE: $00000CCA VOL: 0
 ;PCODE: $00000CCB VOL: 0
+;                                case 1: if(newval[numSet]>500) newval[numSet]=500; break;   // Отклонение
 ;PCODE: $00000CCC VOL: 0
 ;PCODE: $00000CCD VOL: 0
 ;PCODE: $00000CCE VOL: 0
@@ -4519,7 +4508,6 @@ _0xB5:
 ;PCODE: $00000CD5 VOL: 0
 ;PCODE: $00000CD6 VOL: 0
 ;PCODE: $00000CD7 VOL: 0
-;                                case 1: if(newval[numSet]>500) newval[numSet]=500; break;   // Отклонение
 ;PCODE: $00000CD8 VOL: 0
 ;PCODE: $00000CD9 VOL: 0
 ;PCODE: $00000CDA VOL: 0
@@ -4528,6 +4516,7 @@ _0xB5:
 ;PCODE: $00000CDD VOL: 0
 ;PCODE: $00000CDE VOL: 0
 ;PCODE: $00000CDF VOL: 0
+;                                case 2: if(newval[numSet]>100) newval[numSet]=100; break;   // Гистерезис
 ;PCODE: $00000CE0 VOL: 0
 ;PCODE: $00000CE1 VOL: 0
 ;PCODE: $00000CE2 VOL: 0
@@ -4540,7 +4529,6 @@ _0xB5:
 ;PCODE: $00000CE9 VOL: 0
 ;PCODE: $00000CEA VOL: 0
 ;PCODE: $00000CEB VOL: 0
-;                                case 2: if(newval[numSet]>100) newval[numSet]=100; break;   // Гистерезис
 ;PCODE: $00000CEC VOL: 0
 ;PCODE: $00000CED VOL: 0
 ;PCODE: $00000CEE VOL: 0
@@ -4549,6 +4537,7 @@ _0xB5:
 ;PCODE: $00000CF1 VOL: 0
 ;PCODE: $00000CF2 VOL: 0
 ;PCODE: $00000CF3 VOL: 0
+;                                case 3: if(newval[numSet]>1)  newval[numSet]=1;  break;   // Режим
 ;PCODE: $00000CF4 VOL: 0
 ;PCODE: $00000CF5 VOL: 0
 ;PCODE: $00000CF6 VOL: 0
@@ -4561,7 +4550,6 @@ _0xB5:
 ;PCODE: $00000CFD VOL: 0
 ;PCODE: $00000CFE VOL: 0
 ;PCODE: $00000CFF VOL: 0
-;                                case 3: if(newval[numSet]>1)  newval[numSet]=1;  break;   // Режим
 ;PCODE: $00000D00 VOL: 0
 ;PCODE: $00000D01 VOL: 0
 ;PCODE: $00000D02 VOL: 0
@@ -4570,32 +4558,32 @@ _0xB5:
 ;PCODE: $00000D05 VOL: 0
 ;PCODE: $00000D06 VOL: 0
 ;PCODE: $00000D07 VOL: 0
+;                            };
 ;PCODE: $00000D08 VOL: 0
+;                        }
 ;PCODE: $00000D09 VOL: 0
+;                    break;
 ;PCODE: $00000D0A VOL: 0
+;                    case 2:  // Таймер
 ;PCODE: $00000D0B VOL: 0
 ;PCODE: $00000D0C VOL: 0
 ;PCODE: $00000D0D VOL: 0
+;                        switch (numSet) {
 ;PCODE: $00000D0E VOL: 0
 ;PCODE: $00000D0F VOL: 0
+;                            case 0: if(newval[numSet]>3600) newval[numSet]=3600; break;   // Включен
 ;PCODE: $00000D10 VOL: 0
 ;PCODE: $00000D11 VOL: 0
 ;PCODE: $00000D12 VOL: 0
 ;PCODE: $00000D13 VOL: 0
-;                            };
 ;PCODE: $00000D14 VOL: 0
-;                        }
 ;PCODE: $00000D15 VOL: 0
-;                    break;
 ;PCODE: $00000D16 VOL: 0
-;                    case 2:  // Таймер
 ;PCODE: $00000D17 VOL: 0
 ;PCODE: $00000D18 VOL: 0
 ;PCODE: $00000D19 VOL: 0
-;                        switch (numSet) {
 ;PCODE: $00000D1A VOL: 0
 ;PCODE: $00000D1B VOL: 0
-;                            case 0: if(newval[numSet]>3600) newval[numSet]=3600; break;   // Включен
 ;PCODE: $00000D1C VOL: 0
 ;PCODE: $00000D1D VOL: 0
 ;PCODE: $00000D1E VOL: 0
@@ -4603,6 +4591,7 @@ _0xB5:
 ;PCODE: $00000D20 VOL: 0
 ;PCODE: $00000D21 VOL: 0
 ;PCODE: $00000D22 VOL: 0
+;                            case 1: if(newval[numSet]>3600) newval[numSet]=3600; break;   // Отключен
 ;PCODE: $00000D23 VOL: 0
 ;PCODE: $00000D24 VOL: 0
 ;PCODE: $00000D25 VOL: 0
@@ -4615,7 +4604,6 @@ _0xB5:
 ;PCODE: $00000D2C VOL: 0
 ;PCODE: $00000D2D VOL: 0
 ;PCODE: $00000D2E VOL: 0
-;                            case 1: if(newval[numSet]>3600) newval[numSet]=3600; break;   // Отключен
 ;PCODE: $00000D2F VOL: 0
 ;PCODE: $00000D30 VOL: 0
 ;PCODE: $00000D31 VOL: 0
@@ -4624,6 +4612,7 @@ _0xB5:
 ;PCODE: $00000D34 VOL: 0
 ;PCODE: $00000D35 VOL: 0
 ;PCODE: $00000D36 VOL: 0
+;                            case 2: if(newval[numSet]>1) newval[numSet]=1; break;   // Размерность
 ;PCODE: $00000D37 VOL: 0
 ;PCODE: $00000D38 VOL: 0
 ;PCODE: $00000D39 VOL: 0
@@ -4636,7 +4625,6 @@ _0xB5:
 ;PCODE: $00000D40 VOL: 0
 ;PCODE: $00000D41 VOL: 0
 ;PCODE: $00000D42 VOL: 0
-;                            case 2: if(newval[numSet]>1) newval[numSet]=1; break;   // Размерность
 ;PCODE: $00000D43 VOL: 0
 ;PCODE: $00000D44 VOL: 0
 ;PCODE: $00000D45 VOL: 0
@@ -4645,6 +4633,7 @@ _0xB5:
 ;PCODE: $00000D48 VOL: 0
 ;PCODE: $00000D49 VOL: 0
 ;PCODE: $00000D4A VOL: 0
+;                            case 3: if(newval[numSet]>100) newval[numSet]=100; break;   // Шаг
 ;PCODE: $00000D4B VOL: 0
 ;PCODE: $00000D4C VOL: 0
 ;PCODE: $00000D4D VOL: 0
@@ -4657,7 +4646,6 @@ _0xB5:
 ;PCODE: $00000D54 VOL: 0
 ;PCODE: $00000D55 VOL: 0
 ;PCODE: $00000D56 VOL: 0
-;                            case 3: if(newval[numSet]>100) newval[numSet]=100; break;   // Шаг
 ;PCODE: $00000D57 VOL: 0
 ;PCODE: $00000D58 VOL: 0
 ;PCODE: $00000D59 VOL: 0
@@ -4666,118 +4654,118 @@ _0xB5:
 ;PCODE: $00000D5C VOL: 0
 ;PCODE: $00000D5D VOL: 0
 ;PCODE: $00000D5E VOL: 0
+;                        };
 ;PCODE: $00000D5F VOL: 0
+;                    break;
 ;PCODE: $00000D60 VOL: 0
+;                    case 3:  // Настройки
 ;PCODE: $00000D61 VOL: 0
 ;PCODE: $00000D62 VOL: 0
 ;PCODE: $00000D63 VOL: 0
+;                        switch (numSet) {
 ;PCODE: $00000D64 VOL: 0
 ;PCODE: $00000D65 VOL: 0
+;                            case 0:    break;   //
 ;PCODE: $00000D66 VOL: 0
 ;PCODE: $00000D67 VOL: 0
 ;PCODE: $00000D68 VOL: 0
+;                            case 1:    break;   //
 ;PCODE: $00000D69 VOL: 0
 ;PCODE: $00000D6A VOL: 0
-;                        };
 ;PCODE: $00000D6B VOL: 0
-;                    break;
 ;PCODE: $00000D6C VOL: 0
-;                    case 3:  // Настройки
+;                            case 2:    break;   //
 ;PCODE: $00000D6D VOL: 0
 ;PCODE: $00000D6E VOL: 0
 ;PCODE: $00000D6F VOL: 0
-;                        switch (numSet) {
 ;PCODE: $00000D70 VOL: 0
+;                            case 3:    break;   //
 ;PCODE: $00000D71 VOL: 0
-;                            case 0:    break;   //
 ;PCODE: $00000D72 VOL: 0
 ;PCODE: $00000D73 VOL: 0
 ;PCODE: $00000D74 VOL: 0
-;                            case 1:    break;   //
+;                            case 4:    break;   //
 ;PCODE: $00000D75 VOL: 0
 ;PCODE: $00000D76 VOL: 0
 ;PCODE: $00000D77 VOL: 0
 ;PCODE: $00000D78 VOL: 0
-;                            case 2:    break;   //
+;                        };
 ;PCODE: $00000D79 VOL: 0
+;                    break;
 ;PCODE: $00000D7A VOL: 0
+;                    case 4:  // Время и Дата
 ;PCODE: $00000D7B VOL: 0
 ;PCODE: $00000D7C VOL: 0
-;                            case 3:    break;   //
 ;PCODE: $00000D7D VOL: 0
+;                        switch (numSet) {
 ;PCODE: $00000D7E VOL: 0
 ;PCODE: $00000D7F VOL: 0
+;                            case 0:    break;   //
 ;PCODE: $00000D80 VOL: 0
-;                            case 4:    break;   //
 ;PCODE: $00000D81 VOL: 0
 ;PCODE: $00000D82 VOL: 0
+;                            case 1:    break;   //
 ;PCODE: $00000D83 VOL: 0
 ;PCODE: $00000D84 VOL: 0
-;                        };
 ;PCODE: $00000D85 VOL: 0
-;                    break;
 ;PCODE: $00000D86 VOL: 0
-;                    case 4:  // Время и Дата
+;                            case 2:    break;   //
 ;PCODE: $00000D87 VOL: 0
 ;PCODE: $00000D88 VOL: 0
 ;PCODE: $00000D89 VOL: 0
-;                        switch (numSet) {
 ;PCODE: $00000D8A VOL: 0
+;                            case 3:    break;   //
 ;PCODE: $00000D8B VOL: 0
-;                            case 0:    break;   //
 ;PCODE: $00000D8C VOL: 0
 ;PCODE: $00000D8D VOL: 0
 ;PCODE: $00000D8E VOL: 0
-;                            case 1:    break;   //
+;                            case 4:    break;   //
 ;PCODE: $00000D8F VOL: 0
 ;PCODE: $00000D90 VOL: 0
 ;PCODE: $00000D91 VOL: 0
 ;PCODE: $00000D92 VOL: 0
-;                            case 2:    break;   //
+;                        };
 ;PCODE: $00000D93 VOL: 0
+;                    break;
 ;PCODE: $00000D94 VOL: 0
+;                  };
 ;PCODE: $00000D95 VOL: 0
+;            break;
 ;PCODE: $00000D96 VOL: 0
-;                            case 3:    break;   //
+;            case 2: --newval[numSet];
 ;PCODE: $00000D97 VOL: 0
 ;PCODE: $00000D98 VOL: 0
 ;PCODE: $00000D99 VOL: 0
 ;PCODE: $00000D9A VOL: 0
-;                            case 4:    break;   //
 ;PCODE: $00000D9B VOL: 0
 ;PCODE: $00000D9C VOL: 0
 ;PCODE: $00000D9D VOL: 0
 ;PCODE: $00000D9E VOL: 0
-;                        };
 ;PCODE: $00000D9F VOL: 0
-;                    break;
 ;PCODE: $00000DA0 VOL: 0
-;                  };
 ;PCODE: $00000DA1 VOL: 0
-;            break;
+;                 switch (numMenu) {
 ;PCODE: $00000DA2 VOL: 0
-;            case 2: --newval[numSet];
 ;PCODE: $00000DA3 VOL: 0
+;                    case 0:  // Температура
 ;PCODE: $00000DA4 VOL: 0
 ;PCODE: $00000DA5 VOL: 0
+;                        switch (numSet) {
 ;PCODE: $00000DA6 VOL: 0
 ;PCODE: $00000DA7 VOL: 0
+;                            case 0: if(newval[numSet]<-500) newval[numSet]=-500; break;   // Задание
 ;PCODE: $00000DA8 VOL: 0
 ;PCODE: $00000DA9 VOL: 0
 ;PCODE: $00000DAA VOL: 0
 ;PCODE: $00000DAB VOL: 0
 ;PCODE: $00000DAC VOL: 0
 ;PCODE: $00000DAD VOL: 0
-;                 switch (numMenu) {
 ;PCODE: $00000DAE VOL: 0
 ;PCODE: $00000DAF VOL: 0
-;                    case 0:  // Температура
 ;PCODE: $00000DB0 VOL: 0
 ;PCODE: $00000DB1 VOL: 0
-;                        switch (numSet) {
 ;PCODE: $00000DB2 VOL: 0
 ;PCODE: $00000DB3 VOL: 0
-;                            case 0: if(newval[numSet]<-500) newval[numSet]=-500; break;   // Задание
 ;PCODE: $00000DB4 VOL: 0
 ;PCODE: $00000DB5 VOL: 0
 ;PCODE: $00000DB6 VOL: 0
@@ -4785,6 +4773,7 @@ _0xB5:
 ;PCODE: $00000DB8 VOL: 0
 ;PCODE: $00000DB9 VOL: 0
 ;PCODE: $00000DBA VOL: 0
+;                            case 1: if(newval[numSet]<1) newval[numSet]=1; break;   // Отклонение
 ;PCODE: $00000DBB VOL: 0
 ;PCODE: $00000DBC VOL: 0
 ;PCODE: $00000DBD VOL: 0
@@ -4797,7 +4786,6 @@ _0xB5:
 ;PCODE: $00000DC4 VOL: 0
 ;PCODE: $00000DC5 VOL: 0
 ;PCODE: $00000DC6 VOL: 0
-;                            case 1: if(newval[numSet]<1) newval[numSet]=1; break;   // Отклонение
 ;PCODE: $00000DC7 VOL: 0
 ;PCODE: $00000DC8 VOL: 0
 ;PCODE: $00000DC9 VOL: 0
@@ -4806,6 +4794,7 @@ _0xB5:
 ;PCODE: $00000DCC VOL: 0
 ;PCODE: $00000DCD VOL: 0
 ;PCODE: $00000DCE VOL: 0
+;                            case 2: if(newval[numSet]<1) newval[numSet]=1; break;   // Гистерезис
 ;PCODE: $00000DCF VOL: 0
 ;PCODE: $00000DD0 VOL: 0
 ;PCODE: $00000DD1 VOL: 0
@@ -4818,7 +4807,6 @@ _0xB5:
 ;PCODE: $00000DD8 VOL: 0
 ;PCODE: $00000DD9 VOL: 0
 ;PCODE: $00000DDA VOL: 0
-;                            case 2: if(newval[numSet]<1) newval[numSet]=1; break;   // Гистерезис
 ;PCODE: $00000DDB VOL: 0
 ;PCODE: $00000DDC VOL: 0
 ;PCODE: $00000DDD VOL: 0
@@ -4827,6 +4815,7 @@ _0xB5:
 ;PCODE: $00000DE0 VOL: 0
 ;PCODE: $00000DE1 VOL: 0
 ;PCODE: $00000DE2 VOL: 0
+;                            case 3: if(newval[numSet]<0) newval[numSet]=0; break;   // Режим
 ;PCODE: $00000DE3 VOL: 0
 ;PCODE: $00000DE4 VOL: 0
 ;PCODE: $00000DE5 VOL: 0
@@ -4839,7 +4828,6 @@ _0xB5:
 ;PCODE: $00000DEC VOL: 0
 ;PCODE: $00000DED VOL: 0
 ;PCODE: $00000DEE VOL: 0
-;                            case 3: if(newval[numSet]<0) newval[numSet]=0; break;   // Режим
 ;PCODE: $00000DEF VOL: 0
 ;PCODE: $00000DF0 VOL: 0
 ;PCODE: $00000DF1 VOL: 0
@@ -4848,30 +4836,30 @@ _0xB5:
 ;PCODE: $00000DF4 VOL: 0
 ;PCODE: $00000DF5 VOL: 0
 ;PCODE: $00000DF6 VOL: 0
+;                        };
 ;PCODE: $00000DF7 VOL: 0
+;                    break;
 ;PCODE: $00000DF8 VOL: 0
+;                    case 1:  // Влажность
 ;PCODE: $00000DF9 VOL: 0
 ;PCODE: $00000DFA VOL: 0
 ;PCODE: $00000DFB VOL: 0
+;                        switch (numSet) {
 ;PCODE: $00000DFC VOL: 0
 ;PCODE: $00000DFD VOL: 0
+;                            case 0: if(newval[numSet]<10) newval[numSet]=10; break;   // Задание
 ;PCODE: $00000DFE VOL: 0
 ;PCODE: $00000DFF VOL: 0
 ;PCODE: $00000E00 VOL: 0
 ;PCODE: $00000E01 VOL: 0
 ;PCODE: $00000E02 VOL: 0
-;                        };
 ;PCODE: $00000E03 VOL: 0
-;                    break;
 ;PCODE: $00000E04 VOL: 0
-;                    case 1:  // Влажность
 ;PCODE: $00000E05 VOL: 0
 ;PCODE: $00000E06 VOL: 0
 ;PCODE: $00000E07 VOL: 0
-;                        switch (numSet) {
 ;PCODE: $00000E08 VOL: 0
 ;PCODE: $00000E09 VOL: 0
-;                            case 0: if(newval[numSet]<10) newval[numSet]=10; break;   // Задание
 ;PCODE: $00000E0A VOL: 0
 ;PCODE: $00000E0B VOL: 0
 ;PCODE: $00000E0C VOL: 0
@@ -4879,6 +4867,7 @@ _0xB5:
 ;PCODE: $00000E0E VOL: 0
 ;PCODE: $00000E0F VOL: 0
 ;PCODE: $00000E10 VOL: 0
+;                            case 1: if(newval[numSet]<1) newval[numSet]=1; break;   // Отклонение
 ;PCODE: $00000E11 VOL: 0
 ;PCODE: $00000E12 VOL: 0
 ;PCODE: $00000E13 VOL: 0
@@ -4891,7 +4880,6 @@ _0xB5:
 ;PCODE: $00000E1A VOL: 0
 ;PCODE: $00000E1B VOL: 0
 ;PCODE: $00000E1C VOL: 0
-;                            case 1: if(newval[numSet]<1) newval[numSet]=1; break;   // Отклонение
 ;PCODE: $00000E1D VOL: 0
 ;PCODE: $00000E1E VOL: 0
 ;PCODE: $00000E1F VOL: 0
@@ -4900,6 +4888,7 @@ _0xB5:
 ;PCODE: $00000E22 VOL: 0
 ;PCODE: $00000E23 VOL: 0
 ;PCODE: $00000E24 VOL: 0
+;                            case 2: if(newval[numSet]<1) newval[numSet]=1; break;   // Гистерезис
 ;PCODE: $00000E25 VOL: 0
 ;PCODE: $00000E26 VOL: 0
 ;PCODE: $00000E27 VOL: 0
@@ -4912,7 +4901,6 @@ _0xB5:
 ;PCODE: $00000E2E VOL: 0
 ;PCODE: $00000E2F VOL: 0
 ;PCODE: $00000E30 VOL: 0
-;                            case 2: if(newval[numSet]<1) newval[numSet]=1; break;   // Гистерезис
 ;PCODE: $00000E31 VOL: 0
 ;PCODE: $00000E32 VOL: 0
 ;PCODE: $00000E33 VOL: 0
@@ -4921,6 +4909,7 @@ _0xB5:
 ;PCODE: $00000E36 VOL: 0
 ;PCODE: $00000E37 VOL: 0
 ;PCODE: $00000E38 VOL: 0
+;                            case 3: if(newval[numSet]<0) newval[numSet]=0; break;   // Режим
 ;PCODE: $00000E39 VOL: 0
 ;PCODE: $00000E3A VOL: 0
 ;PCODE: $00000E3B VOL: 0
@@ -4933,7 +4922,6 @@ _0xB5:
 ;PCODE: $00000E42 VOL: 0
 ;PCODE: $00000E43 VOL: 0
 ;PCODE: $00000E44 VOL: 0
-;                            case 3: if(newval[numSet]<0) newval[numSet]=0; break;   // Режим
 ;PCODE: $00000E45 VOL: 0
 ;PCODE: $00000E46 VOL: 0
 ;PCODE: $00000E47 VOL: 0
@@ -4942,30 +4930,30 @@ _0xB5:
 ;PCODE: $00000E4A VOL: 0
 ;PCODE: $00000E4B VOL: 0
 ;PCODE: $00000E4C VOL: 0
+;                        };
 ;PCODE: $00000E4D VOL: 0
+;                    break;
 ;PCODE: $00000E4E VOL: 0
+;                    case 2:  // Таймер
 ;PCODE: $00000E4F VOL: 0
 ;PCODE: $00000E50 VOL: 0
 ;PCODE: $00000E51 VOL: 0
+;                        switch (numSet) {
 ;PCODE: $00000E52 VOL: 0
 ;PCODE: $00000E53 VOL: 0
+;                            case 0: if(newval[numSet]<1) newval[numSet]=1; break;   // Включен
 ;PCODE: $00000E54 VOL: 0
 ;PCODE: $00000E55 VOL: 0
 ;PCODE: $00000E56 VOL: 0
 ;PCODE: $00000E57 VOL: 0
 ;PCODE: $00000E58 VOL: 0
-;                        };
 ;PCODE: $00000E59 VOL: 0
-;                    break;
 ;PCODE: $00000E5A VOL: 0
-;                    case 2:  // Таймер
 ;PCODE: $00000E5B VOL: 0
 ;PCODE: $00000E5C VOL: 0
 ;PCODE: $00000E5D VOL: 0
-;                        switch (numSet) {
 ;PCODE: $00000E5E VOL: 0
 ;PCODE: $00000E5F VOL: 0
-;                            case 0: if(newval[numSet]<1) newval[numSet]=1; break;   // Включен
 ;PCODE: $00000E60 VOL: 0
 ;PCODE: $00000E61 VOL: 0
 ;PCODE: $00000E62 VOL: 0
@@ -4973,6 +4961,7 @@ _0xB5:
 ;PCODE: $00000E64 VOL: 0
 ;PCODE: $00000E65 VOL: 0
 ;PCODE: $00000E66 VOL: 0
+;                            case 1: if(newval[numSet]<1) newval[numSet]=1; break;   // Отключен
 ;PCODE: $00000E67 VOL: 0
 ;PCODE: $00000E68 VOL: 0
 ;PCODE: $00000E69 VOL: 0
@@ -4985,7 +4974,6 @@ _0xB5:
 ;PCODE: $00000E70 VOL: 0
 ;PCODE: $00000E71 VOL: 0
 ;PCODE: $00000E72 VOL: 0
-;                            case 1: if(newval[numSet]<1) newval[numSet]=1; break;   // Отключен
 ;PCODE: $00000E73 VOL: 0
 ;PCODE: $00000E74 VOL: 0
 ;PCODE: $00000E75 VOL: 0
@@ -4994,6 +4982,7 @@ _0xB5:
 ;PCODE: $00000E78 VOL: 0
 ;PCODE: $00000E79 VOL: 0
 ;PCODE: $00000E7A VOL: 0
+;                            case 2: if(newval[numSet]<0) newval[numSet]=0; break;   // Размерность
 ;PCODE: $00000E7B VOL: 0
 ;PCODE: $00000E7C VOL: 0
 ;PCODE: $00000E7D VOL: 0
@@ -5006,7 +4995,6 @@ _0xB5:
 ;PCODE: $00000E84 VOL: 0
 ;PCODE: $00000E85 VOL: 0
 ;PCODE: $00000E86 VOL: 0
-;                            case 2: if(newval[numSet]<0) newval[numSet]=0; break;   // Размерность
 ;PCODE: $00000E87 VOL: 0
 ;PCODE: $00000E88 VOL: 0
 ;PCODE: $00000E89 VOL: 0
@@ -5015,6 +5003,7 @@ _0xB5:
 ;PCODE: $00000E8C VOL: 0
 ;PCODE: $00000E8D VOL: 0
 ;PCODE: $00000E8E VOL: 0
+;                            case 3: if(newval[numSet]<1) newval[numSet]=1; break;   // Шаг
 ;PCODE: $00000E8F VOL: 0
 ;PCODE: $00000E90 VOL: 0
 ;PCODE: $00000E91 VOL: 0
@@ -5027,7 +5016,6 @@ _0xB5:
 ;PCODE: $00000E98 VOL: 0
 ;PCODE: $00000E99 VOL: 0
 ;PCODE: $00000E9A VOL: 0
-;                            case 3: if(newval[numSet]<1) newval[numSet]=1; break;   // Шаг
 ;PCODE: $00000E9B VOL: 0
 ;PCODE: $00000E9C VOL: 0
 ;PCODE: $00000E9D VOL: 0
@@ -5036,88 +5024,89 @@ _0xB5:
 ;PCODE: $00000EA0 VOL: 0
 ;PCODE: $00000EA1 VOL: 0
 ;PCODE: $00000EA2 VOL: 0
+;                        };
 ;PCODE: $00000EA3 VOL: 0
+;                    break;
 ;PCODE: $00000EA4 VOL: 0
+;                    case 3:  // Настройки
 ;PCODE: $00000EA5 VOL: 0
 ;PCODE: $00000EA6 VOL: 0
 ;PCODE: $00000EA7 VOL: 0
+;                        switch (numSet) {
 ;PCODE: $00000EA8 VOL: 0
 ;PCODE: $00000EA9 VOL: 0
+;                            case 0:    break;   //
 ;PCODE: $00000EAA VOL: 0
 ;PCODE: $00000EAB VOL: 0
 ;PCODE: $00000EAC VOL: 0
+;                            case 1:    break;   //
 ;PCODE: $00000EAD VOL: 0
 ;PCODE: $00000EAE VOL: 0
-;                        };
 ;PCODE: $00000EAF VOL: 0
-;                    break;
 ;PCODE: $00000EB0 VOL: 0
-;                    case 3:  // Настройки
+;                            case 2:    break;   //
 ;PCODE: $00000EB1 VOL: 0
 ;PCODE: $00000EB2 VOL: 0
 ;PCODE: $00000EB3 VOL: 0
-;                        switch (numSet) {
 ;PCODE: $00000EB4 VOL: 0
+;                            case 3:    break;   //
 ;PCODE: $00000EB5 VOL: 0
-;                            case 0:    break;   //
 ;PCODE: $00000EB6 VOL: 0
 ;PCODE: $00000EB7 VOL: 0
 ;PCODE: $00000EB8 VOL: 0
-;                            case 1:    break;   //
+;                        };
 ;PCODE: $00000EB9 VOL: 0
+;                    break;
 ;PCODE: $00000EBA VOL: 0
+;                    case 4:  // Время и Дата
 ;PCODE: $00000EBB VOL: 0
 ;PCODE: $00000EBC VOL: 0
-;                            case 2:    break;   //
 ;PCODE: $00000EBD VOL: 0
+;                        switch (numSet) {
 ;PCODE: $00000EBE VOL: 0
 ;PCODE: $00000EBF VOL: 0
+;                            case 0:    break;   //
 ;PCODE: $00000EC0 VOL: 0
-;                            case 3:    break;   //
 ;PCODE: $00000EC1 VOL: 0
 ;PCODE: $00000EC2 VOL: 0
+;                            case 1:    break;   //
 ;PCODE: $00000EC3 VOL: 0
 ;PCODE: $00000EC4 VOL: 0
-;                        };
 ;PCODE: $00000EC5 VOL: 0
-;                    break;
 ;PCODE: $00000EC6 VOL: 0
-;                    case 4:  // Время и Дата
+;                            case 2:    break;   //
 ;PCODE: $00000EC7 VOL: 0
 ;PCODE: $00000EC8 VOL: 0
 ;PCODE: $00000EC9 VOL: 0
-;                        switch (numSet) {
 ;PCODE: $00000ECA VOL: 0
+;                            case 3:    break;   //
 ;PCODE: $00000ECB VOL: 0
-;                            case 0:    break;   //
 ;PCODE: $00000ECC VOL: 0
 ;PCODE: $00000ECD VOL: 0
 ;PCODE: $00000ECE VOL: 0
-;                            case 1:    break;   //
+;                        };
 ;PCODE: $00000ECF VOL: 0
+;                    break;
 ;PCODE: $00000ED0 VOL: 0
+;                  };
 ;PCODE: $00000ED1 VOL: 0
+;            break;
 ;PCODE: $00000ED2 VOL: 0
-;                            case 2:    break;   //
+;            case 3: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
 ;PCODE: $00000ED3 VOL: 0
 ;PCODE: $00000ED4 VOL: 0
 ;PCODE: $00000ED5 VOL: 0
 ;PCODE: $00000ED6 VOL: 0
-;                            case 3:    break;   //
 ;PCODE: $00000ED7 VOL: 0
 ;PCODE: $00000ED8 VOL: 0
 ;PCODE: $00000ED9 VOL: 0
 ;PCODE: $00000EDA VOL: 0
-;                        };
 ;PCODE: $00000EDB VOL: 0
-;                    break;
 ;PCODE: $00000EDC VOL: 0
-;                  };
 ;PCODE: $00000EDD VOL: 0
-;            break;
 ;PCODE: $00000EDE VOL: 0
-;            case 3: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
 ;PCODE: $00000EDF VOL: 0
+;                  ILI9341_WriteString(5,100,"ВЫПОЛНЯЮ  ЗАПИСЬ",Font_11x18,GREEN,fillScreen,1);
 ;PCODE: $00000EE0 VOL: 0
 ;PCODE: $00000EE1 VOL: 0
 ;PCODE: $00000EE2 VOL: 0
@@ -5130,12 +5119,13 @@ _0xB5:
 ;PCODE: $00000EE9 VOL: 0
 ;PCODE: $00000EEA VOL: 0
 ;PCODE: $00000EEB VOL: 0
-;                  ILI9341_WriteString(5,100,"ВЫПОЛНЯЮ  ЗАПИСЬ",Font_11x18,GREEN,fillScreen,1);
 ;PCODE: $00000EEC VOL: 0
 ;PCODE: $00000EED VOL: 0
 ;PCODE: $00000EEE VOL: 0
+;                  switch (numMenu){
 ;PCODE: $00000EEF VOL: 0
 ;PCODE: $00000EF0 VOL: 0
+;                    case 0: set[0][numSet] = newval[numSet]; break; // "Температура"
 ;PCODE: $00000EF1 VOL: 0
 ;PCODE: $00000EF2 VOL: 0
 ;PCODE: $00000EF3 VOL: 0
@@ -5146,15 +5136,14 @@ _0xB5:
 ;PCODE: $00000EF8 VOL: 0
 ;PCODE: $00000EF9 VOL: 0
 ;PCODE: $00000EFA VOL: 0
-;                  switch (numMenu){
 ;PCODE: $00000EFB VOL: 0
 ;PCODE: $00000EFC VOL: 0
-;                    case 0: set[0][numSet] = newval[numSet]; break; // "Температура"
 ;PCODE: $00000EFD VOL: 0
 ;PCODE: $00000EFE VOL: 0
 ;PCODE: $00000EFF VOL: 0
 ;PCODE: $00000F00 VOL: 0
 ;PCODE: $00000F01 VOL: 0
+;                    case 1: if (Dht) set[1][numSet] = newval[numSet];  // "Влажность"
 ;PCODE: $00000F02 VOL: 0
 ;PCODE: $00000F03 VOL: 0
 ;PCODE: $00000F04 VOL: 0
@@ -5167,7 +5156,6 @@ _0xB5:
 ;PCODE: $00000F0B VOL: 0
 ;PCODE: $00000F0C VOL: 0
 ;PCODE: $00000F0D VOL: 0
-;                    case 1: if (Dht) set[1][numSet] = newval[numSet];  // "Влажность"
 ;PCODE: $00000F0E VOL: 0
 ;PCODE: $00000F0F VOL: 0
 ;PCODE: $00000F10 VOL: 0
@@ -5177,6 +5165,7 @@ _0xB5:
 ;PCODE: $00000F14 VOL: 0
 ;PCODE: $00000F15 VOL: 0
 ;PCODE: $00000F16 VOL: 0
+;                            else set[2][numSet] = newval[numSet];
 ;PCODE: $00000F17 VOL: 0
 ;PCODE: $00000F18 VOL: 0
 ;PCODE: $00000F19 VOL: 0
@@ -5189,14 +5178,15 @@ _0xB5:
 ;PCODE: $00000F20 VOL: 0
 ;PCODE: $00000F21 VOL: 0
 ;PCODE: $00000F22 VOL: 0
-;                            else set[2][numSet] = newval[numSet];
 ;PCODE: $00000F23 VOL: 0
 ;PCODE: $00000F24 VOL: 0
 ;PCODE: $00000F25 VOL: 0
 ;PCODE: $00000F26 VOL: 0
 ;PCODE: $00000F27 VOL: 0
+;                      break;
 ;PCODE: $00000F28 VOL: 0
 ;PCODE: $00000F29 VOL: 0
+;                    case 2: set[3][numSet] = newval[numSet]; break; // "Таймер"
 ;PCODE: $00000F2A VOL: 0
 ;PCODE: $00000F2B VOL: 0
 ;PCODE: $00000F2C VOL: 0
@@ -5207,10 +5197,8 @@ _0xB5:
 ;PCODE: $00000F31 VOL: 0
 ;PCODE: $00000F32 VOL: 0
 ;PCODE: $00000F33 VOL: 0
-;                      break;
 ;PCODE: $00000F34 VOL: 0
 ;PCODE: $00000F35 VOL: 0
-;                    case 2: set[3][numSet] = newval[numSet]; break; // "Таймер"
 ;PCODE: $00000F36 VOL: 0
 ;PCODE: $00000F37 VOL: 0
 ;PCODE: $00000F38 VOL: 0
@@ -5218,6 +5206,7 @@ _0xB5:
 ;PCODE: $00000F3A VOL: 0
 ;PCODE: $00000F3B VOL: 0
 ;PCODE: $00000F3C VOL: 0
+;                    case 3: set[4][numSet] = newval[numSet]; break; // "Настройки"
 ;PCODE: $00000F3D VOL: 0
 ;PCODE: $00000F3E VOL: 0
 ;PCODE: $00000F3F VOL: 0
@@ -5230,7 +5219,6 @@ _0xB5:
 ;PCODE: $00000F46 VOL: 0
 ;PCODE: $00000F47 VOL: 0
 ;PCODE: $00000F48 VOL: 0
-;                    case 3: set[4][numSet] = newval[numSet]; break; // "Настройки"
 ;PCODE: $00000F49 VOL: 0
 ;PCODE: $00000F4A VOL: 0
 ;PCODE: $00000F4B VOL: 0
@@ -5238,6 +5226,7 @@ _0xB5:
 ;PCODE: $00000F4D VOL: 0
 ;PCODE: $00000F4E VOL: 0
 ;PCODE: $00000F4F VOL: 0
+;                    case 4: for (byte=0;byte<2;byte++) clock_buffer[byte+1] = ByteToBcd2(newval[byte]);
 ;PCODE: $00000F50 VOL: 0
 ;PCODE: $00000F51 VOL: 0
 ;PCODE: $00000F52 VOL: 0
@@ -5250,7 +5239,6 @@ _0xB5:
 ;PCODE: $00000F59 VOL: 0
 ;PCODE: $00000F5A VOL: 0
 ;PCODE: $00000F5B VOL: 0
-;                    case 4: for (byte=0;byte<2;byte++) clock_buffer[byte+1] = ByteToBcd2(newval[byte]);
 ;PCODE: $00000F5C VOL: 0
 ;PCODE: $00000F5D VOL: 0
 ;PCODE: $00000F5E VOL: 0
@@ -5307,6 +5295,7 @@ _0xB5:
 ;PCODE: $00000F91 VOL: 0
 ;PCODE: $00000F92 VOL: 0
 ;PCODE: $00000F93 VOL: 0
+;                            Clock_Ok = write_TWI(DS3231,0,clock_buffer,7);
 ;PCODE: $00000F94 VOL: 0
 ;PCODE: $00000F95 VOL: 0
 ;PCODE: $00000F96 VOL: 0
@@ -5319,48 +5308,48 @@ _0xB5:
 ;PCODE: $00000F9D VOL: 0
 ;PCODE: $00000F9E VOL: 0
 ;PCODE: $00000F9F VOL: 0
-;                            Clock_Ok = write_TWI(DS3231,0,clock_buffer,7);
+;                      break; // "Время и Дата"
 ;PCODE: $00000FA0 VOL: 0
+;                  }
 ;PCODE: $00000FA1 VOL: 0
+;                  delay_ms(500);
 ;PCODE: $00000FA2 VOL: 0
 ;PCODE: $00000FA3 VOL: 0
+;                  displ_num = 4; newSetButt = 1; break;
 ;PCODE: $00000FA4 VOL: 0
 ;PCODE: $00000FA5 VOL: 0
 ;PCODE: $00000FA6 VOL: 0
 ;PCODE: $00000FA7 VOL: 0
 ;PCODE: $00000FA8 VOL: 0
+;          }
 ;PCODE: $00000FA9 VOL: 0
+;          byte = 10;
 ;PCODE: $00000FAA VOL: 0
 ;PCODE: $00000FAB VOL: 0
-;                      break; // "Время и Дата"
+;        break;
 ;PCODE: $00000FAC VOL: 0
-;                  }
+;        //- УСТАНОВКИ АНАЛОГОВЫЕ ВЫХОДЫ -
+;        case 6:
 ;PCODE: $00000FAD VOL: 0
-;                  delay_ms(500);
 ;PCODE: $00000FAE VOL: 0
 ;PCODE: $00000FAF VOL: 0
-;                  displ_num = 4; newSetButt = 1; break;
+;          switch (byte){
 ;PCODE: $00000FB0 VOL: 0
 ;PCODE: $00000FB1 VOL: 0
+;               case 0: displ_num = 1; newSetButt = 1; break;
 ;PCODE: $00000FB2 VOL: 0
 ;PCODE: $00000FB3 VOL: 0
 ;PCODE: $00000FB4 VOL: 0
-;          }
 ;PCODE: $00000FB5 VOL: 0
-;          byte = 10;
 ;PCODE: $00000FB6 VOL: 0
 ;PCODE: $00000FB7 VOL: 0
-;        break;
 ;PCODE: $00000FB8 VOL: 0
-;        //- УСТАНОВКИ АНАЛОГОВЫЕ ВЫХОДЫ -
-;        case 6:
+;            case 1: if (--numSet<0) numSet = 0;    break;
 ;PCODE: $00000FB9 VOL: 0
 ;PCODE: $00000FBA VOL: 0
 ;PCODE: $00000FBB VOL: 0
-;          switch (byte){
 ;PCODE: $00000FBC VOL: 0
 ;PCODE: $00000FBD VOL: 0
-;               case 0: displ_num = 1; newSetButt = 1; break;
 ;PCODE: $00000FBE VOL: 0
 ;PCODE: $00000FBF VOL: 0
 ;PCODE: $00000FC0 VOL: 0
@@ -5368,7 +5357,7 @@ _0xB5:
 ;PCODE: $00000FC2 VOL: 0
 ;PCODE: $00000FC3 VOL: 0
 ;PCODE: $00000FC4 VOL: 0
-;            case 1: if (--numSet<0) numSet = 0;    break;
+;            case 2: if (++numSet>MAX_SET-1) numSet = MAX_SET-1;    break;
 ;PCODE: $00000FC5 VOL: 0
 ;PCODE: $00000FC6 VOL: 0
 ;PCODE: $00000FC7 VOL: 0
@@ -5381,7 +5370,7 @@ _0xB5:
 ;PCODE: $00000FCE VOL: 0
 ;PCODE: $00000FCF VOL: 0
 ;PCODE: $00000FD0 VOL: 0
-;            case 2: if (++numSet>MAX_SET-1) numSet = MAX_SET-1;    break;
+;            case 3: displ_num = 8; newSetButt = 1;
 ;PCODE: $00000FD1 VOL: 0
 ;PCODE: $00000FD2 VOL: 0
 ;PCODE: $00000FD3 VOL: 0
@@ -5389,12 +5378,12 @@ _0xB5:
 ;PCODE: $00000FD5 VOL: 0
 ;PCODE: $00000FD6 VOL: 0
 ;PCODE: $00000FD7 VOL: 0
+;                for (byte=0;byte<MAX_SET;byte++) newval[byte] = analog[byte]; break;
 ;PCODE: $00000FD8 VOL: 0
 ;PCODE: $00000FD9 VOL: 0
 ;PCODE: $00000FDA VOL: 0
 ;PCODE: $00000FDB VOL: 0
 ;PCODE: $00000FDC VOL: 0
-;            case 3: displ_num = 8; newSetButt = 1;
 ;PCODE: $00000FDD VOL: 0
 ;PCODE: $00000FDE VOL: 0
 ;PCODE: $00000FDF VOL: 0
@@ -5402,7 +5391,6 @@ _0xB5:
 ;PCODE: $00000FE1 VOL: 0
 ;PCODE: $00000FE2 VOL: 0
 ;PCODE: $00000FE3 VOL: 0
-;                for (byte=0;byte<MAX_SET;byte++) newval[byte] = analog[byte]; break;
 ;PCODE: $00000FE4 VOL: 0
 ;PCODE: $00000FE5 VOL: 0
 ;PCODE: $00000FE6 VOL: 0
@@ -5419,36 +5407,37 @@ _0xB5:
 ;PCODE: $00000FF1 VOL: 0
 ;PCODE: $00000FF2 VOL: 0
 ;PCODE: $00000FF3 VOL: 0
+;            break;
 ;PCODE: $00000FF4 VOL: 0
+;          }
 ;PCODE: $00000FF5 VOL: 0
+;          byte = 10;
 ;PCODE: $00000FF6 VOL: 0
 ;PCODE: $00000FF7 VOL: 0
+;        break;
 ;PCODE: $00000FF8 VOL: 0
+;        //- УСТАНОВКИ РЕДЛЕЙНЫЕ ВЫХОДЫ -
+;        case 7:
 ;PCODE: $00000FF9 VOL: 0
 ;PCODE: $00000FFA VOL: 0
 ;PCODE: $00000FFB VOL: 0
+;          switch (byte){
 ;PCODE: $00000FFC VOL: 0
 ;PCODE: $00000FFD VOL: 0
+;            case 0: displ_num = 2; newSetButt = 1; break;
 ;PCODE: $00000FFE VOL: 0
 ;PCODE: $00000FFF VOL: 0
-;            break;
 ;PCODE: $00001000 VOL: 0
-;          }
 ;PCODE: $00001001 VOL: 0
-;          byte = 10;
 ;PCODE: $00001002 VOL: 0
 ;PCODE: $00001003 VOL: 0
-;        break;
 ;PCODE: $00001004 VOL: 0
-;        //- УСТАНОВКИ РЕДЛЕЙНЫЕ ВЫХОДЫ -
-;        case 7:
+;            case 1: if (--numSet<0) numSet = 0;    break;
 ;PCODE: $00001005 VOL: 0
 ;PCODE: $00001006 VOL: 0
 ;PCODE: $00001007 VOL: 0
-;          switch (byte){
 ;PCODE: $00001008 VOL: 0
 ;PCODE: $00001009 VOL: 0
-;            case 0: displ_num = 2; newSetButt = 1; break;
 ;PCODE: $0000100A VOL: 0
 ;PCODE: $0000100B VOL: 0
 ;PCODE: $0000100C VOL: 0
@@ -5456,7 +5445,7 @@ _0xB5:
 ;PCODE: $0000100E VOL: 0
 ;PCODE: $0000100F VOL: 0
 ;PCODE: $00001010 VOL: 0
-;            case 1: if (--numSet<0) numSet = 0;    break;
+;            case 2: if (++numSet>MAX_SET-1) numSet = MAX_SET-1;    break;
 ;PCODE: $00001011 VOL: 0
 ;PCODE: $00001012 VOL: 0
 ;PCODE: $00001013 VOL: 0
@@ -5469,7 +5458,7 @@ _0xB5:
 ;PCODE: $0000101A VOL: 0
 ;PCODE: $0000101B VOL: 0
 ;PCODE: $0000101C VOL: 0
-;            case 2: if (++numSet>MAX_SET-1) numSet = MAX_SET-1;    break;
+;            case 3: displ_num = 9; newSetButt = 1;
 ;PCODE: $0000101D VOL: 0
 ;PCODE: $0000101E VOL: 0
 ;PCODE: $0000101F VOL: 0
@@ -5477,12 +5466,12 @@ _0xB5:
 ;PCODE: $00001021 VOL: 0
 ;PCODE: $00001022 VOL: 0
 ;PCODE: $00001023 VOL: 0
+;                for (byte=0;byte<MAX_SET;byte++) newval[byte] = relay[byte]; break;
 ;PCODE: $00001024 VOL: 0
 ;PCODE: $00001025 VOL: 0
 ;PCODE: $00001026 VOL: 0
 ;PCODE: $00001027 VOL: 0
 ;PCODE: $00001028 VOL: 0
-;            case 3: displ_num = 9; newSetButt = 1;
 ;PCODE: $00001029 VOL: 0
 ;PCODE: $0000102A VOL: 0
 ;PCODE: $0000102B VOL: 0
@@ -5490,7 +5479,6 @@ _0xB5:
 ;PCODE: $0000102D VOL: 0
 ;PCODE: $0000102E VOL: 0
 ;PCODE: $0000102F VOL: 0
-;                for (byte=0;byte<MAX_SET;byte++) newval[byte] = relay[byte]; break;
 ;PCODE: $00001030 VOL: 0
 ;PCODE: $00001031 VOL: 0
 ;PCODE: $00001032 VOL: 0
@@ -5507,36 +5495,37 @@ _0xB5:
 ;PCODE: $0000103D VOL: 0
 ;PCODE: $0000103E VOL: 0
 ;PCODE: $0000103F VOL: 0
+;            break;
 ;PCODE: $00001040 VOL: 0
+;          }
 ;PCODE: $00001041 VOL: 0
+;          byte = 10;
 ;PCODE: $00001042 VOL: 0
 ;PCODE: $00001043 VOL: 0
+;        break;
 ;PCODE: $00001044 VOL: 0
+;        //- РЕДАКТИР. АНАЛОГОВЫЕ ВЫХОДЫ -
+;        case 8:
 ;PCODE: $00001045 VOL: 0
 ;PCODE: $00001046 VOL: 0
 ;PCODE: $00001047 VOL: 0
+;          switch (byte){
 ;PCODE: $00001048 VOL: 0
 ;PCODE: $00001049 VOL: 0
+;            case 0: displ_num = 6; newSetButt = 1; break;
 ;PCODE: $0000104A VOL: 0
 ;PCODE: $0000104B VOL: 0
-;            break;
 ;PCODE: $0000104C VOL: 0
-;          }
 ;PCODE: $0000104D VOL: 0
-;          byte = 10;
 ;PCODE: $0000104E VOL: 0
 ;PCODE: $0000104F VOL: 0
-;        break;
 ;PCODE: $00001050 VOL: 0
-;        //- РЕДАКТИР. АНАЛОГОВЫЕ ВЫХОДЫ -
-;        case 8:
+;            case 1: if(++newval[numSet]>100) newval[numSet]=100; break;
 ;PCODE: $00001051 VOL: 0
 ;PCODE: $00001052 VOL: 0
 ;PCODE: $00001053 VOL: 0
-;          switch (byte){
 ;PCODE: $00001054 VOL: 0
 ;PCODE: $00001055 VOL: 0
-;            case 0: displ_num = 6; newSetButt = 1; break;
 ;PCODE: $00001056 VOL: 0
 ;PCODE: $00001057 VOL: 0
 ;PCODE: $00001058 VOL: 0
@@ -5544,7 +5533,6 @@ _0xB5:
 ;PCODE: $0000105A VOL: 0
 ;PCODE: $0000105B VOL: 0
 ;PCODE: $0000105C VOL: 0
-;            case 1: if(++newval[numSet]>100) newval[numSet]=100; break;
 ;PCODE: $0000105D VOL: 0
 ;PCODE: $0000105E VOL: 0
 ;PCODE: $0000105F VOL: 0
@@ -5555,6 +5543,7 @@ _0xB5:
 ;PCODE: $00001064 VOL: 0
 ;PCODE: $00001065 VOL: 0
 ;PCODE: $00001066 VOL: 0
+;            case 2: if(--newval[numSet]<-1) newval[numSet] = -1; break;
 ;PCODE: $00001067 VOL: 0
 ;PCODE: $00001068 VOL: 0
 ;PCODE: $00001069 VOL: 0
@@ -5567,7 +5556,6 @@ _0xB5:
 ;PCODE: $00001070 VOL: 0
 ;PCODE: $00001071 VOL: 0
 ;PCODE: $00001072 VOL: 0
-;            case 2: if(--newval[numSet]<-1) newval[numSet] = -1; break;
 ;PCODE: $00001073 VOL: 0
 ;PCODE: $00001074 VOL: 0
 ;PCODE: $00001075 VOL: 0
@@ -5578,6 +5566,7 @@ _0xB5:
 ;PCODE: $0000107A VOL: 0
 ;PCODE: $0000107B VOL: 0
 ;PCODE: $0000107C VOL: 0
+;            case 3: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
 ;PCODE: $0000107D VOL: 0
 ;PCODE: $0000107E VOL: 0
 ;PCODE: $0000107F VOL: 0
@@ -5590,8 +5579,8 @@ _0xB5:
 ;PCODE: $00001086 VOL: 0
 ;PCODE: $00001087 VOL: 0
 ;PCODE: $00001088 VOL: 0
-;            case 3: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
 ;PCODE: $00001089 VOL: 0
+;                  ILI9341_WriteString(5,100,"ВЫПОЛНЯЮ  ЗАПИСЬ",Font_11x18,GREEN,fillScreen,1);
 ;PCODE: $0000108A VOL: 0
 ;PCODE: $0000108B VOL: 0
 ;PCODE: $0000108C VOL: 0
@@ -5604,10 +5593,10 @@ _0xB5:
 ;PCODE: $00001093 VOL: 0
 ;PCODE: $00001094 VOL: 0
 ;PCODE: $00001095 VOL: 0
-;                  ILI9341_WriteString(5,100,"ВЫПОЛНЯЮ  ЗАПИСЬ",Font_11x18,GREEN,fillScreen,1);
 ;PCODE: $00001096 VOL: 0
 ;PCODE: $00001097 VOL: 0
 ;PCODE: $00001098 VOL: 0
+;                  analog[numSet] = newval[numSet];
 ;PCODE: $00001099 VOL: 0
 ;PCODE: $0000109A VOL: 0
 ;PCODE: $0000109B VOL: 0
@@ -5620,44 +5609,44 @@ _0xB5:
 ;PCODE: $000010A2 VOL: 0
 ;PCODE: $000010A3 VOL: 0
 ;PCODE: $000010A4 VOL: 0
-;                  analog[numSet] = newval[numSet];
+;                  delay_ms(1000);
 ;PCODE: $000010A5 VOL: 0
 ;PCODE: $000010A6 VOL: 0
+;                  displ_num = 6; newSetButt = 1; break;
 ;PCODE: $000010A7 VOL: 0
 ;PCODE: $000010A8 VOL: 0
 ;PCODE: $000010A9 VOL: 0
 ;PCODE: $000010AA VOL: 0
 ;PCODE: $000010AB VOL: 0
+;          }
 ;PCODE: $000010AC VOL: 0
+;          byte = 10;
 ;PCODE: $000010AD VOL: 0
 ;PCODE: $000010AE VOL: 0
+;        break;
 ;PCODE: $000010AF VOL: 0
+;        //- РЕДАКТИР. РЕЛЕЙНЫЕ ВЫХОДЫ -
+;        case 9:
 ;PCODE: $000010B0 VOL: 0
-;                  delay_ms(1000);
 ;PCODE: $000010B1 VOL: 0
 ;PCODE: $000010B2 VOL: 0
-;                  displ_num = 6; newSetButt = 1; break;
+;          switch (byte){
 ;PCODE: $000010B3 VOL: 0
 ;PCODE: $000010B4 VOL: 0
+;               case 0: displ_num = 6; newSetButt = 1; break;
 ;PCODE: $000010B5 VOL: 0
 ;PCODE: $000010B6 VOL: 0
 ;PCODE: $000010B7 VOL: 0
-;          }
 ;PCODE: $000010B8 VOL: 0
-;          byte = 10;
 ;PCODE: $000010B9 VOL: 0
 ;PCODE: $000010BA VOL: 0
-;        break;
 ;PCODE: $000010BB VOL: 0
-;        //- РЕДАКТИР. РЕЛЕЙНЫЕ ВЫХОДЫ -
-;        case 9:
+;            case 1: if(++newval[numSet]>2) newval[numSet]= 2; break;
 ;PCODE: $000010BC VOL: 0
 ;PCODE: $000010BD VOL: 0
 ;PCODE: $000010BE VOL: 0
-;          switch (byte){
 ;PCODE: $000010BF VOL: 0
 ;PCODE: $000010C0 VOL: 0
-;               case 0: displ_num = 6; newSetButt = 1; break;
 ;PCODE: $000010C1 VOL: 0
 ;PCODE: $000010C2 VOL: 0
 ;PCODE: $000010C3 VOL: 0
@@ -5665,7 +5654,6 @@ _0xB5:
 ;PCODE: $000010C5 VOL: 0
 ;PCODE: $000010C6 VOL: 0
 ;PCODE: $000010C7 VOL: 0
-;            case 1: if(++newval[numSet]>2) newval[numSet]= 2; break;
 ;PCODE: $000010C8 VOL: 0
 ;PCODE: $000010C9 VOL: 0
 ;PCODE: $000010CA VOL: 0
@@ -5676,6 +5664,7 @@ _0xB5:
 ;PCODE: $000010CF VOL: 0
 ;PCODE: $000010D0 VOL: 0
 ;PCODE: $000010D1 VOL: 0
+;            case 2: if(--newval[numSet]<0) newval[numSet]= 0; break;
 ;PCODE: $000010D2 VOL: 0
 ;PCODE: $000010D3 VOL: 0
 ;PCODE: $000010D4 VOL: 0
@@ -5688,7 +5677,6 @@ _0xB5:
 ;PCODE: $000010DB VOL: 0
 ;PCODE: $000010DC VOL: 0
 ;PCODE: $000010DD VOL: 0
-;            case 2: if(--newval[numSet]<0) newval[numSet]= 0; break;
 ;PCODE: $000010DE VOL: 0
 ;PCODE: $000010DF VOL: 0
 ;PCODE: $000010E0 VOL: 0
@@ -5699,6 +5687,7 @@ _0xB5:
 ;PCODE: $000010E5 VOL: 0
 ;PCODE: $000010E6 VOL: 0
 ;PCODE: $000010E7 VOL: 0
+;            case 3: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
 ;PCODE: $000010E8 VOL: 0
 ;PCODE: $000010E9 VOL: 0
 ;PCODE: $000010EA VOL: 0
@@ -5711,8 +5700,8 @@ _0xB5:
 ;PCODE: $000010F1 VOL: 0
 ;PCODE: $000010F2 VOL: 0
 ;PCODE: $000010F3 VOL: 0
-;            case 3: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
 ;PCODE: $000010F4 VOL: 0
+;                  ILI9341_WriteString(5,100,"ВЫПОЛНЯЮ  ЗАПИСЬ",Font_11x18,GREEN,fillScreen,1);
 ;PCODE: $000010F5 VOL: 0
 ;PCODE: $000010F6 VOL: 0
 ;PCODE: $000010F7 VOL: 0
@@ -5725,10 +5714,10 @@ _0xB5:
 ;PCODE: $000010FE VOL: 0
 ;PCODE: $000010FF VOL: 0
 ;PCODE: $00001100 VOL: 0
-;                  ILI9341_WriteString(5,100,"ВЫПОЛНЯЮ  ЗАПИСЬ",Font_11x18,GREEN,fillScreen,1);
 ;PCODE: $00001101 VOL: 0
 ;PCODE: $00001102 VOL: 0
 ;PCODE: $00001103 VOL: 0
+;                  relay[numSet] = newval[numSet];
 ;PCODE: $00001104 VOL: 0
 ;PCODE: $00001105 VOL: 0
 ;PCODE: $00001106 VOL: 0
@@ -5741,51 +5730,38 @@ _0xB5:
 ;PCODE: $0000110D VOL: 0
 ;PCODE: $0000110E VOL: 0
 ;PCODE: $0000110F VOL: 0
-;                  relay[numSet] = newval[numSet];
+;                  delay_ms(1000);
 ;PCODE: $00001110 VOL: 0
 ;PCODE: $00001111 VOL: 0
+;                  displ_num = 7; newSetButt = 1; break;
 ;PCODE: $00001112 VOL: 0
 ;PCODE: $00001113 VOL: 0
 ;PCODE: $00001114 VOL: 0
 ;PCODE: $00001115 VOL: 0
 ;PCODE: $00001116 VOL: 0
+;          }
 ;PCODE: $00001117 VOL: 0
+;          byte = 10;
 ;PCODE: $00001118 VOL: 0
 ;PCODE: $00001119 VOL: 0
+;        break;
 ;PCODE: $0000111A VOL: 0
+;        default: displ_num = 0; newSetButt = 1;
 ;PCODE: $0000111B VOL: 0
-;                  delay_ms(1000);
 ;PCODE: $0000111C VOL: 0
 ;PCODE: $0000111D VOL: 0
-;                  displ_num = 7; newSetButt = 1; break;
 ;PCODE: $0000111E VOL: 0
+;     }
 ;PCODE: $0000111F VOL: 0
+;}
 ;PCODE: $00001120 VOL: 0
 ;PCODE: $00001121 VOL: 0
 ;PCODE: $00001122 VOL: 0
-;          }
 ;PCODE: $00001123 VOL: 0
-;          byte = 10;
 ;PCODE: $00001124 VOL: 0
-;PCODE: $00001125 VOL: 0
-;        break;
-;PCODE: $00001126 VOL: 0
-;        default: displ_num = 0; newSetButt = 1;
-;PCODE: $00001127 VOL: 0
-;PCODE: $00001128 VOL: 0
-;PCODE: $00001129 VOL: 0
-;PCODE: $0000112A VOL: 0
-;     }
-;PCODE: $0000112B VOL: 0
-;}
-;PCODE: $0000112C VOL: 0
-;PCODE: $0000112D VOL: 0
-;PCODE: $0000112E VOL: 0
-;PCODE: $0000112F VOL: 0
-;PCODE: $00001130 VOL: 0
 
 	.DSEG
-_0x1FA:
+_0x1FB:
 	.BYTE 0x33
 ;
 ;#include "displ.c"
@@ -5795,11 +5771,24 @@ _0x1FA:
 ; 0000 0063 void fraction(signed int t){
 
 	.CSEG
+;PCODE: $00001125 VOL: 0
+;PCODE: $00001126 VOL: 0
+;  if (t<0) {t = -t; signchar = '-';} else signchar = ' ';
+;PCODE: $00001127 VOL: 0
+;	t -> Y+0
+;PCODE: $00001128 VOL: 0
+;PCODE: $00001129 VOL: 0
+;PCODE: $0000112A VOL: 0
+;PCODE: $0000112B VOL: 0
+;PCODE: $0000112C VOL: 0
+;PCODE: $0000112D VOL: 0
+;PCODE: $0000112E VOL: 0
+;PCODE: $0000112F VOL: 0
+;PCODE: $00001130 VOL: 0
 ;PCODE: $00001131 VOL: 0
 ;PCODE: $00001132 VOL: 0
-;  if (t<0) {t = -t; signchar = '-';} else signchar = ' ';
 ;PCODE: $00001133 VOL: 0
-;	t -> Y+0
+;  frcval = t%10; intval = t/10;
 ;PCODE: $00001134 VOL: 0
 ;PCODE: $00001135 VOL: 0
 ;PCODE: $00001136 VOL: 0
@@ -5809,35 +5798,34 @@ _0x1FA:
 ;PCODE: $0000113A VOL: 0
 ;PCODE: $0000113B VOL: 0
 ;PCODE: $0000113C VOL: 0
+;}
 ;PCODE: $0000113D VOL: 0
 ;PCODE: $0000113E VOL: 0
 ;PCODE: $0000113F VOL: 0
-;  frcval = t%10; intval = t/10;
+;
+;void checkDisplNum(void){
 ;PCODE: $00001140 VOL: 0
 ;PCODE: $00001141 VOL: 0
+;  unsigned char i;
+;    if(point_Y>200){
 ;PCODE: $00001142 VOL: 0
+;	i -> R17
 ;PCODE: $00001143 VOL: 0
 ;PCODE: $00001144 VOL: 0
 ;PCODE: $00001145 VOL: 0
+;        for (i=0; i<4; i++){if(contains(i)) break;}// проверка попадания новой координаты в область кнопки
 ;PCODE: $00001146 VOL: 0
 ;PCODE: $00001147 VOL: 0
 ;PCODE: $00001148 VOL: 0
-;}
 ;PCODE: $00001149 VOL: 0
 ;PCODE: $0000114A VOL: 0
 ;PCODE: $0000114B VOL: 0
-;
-;void checkDisplNum(void){
 ;PCODE: $0000114C VOL: 0
 ;PCODE: $0000114D VOL: 0
-;  unsigned char i;
-;    if(point_Y>200){
 ;PCODE: $0000114E VOL: 0
-;	i -> R17
 ;PCODE: $0000114F VOL: 0
 ;PCODE: $00001150 VOL: 0
 ;PCODE: $00001151 VOL: 0
-;        for (i=0; i<4; i++){if(contains(i)) break;}// проверка попадания новой координаты в область кнопки
 ;PCODE: $00001152 VOL: 0
 ;PCODE: $00001153 VOL: 0
 ;PCODE: $00001154 VOL: 0
@@ -5846,6 +5834,7 @@ _0x1FA:
 ;PCODE: $00001157 VOL: 0
 ;PCODE: $00001158 VOL: 0
 ;PCODE: $00001159 VOL: 0
+;        if(i<4){BeepT = 20; displ_num = i; newSetButt = 1;}
 ;PCODE: $0000115A VOL: 0
 ;PCODE: $0000115B VOL: 0
 ;PCODE: $0000115C VOL: 0
@@ -5855,26 +5844,13 @@ _0x1FA:
 ;PCODE: $00001160 VOL: 0
 ;PCODE: $00001161 VOL: 0
 ;PCODE: $00001162 VOL: 0
+;    }
 ;PCODE: $00001163 VOL: 0
+;}
 ;PCODE: $00001164 VOL: 0
 ;PCODE: $00001165 VOL: 0
-;        if(i<4){BeepT = 20; displ_num = i; newSetButt = 1;}
 ;PCODE: $00001166 VOL: 0
 ;PCODE: $00001167 VOL: 0
-;PCODE: $00001168 VOL: 0
-;PCODE: $00001169 VOL: 0
-;PCODE: $0000116A VOL: 0
-;PCODE: $0000116B VOL: 0
-;PCODE: $0000116C VOL: 0
-;PCODE: $0000116D VOL: 0
-;PCODE: $0000116E VOL: 0
-;    }
-;PCODE: $0000116F VOL: 0
-;}
-;PCODE: $00001170 VOL: 0
-;PCODE: $00001171 VOL: 0
-;PCODE: $00001172 VOL: 0
-;PCODE: $00001173 VOL: 0
 ;
 ;//void drawButtEdit(unsigned int fW){
 ;//    newSetButt = 0;
@@ -5887,45 +5863,58 @@ _0x1FA:
 ;
 ;//-------------------------------- СТАН ПОВІТРЯ. ----------------------------------------
 ;void displ_0(void){
-;PCODE: $00001174 VOL: 0
-;PCODE: $00001175 VOL: 0
+;PCODE: $00001168 VOL: 0
+;PCODE: $00001169 VOL: 0
 ; unsigned char i;
 ; unsigned int fillWindow = BLUE1, bordWindow = BLACK, temp;
 ;    if(newSetButt){
-;PCODE: $00001176 VOL: 0
-;PCODE: $00001177 VOL: 0
+;PCODE: $0000116A VOL: 0
+;PCODE: $0000116B VOL: 0
 ;	i -> R17
 ;	fillWindow -> R18,R19
 ;	bordWindow -> R20,R21
 ;	temp -> Y+6
+;PCODE: $0000116C VOL: 0
+;PCODE: $0000116D VOL: 0
+;PCODE: $0000116E VOL: 0
+;PCODE: $0000116F VOL: 0
+;PCODE: $00001170 VOL: 0
+;PCODE: $00001171 VOL: 0
+;        newSetButt = 0;
+;PCODE: $00001172 VOL: 0
+;        ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
+;PCODE: $00001173 VOL: 0
+;PCODE: $00001174 VOL: 0
+;PCODE: $00001175 VOL: 0
+;PCODE: $00001176 VOL: 0
+;PCODE: $00001177 VOL: 0
 ;PCODE: $00001178 VOL: 0
 ;PCODE: $00001179 VOL: 0
 ;PCODE: $0000117A VOL: 0
 ;PCODE: $0000117B VOL: 0
 ;PCODE: $0000117C VOL: 0
+;        initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
 ;PCODE: $0000117D VOL: 0
-;        newSetButt = 0;
 ;PCODE: $0000117E VOL: 0
-;        ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
 ;PCODE: $0000117F VOL: 0
 ;PCODE: $00001180 VOL: 0
 ;PCODE: $00001181 VOL: 0
 ;PCODE: $00001182 VOL: 0
+;        //---------- фон ------- рамкa --- текст - номер -текст ---------
+;        drawButton(fillWindow, fillWindow, bordWindow, 0, "Повытря");
 ;PCODE: $00001183 VOL: 0
 ;PCODE: $00001184 VOL: 0
 ;PCODE: $00001185 VOL: 0
 ;PCODE: $00001186 VOL: 0
 ;PCODE: $00001187 VOL: 0
 ;PCODE: $00001188 VOL: 0
-;        initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
 ;PCODE: $00001189 VOL: 0
 ;PCODE: $0000118A VOL: 0
+;        drawButton(WHITE, WHITE, BLACK, 1, "Грунт");
 ;PCODE: $0000118B VOL: 0
 ;PCODE: $0000118C VOL: 0
 ;PCODE: $0000118D VOL: 0
 ;PCODE: $0000118E VOL: 0
-;        //---------- фон ------- рамкa --- текст - номер -текст ---------
-;        drawButton(fillWindow, fillWindow, bordWindow, 0, "Повытря");
 ;PCODE: $0000118F VOL: 0
 ;PCODE: $00001190 VOL: 0
 ;PCODE: $00001191 VOL: 0
@@ -5933,8 +5922,8 @@ _0x1FA:
 ;PCODE: $00001193 VOL: 0
 ;PCODE: $00001194 VOL: 0
 ;PCODE: $00001195 VOL: 0
+;        drawButton(WHITE, WHITE, BLACK, 2, "Управл");
 ;PCODE: $00001196 VOL: 0
-;        drawButton(WHITE, WHITE, BLACK, 1, "Грунт");
 ;PCODE: $00001197 VOL: 0
 ;PCODE: $00001198 VOL: 0
 ;PCODE: $00001199 VOL: 0
@@ -5945,8 +5934,8 @@ _0x1FA:
 ;PCODE: $0000119E VOL: 0
 ;PCODE: $0000119F VOL: 0
 ;PCODE: $000011A0 VOL: 0
+;        drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
 ;PCODE: $000011A1 VOL: 0
-;        drawButton(WHITE, WHITE, BLACK, 2, "Управл");
 ;PCODE: $000011A2 VOL: 0
 ;PCODE: $000011A3 VOL: 0
 ;PCODE: $000011A4 VOL: 0
@@ -5957,30 +5946,30 @@ _0x1FA:
 ;PCODE: $000011A9 VOL: 0
 ;PCODE: $000011AA VOL: 0
 ;PCODE: $000011AB VOL: 0
+;    }
+;//--- Индикация часов ------
+;    pointY = 3;
 ;PCODE: $000011AC VOL: 0
-;        drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
 ;PCODE: $000011AD VOL: 0
 ;PCODE: $000011AE VOL: 0
+;    if(Clock_Ok){
 ;PCODE: $000011AF VOL: 0
 ;PCODE: $000011B0 VOL: 0
 ;PCODE: $000011B1 VOL: 0
+;        read_TWI(DS3231,0,clock_buffer,7);// чтение данных часовой микросхемы
 ;PCODE: $000011B2 VOL: 0
 ;PCODE: $000011B3 VOL: 0
 ;PCODE: $000011B4 VOL: 0
 ;PCODE: $000011B5 VOL: 0
 ;PCODE: $000011B6 VOL: 0
 ;PCODE: $000011B7 VOL: 0
-;    }
-;//--- Индикация часов ------
-;    pointY = 3;
 ;PCODE: $000011B8 VOL: 0
 ;PCODE: $000011B9 VOL: 0
 ;PCODE: $000011BA VOL: 0
-;    if(Clock_Ok){
+;        sprintf(buff,"%02x:%02x   %02x.%02x.20%02x",clock_buffer[2],clock_buffer[1],clock_buffer[4],clock_buffer[5],cloc ...
 ;PCODE: $000011BB VOL: 0
 ;PCODE: $000011BC VOL: 0
 ;PCODE: $000011BD VOL: 0
-;        read_TWI(DS3231,0,clock_buffer,7);// чтение данных часовой микросхемы
 ;PCODE: $000011BE VOL: 0
 ;PCODE: $000011BF VOL: 0
 ;PCODE: $000011C0 VOL: 0
@@ -5990,7 +5979,6 @@ _0x1FA:
 ;PCODE: $000011C4 VOL: 0
 ;PCODE: $000011C5 VOL: 0
 ;PCODE: $000011C6 VOL: 0
-;        sprintf(buff,"%02x:%02x   %02x.%02x.20%02x",clock_buffer[2],clock_buffer[1],clock_buffer[4],clock_buffer[5],cloc ...
 ;PCODE: $000011C7 VOL: 0
 ;PCODE: $000011C8 VOL: 0
 ;PCODE: $000011C9 VOL: 0
@@ -6008,6 +5996,7 @@ _0x1FA:
 ;PCODE: $000011D5 VOL: 0
 ;PCODE: $000011D6 VOL: 0
 ;PCODE: $000011D7 VOL: 0
+;        ILI9341_WriteString(70,pointY,buff,Font_11x18,BLACK,WHITE,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,WHIT ...
 ;PCODE: $000011D8 VOL: 0
 ;PCODE: $000011D9 VOL: 0
 ;PCODE: $000011DA VOL: 0
@@ -6020,7 +6009,6 @@ _0x1FA:
 ;PCODE: $000011E1 VOL: 0
 ;PCODE: $000011E2 VOL: 0
 ;PCODE: $000011E3 VOL: 0
-;        ILI9341_WriteString(70,pointY,buff,Font_11x18,BLACK,WHITE,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,WHIT ...
 ;PCODE: $000011E4 VOL: 0
 ;PCODE: $000011E5 VOL: 0
 ;PCODE: $000011E6 VOL: 0
@@ -6039,8 +6027,11 @@ _0x1FA:
 ;PCODE: $000011F3 VOL: 0
 ;PCODE: $000011F4 VOL: 0
 ;PCODE: $000011F5 VOL: 0
+;    }
+;    else {
 ;PCODE: $000011F6 VOL: 0
 ;PCODE: $000011F7 VOL: 0
+;        sprintf(buff,"Помилка часыв!");
 ;PCODE: $000011F8 VOL: 0
 ;PCODE: $000011F9 VOL: 0
 ;PCODE: $000011FA VOL: 0
@@ -6050,12 +6041,10 @@ _0x1FA:
 ;PCODE: $000011FE VOL: 0
 ;PCODE: $000011FF VOL: 0
 ;PCODE: $00001200 VOL: 0
+;        ILI9341_WriteString(70,pointY,buff,Font_11x18,YELLOW,RED,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,RED,Y ...
 ;PCODE: $00001201 VOL: 0
-;    }
-;    else {
 ;PCODE: $00001202 VOL: 0
 ;PCODE: $00001203 VOL: 0
-;        sprintf(buff,"Помилка часыв!");
 ;PCODE: $00001204 VOL: 0
 ;PCODE: $00001205 VOL: 0
 ;PCODE: $00001206 VOL: 0
@@ -6065,7 +6054,6 @@ _0x1FA:
 ;PCODE: $0000120A VOL: 0
 ;PCODE: $0000120B VOL: 0
 ;PCODE: $0000120C VOL: 0
-;        ILI9341_WriteString(70,pointY,buff,Font_11x18,YELLOW,RED,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,RED,Y ...
 ;PCODE: $0000120D VOL: 0
 ;PCODE: $0000120E VOL: 0
 ;PCODE: $0000120F VOL: 0
@@ -6084,41 +6072,42 @@ _0x1FA:
 ;PCODE: $0000121C VOL: 0
 ;PCODE: $0000121D VOL: 0
 ;PCODE: $0000121E VOL: 0
+;    }
 ;PCODE: $0000121F VOL: 0
+;    pointY += 22;
 ;PCODE: $00001220 VOL: 0
 ;PCODE: $00001221 VOL: 0
 ;PCODE: $00001222 VOL: 0
+;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
 ;PCODE: $00001223 VOL: 0
 ;PCODE: $00001224 VOL: 0
 ;PCODE: $00001225 VOL: 0
 ;PCODE: $00001226 VOL: 0
+;//--- Индикация t ВОЗДУХА -----
+;    temp = set[0][0]; fraction(temp);     // проверка знака температуры
 ;PCODE: $00001227 VOL: 0
 ;PCODE: $00001228 VOL: 0
 ;PCODE: $00001229 VOL: 0
 ;PCODE: $0000122A VOL: 0
-;    }
 ;PCODE: $0000122B VOL: 0
-;    pointY += 22;
 ;PCODE: $0000122C VOL: 0
+;    sprintf(buff,"[%2u.%u]",intval,frcval); // ЗАДАНИЕ T показываем с десятичным знаком
 ;PCODE: $0000122D VOL: 0
 ;PCODE: $0000122E VOL: 0
-;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
 ;PCODE: $0000122F VOL: 0
 ;PCODE: $00001230 VOL: 0
 ;PCODE: $00001231 VOL: 0
 ;PCODE: $00001232 VOL: 0
-;//--- Индикация t ВОЗДУХА -----
-;    temp = set[0][0]; fraction(temp);     // проверка знака температуры
 ;PCODE: $00001233 VOL: 0
 ;PCODE: $00001234 VOL: 0
 ;PCODE: $00001235 VOL: 0
 ;PCODE: $00001236 VOL: 0
 ;PCODE: $00001237 VOL: 0
 ;PCODE: $00001238 VOL: 0
-;    sprintf(buff,"[%2u.%u]",intval,frcval); // ЗАДАНИЕ T показываем с десятичным знаком
 ;PCODE: $00001239 VOL: 0
 ;PCODE: $0000123A VOL: 0
 ;PCODE: $0000123B VOL: 0
+;    ILI9341_WriteString(5,pointY+5,buff,Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $0000123C VOL: 0
 ;PCODE: $0000123D VOL: 0
 ;PCODE: $0000123E VOL: 0
@@ -6131,9 +6120,9 @@ _0x1FA:
 ;PCODE: $00001245 VOL: 0
 ;PCODE: $00001246 VOL: 0
 ;PCODE: $00001247 VOL: 0
-;    ILI9341_WriteString(5,pointY+5,buff,Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $00001248 VOL: 0
 ;PCODE: $00001249 VOL: 0
+;    ILI9341_WriteString(5,pointY+25,"температура",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $0000124A VOL: 0
 ;PCODE: $0000124B VOL: 0
 ;PCODE: $0000124C VOL: 0
@@ -6146,10 +6135,10 @@ _0x1FA:
 ;PCODE: $00001253 VOL: 0
 ;PCODE: $00001254 VOL: 0
 ;PCODE: $00001255 VOL: 0
-;    ILI9341_WriteString(5,pointY+25,"температура",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $00001256 VOL: 0
 ;PCODE: $00001257 VOL: 0
 ;PCODE: $00001258 VOL: 0
+;    if (pvT>1250) sprintf(buff,"**.*");
 ;PCODE: $00001259 VOL: 0
 ;PCODE: $0000125A VOL: 0
 ;PCODE: $0000125B VOL: 0
@@ -6162,32 +6151,33 @@ _0x1FA:
 ;PCODE: $00001262 VOL: 0
 ;PCODE: $00001263 VOL: 0
 ;PCODE: $00001264 VOL: 0
-;    if (pvT>1250) sprintf(buff,"**.*");
+;    else {
 ;PCODE: $00001265 VOL: 0
 ;PCODE: $00001266 VOL: 0
+;        temp = pvT; fraction(temp);     // проверка знака температуры
 ;PCODE: $00001267 VOL: 0
 ;PCODE: $00001268 VOL: 0
 ;PCODE: $00001269 VOL: 0
 ;PCODE: $0000126A VOL: 0
+;        sprintf(buff,"%2u.%u",intval,frcval); // T датчиков показываем с десятичным знаком
 ;PCODE: $0000126B VOL: 0
 ;PCODE: $0000126C VOL: 0
 ;PCODE: $0000126D VOL: 0
 ;PCODE: $0000126E VOL: 0
 ;PCODE: $0000126F VOL: 0
 ;PCODE: $00001270 VOL: 0
-;    else {
 ;PCODE: $00001271 VOL: 0
 ;PCODE: $00001272 VOL: 0
-;        temp = pvT; fraction(temp);     // проверка знака температуры
 ;PCODE: $00001273 VOL: 0
 ;PCODE: $00001274 VOL: 0
 ;PCODE: $00001275 VOL: 0
 ;PCODE: $00001276 VOL: 0
-;        sprintf(buff,"%2u.%u",intval,frcval); // T датчиков показываем с десятичным знаком
 ;PCODE: $00001277 VOL: 0
 ;PCODE: $00001278 VOL: 0
 ;PCODE: $00001279 VOL: 0
+;    }
 ;PCODE: $0000127A VOL: 0
+;    ILI9341_WriteString(140,pointY,buff,Font_11x18,bordWindow,fillWindow,3);
 ;PCODE: $0000127B VOL: 0
 ;PCODE: $0000127C VOL: 0
 ;PCODE: $0000127D VOL: 0
@@ -6199,72 +6189,71 @@ _0x1FA:
 ;PCODE: $00001283 VOL: 0
 ;PCODE: $00001284 VOL: 0
 ;PCODE: $00001285 VOL: 0
-;    }
 ;PCODE: $00001286 VOL: 0
-;    ILI9341_WriteString(140,pointY,buff,Font_11x18,bordWindow,fillWindow,3);
 ;PCODE: $00001287 VOL: 0
+;    // индикация тревоги alarm[0]
+;    switch (alarm[0]) {
 ;PCODE: $00001288 VOL: 0
 ;PCODE: $00001289 VOL: 0
+;        case 0: temp=GREEN; break;
 ;PCODE: $0000128A VOL: 0
 ;PCODE: $0000128B VOL: 0
 ;PCODE: $0000128C VOL: 0
 ;PCODE: $0000128D VOL: 0
 ;PCODE: $0000128E VOL: 0
+;        case 1: temp=RED;   break;
 ;PCODE: $0000128F VOL: 0
 ;PCODE: $00001290 VOL: 0
 ;PCODE: $00001291 VOL: 0
 ;PCODE: $00001292 VOL: 0
 ;PCODE: $00001293 VOL: 0
-;    // индикация тревоги alarm[0]
-;    switch (alarm[0]) {
 ;PCODE: $00001294 VOL: 0
+;        default: temp=GREEN;
 ;PCODE: $00001295 VOL: 0
-;        case 0: temp=GREEN; break;
 ;PCODE: $00001296 VOL: 0
 ;PCODE: $00001297 VOL: 0
+;    };
 ;PCODE: $00001298 VOL: 0
+;    ILI9341_FillRectangle(280,pointY+2,30,45,temp);
 ;PCODE: $00001299 VOL: 0
 ;PCODE: $0000129A VOL: 0
-;        case 1: temp=RED;   break;
 ;PCODE: $0000129B VOL: 0
 ;PCODE: $0000129C VOL: 0
 ;PCODE: $0000129D VOL: 0
 ;PCODE: $0000129E VOL: 0
 ;PCODE: $0000129F VOL: 0
 ;PCODE: $000012A0 VOL: 0
-;        default: temp=GREEN;
 ;PCODE: $000012A1 VOL: 0
 ;PCODE: $000012A2 VOL: 0
 ;PCODE: $000012A3 VOL: 0
-;    };
 ;PCODE: $000012A4 VOL: 0
-;    ILI9341_FillRectangle(280,pointY+2,30,45,temp);
+;    pointY += 55;
 ;PCODE: $000012A5 VOL: 0
 ;PCODE: $000012A6 VOL: 0
 ;PCODE: $000012A7 VOL: 0
+;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
 ;PCODE: $000012A8 VOL: 0
 ;PCODE: $000012A9 VOL: 0
 ;PCODE: $000012AA VOL: 0
 ;PCODE: $000012AB VOL: 0
+;//--- Индикация RH ------
+;    sprintf(buff,"[%3u%%]",set[1][0]); // ЗАДАНИЕ RH
 ;PCODE: $000012AC VOL: 0
 ;PCODE: $000012AD VOL: 0
 ;PCODE: $000012AE VOL: 0
 ;PCODE: $000012AF VOL: 0
 ;PCODE: $000012B0 VOL: 0
-;    pointY += 55;
 ;PCODE: $000012B1 VOL: 0
 ;PCODE: $000012B2 VOL: 0
 ;PCODE: $000012B3 VOL: 0
-;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
 ;PCODE: $000012B4 VOL: 0
 ;PCODE: $000012B5 VOL: 0
 ;PCODE: $000012B6 VOL: 0
 ;PCODE: $000012B7 VOL: 0
-;//--- Индикация RH ------
-;    sprintf(buff,"[%3u%%]",set[1][0]); // ЗАДАНИЕ RH
 ;PCODE: $000012B8 VOL: 0
 ;PCODE: $000012B9 VOL: 0
 ;PCODE: $000012BA VOL: 0
+;    ILI9341_WriteString(5,pointY+5,buff,Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $000012BB VOL: 0
 ;PCODE: $000012BC VOL: 0
 ;PCODE: $000012BD VOL: 0
@@ -6277,9 +6266,9 @@ _0x1FA:
 ;PCODE: $000012C4 VOL: 0
 ;PCODE: $000012C5 VOL: 0
 ;PCODE: $000012C6 VOL: 0
-;    ILI9341_WriteString(5,pointY+5,buff,Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $000012C7 VOL: 0
 ;PCODE: $000012C8 VOL: 0
+;    ILI9341_WriteString(5,pointY+25,"вологысть",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $000012C9 VOL: 0
 ;PCODE: $000012CA VOL: 0
 ;PCODE: $000012CB VOL: 0
@@ -6292,10 +6281,10 @@ _0x1FA:
 ;PCODE: $000012D2 VOL: 0
 ;PCODE: $000012D3 VOL: 0
 ;PCODE: $000012D4 VOL: 0
-;    ILI9341_WriteString(5,pointY+25,"вологысть",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $000012D5 VOL: 0
 ;PCODE: $000012D6 VOL: 0
 ;PCODE: $000012D7 VOL: 0
+;    if (pvRH>100) sprintf(buff,"***%%",pvRH); else sprintf(buff,"%3u%% ",pvRH);
 ;PCODE: $000012D8 VOL: 0
 ;PCODE: $000012D9 VOL: 0
 ;PCODE: $000012DA VOL: 0
@@ -6308,7 +6297,6 @@ _0x1FA:
 ;PCODE: $000012E1 VOL: 0
 ;PCODE: $000012E2 VOL: 0
 ;PCODE: $000012E3 VOL: 0
-;    if (pvRH>100) sprintf(buff,"***%%",pvRH); else sprintf(buff,"%3u%% ",pvRH);
 ;PCODE: $000012E4 VOL: 0
 ;PCODE: $000012E5 VOL: 0
 ;PCODE: $000012E6 VOL: 0
@@ -6326,6 +6314,7 @@ _0x1FA:
 ;PCODE: $000012F2 VOL: 0
 ;PCODE: $000012F3 VOL: 0
 ;PCODE: $000012F4 VOL: 0
+;    ILI9341_WriteString(142,pointY,buff,Font_11x18,bordWindow,fillWindow,3);
 ;PCODE: $000012F5 VOL: 0
 ;PCODE: $000012F6 VOL: 0
 ;PCODE: $000012F7 VOL: 0
@@ -6338,78 +6327,77 @@ _0x1FA:
 ;PCODE: $000012FE VOL: 0
 ;PCODE: $000012FF VOL: 0
 ;PCODE: $00001300 VOL: 0
-;    ILI9341_WriteString(142,pointY,buff,Font_11x18,bordWindow,fillWindow,3);
 ;PCODE: $00001301 VOL: 0
 ;PCODE: $00001302 VOL: 0
+;    // индикация тревоги alarm[1]
+;    switch (alarm[1]) {
 ;PCODE: $00001303 VOL: 0
 ;PCODE: $00001304 VOL: 0
 ;PCODE: $00001305 VOL: 0
+;        case 0: temp=GREEN; break;
 ;PCODE: $00001306 VOL: 0
 ;PCODE: $00001307 VOL: 0
 ;PCODE: $00001308 VOL: 0
 ;PCODE: $00001309 VOL: 0
 ;PCODE: $0000130A VOL: 0
+;        case 1: temp=RED;   break;
 ;PCODE: $0000130B VOL: 0
 ;PCODE: $0000130C VOL: 0
 ;PCODE: $0000130D VOL: 0
 ;PCODE: $0000130E VOL: 0
-;    // индикация тревоги alarm[1]
-;    switch (alarm[1]) {
 ;PCODE: $0000130F VOL: 0
 ;PCODE: $00001310 VOL: 0
+;        default: temp=GREEN;
 ;PCODE: $00001311 VOL: 0
-;        case 0: temp=GREEN; break;
 ;PCODE: $00001312 VOL: 0
 ;PCODE: $00001313 VOL: 0
+;    };
 ;PCODE: $00001314 VOL: 0
+;    ILI9341_FillRectangle(280,pointY+2,30,45,temp);
 ;PCODE: $00001315 VOL: 0
 ;PCODE: $00001316 VOL: 0
-;        case 1: temp=RED;   break;
 ;PCODE: $00001317 VOL: 0
 ;PCODE: $00001318 VOL: 0
 ;PCODE: $00001319 VOL: 0
 ;PCODE: $0000131A VOL: 0
 ;PCODE: $0000131B VOL: 0
 ;PCODE: $0000131C VOL: 0
-;        default: temp=GREEN;
 ;PCODE: $0000131D VOL: 0
 ;PCODE: $0000131E VOL: 0
 ;PCODE: $0000131F VOL: 0
-;    };
 ;PCODE: $00001320 VOL: 0
-;    ILI9341_FillRectangle(280,pointY+2,30,45,temp);
+;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
 ;PCODE: $00001321 VOL: 0
 ;PCODE: $00001322 VOL: 0
 ;PCODE: $00001323 VOL: 0
 ;PCODE: $00001324 VOL: 0
-;PCODE: $00001325 VOL: 0
-;PCODE: $00001326 VOL: 0
-;PCODE: $00001327 VOL: 0
-;PCODE: $00001328 VOL: 0
-;PCODE: $00001329 VOL: 0
-;PCODE: $0000132A VOL: 0
-;PCODE: $0000132B VOL: 0
-;PCODE: $0000132C VOL: 0
-;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
-;PCODE: $0000132D VOL: 0
-;PCODE: $0000132E VOL: 0
-;PCODE: $0000132F VOL: 0
-;PCODE: $00001330 VOL: 0
 ;//--- Индикация CO2 ----
 ;//CO2module = 1;
 ;//pHsensor = 1;
 ;//pvCO2 = 2500;
 ;//pvPH = 75;
 ;    pointY += 55;
+;PCODE: $00001325 VOL: 0
+;PCODE: $00001326 VOL: 0
+;PCODE: $00001327 VOL: 0
+;PCODE: $00001328 VOL: 0
+;    if(CO2module){
+;PCODE: $00001329 VOL: 0
+;PCODE: $0000132A VOL: 0
+;PCODE: $0000132B VOL: 0
+;    if(error&0x08) ILI9341_WriteString(10,pointY,"CO2 помилка модуля!",Font_11x18,YELLOW,RED,1);
+;PCODE: $0000132C VOL: 0
+;PCODE: $0000132D VOL: 0
+;PCODE: $0000132E VOL: 0
+;PCODE: $0000132F VOL: 0
+;PCODE: $00001330 VOL: 0
 ;PCODE: $00001331 VOL: 0
 ;PCODE: $00001332 VOL: 0
 ;PCODE: $00001333 VOL: 0
 ;PCODE: $00001334 VOL: 0
-;    if(CO2module){
 ;PCODE: $00001335 VOL: 0
 ;PCODE: $00001336 VOL: 0
 ;PCODE: $00001337 VOL: 0
-;    if(error&0x08) ILI9341_WriteString(10,pointY,"CO2 помилка модуля!",Font_11x18,YELLOW,RED,1);
 ;PCODE: $00001338 VOL: 0
 ;PCODE: $00001339 VOL: 0
 ;PCODE: $0000133A VOL: 0
@@ -6417,8 +6405,10 @@ _0x1FA:
 ;PCODE: $0000133C VOL: 0
 ;PCODE: $0000133D VOL: 0
 ;PCODE: $0000133E VOL: 0
+;    else {
 ;PCODE: $0000133F VOL: 0
 ;PCODE: $00001340 VOL: 0
+;        sprintf(buff,"CO2   %4u",pvCO2);
 ;PCODE: $00001341 VOL: 0
 ;PCODE: $00001342 VOL: 0
 ;PCODE: $00001343 VOL: 0
@@ -6429,10 +6419,9 @@ _0x1FA:
 ;PCODE: $00001348 VOL: 0
 ;PCODE: $00001349 VOL: 0
 ;PCODE: $0000134A VOL: 0
-;    else {
 ;PCODE: $0000134B VOL: 0
 ;PCODE: $0000134C VOL: 0
-;        sprintf(buff,"CO2   %4u",pvCO2);
+;        ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
 ;PCODE: $0000134D VOL: 0
 ;PCODE: $0000134E VOL: 0
 ;PCODE: $0000134F VOL: 0
@@ -6445,8 +6434,8 @@ _0x1FA:
 ;PCODE: $00001356 VOL: 0
 ;PCODE: $00001357 VOL: 0
 ;PCODE: $00001358 VOL: 0
-;        ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
 ;PCODE: $00001359 VOL: 0
+;        ILI9341_WriteString(250,pointY+10,"ppm",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $0000135A VOL: 0
 ;PCODE: $0000135B VOL: 0
 ;PCODE: $0000135C VOL: 0
@@ -6459,11 +6448,13 @@ _0x1FA:
 ;PCODE: $00001363 VOL: 0
 ;PCODE: $00001364 VOL: 0
 ;PCODE: $00001365 VOL: 0
-;        ILI9341_WriteString(250,pointY+10,"ppm",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $00001366 VOL: 0
 ;PCODE: $00001367 VOL: 0
 ;PCODE: $00001368 VOL: 0
+;    }
 ;PCODE: $00001369 VOL: 0
+;    }
+;    else ILI9341_WriteString(10,pointY,"CO2 модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $0000136A VOL: 0
 ;PCODE: $0000136B VOL: 0
 ;PCODE: $0000136C VOL: 0
@@ -6475,37 +6466,34 @@ _0x1FA:
 ;PCODE: $00001372 VOL: 0
 ;PCODE: $00001373 VOL: 0
 ;PCODE: $00001374 VOL: 0
-;    }
 ;PCODE: $00001375 VOL: 0
-;    }
-;    else ILI9341_WriteString(10,pointY,"CO2 модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $00001376 VOL: 0
 ;PCODE: $00001377 VOL: 0
 ;PCODE: $00001378 VOL: 0
 ;PCODE: $00001379 VOL: 0
+;//--- Индикация рH-4502 -----
+;    pointY += 35;
 ;PCODE: $0000137A VOL: 0
 ;PCODE: $0000137B VOL: 0
 ;PCODE: $0000137C VOL: 0
 ;PCODE: $0000137D VOL: 0
+;    if(pHsensor){
 ;PCODE: $0000137E VOL: 0
 ;PCODE: $0000137F VOL: 0
 ;PCODE: $00001380 VOL: 0
+;        if(error&0x08) ILI9341_WriteString(10,pointY,"рН помилка модуля!",Font_11x18,YELLOW,RED,1);
 ;PCODE: $00001381 VOL: 0
 ;PCODE: $00001382 VOL: 0
 ;PCODE: $00001383 VOL: 0
 ;PCODE: $00001384 VOL: 0
 ;PCODE: $00001385 VOL: 0
-;//--- Индикация рH-4502 -----
-;    pointY += 35;
 ;PCODE: $00001386 VOL: 0
 ;PCODE: $00001387 VOL: 0
 ;PCODE: $00001388 VOL: 0
 ;PCODE: $00001389 VOL: 0
-;    if(pHsensor){
 ;PCODE: $0000138A VOL: 0
 ;PCODE: $0000138B VOL: 0
 ;PCODE: $0000138C VOL: 0
-;        if(error&0x08) ILI9341_WriteString(10,pointY,"рН помилка модуля!",Font_11x18,YELLOW,RED,1);
 ;PCODE: $0000138D VOL: 0
 ;PCODE: $0000138E VOL: 0
 ;PCODE: $0000138F VOL: 0
@@ -6513,30 +6501,31 @@ _0x1FA:
 ;PCODE: $00001391 VOL: 0
 ;PCODE: $00001392 VOL: 0
 ;PCODE: $00001393 VOL: 0
+;        else {
 ;PCODE: $00001394 VOL: 0
 ;PCODE: $00001395 VOL: 0
+;          temp = pvPH; fraction(temp);
 ;PCODE: $00001396 VOL: 0
 ;PCODE: $00001397 VOL: 0
 ;PCODE: $00001398 VOL: 0
 ;PCODE: $00001399 VOL: 0
+;          sprintf(buff,"рН   %2u.%u",intval,frcval);
 ;PCODE: $0000139A VOL: 0
 ;PCODE: $0000139B VOL: 0
 ;PCODE: $0000139C VOL: 0
 ;PCODE: $0000139D VOL: 0
 ;PCODE: $0000139E VOL: 0
 ;PCODE: $0000139F VOL: 0
-;        else {
 ;PCODE: $000013A0 VOL: 0
 ;PCODE: $000013A1 VOL: 0
-;          temp = pvPH; fraction(temp);
 ;PCODE: $000013A2 VOL: 0
 ;PCODE: $000013A3 VOL: 0
 ;PCODE: $000013A4 VOL: 0
 ;PCODE: $000013A5 VOL: 0
-;          sprintf(buff,"рН   %2u.%u",intval,frcval);
 ;PCODE: $000013A6 VOL: 0
 ;PCODE: $000013A7 VOL: 0
 ;PCODE: $000013A8 VOL: 0
+;          ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
 ;PCODE: $000013A9 VOL: 0
 ;PCODE: $000013AA VOL: 0
 ;PCODE: $000013AB VOL: 0
@@ -6549,8 +6538,8 @@ _0x1FA:
 ;PCODE: $000013B2 VOL: 0
 ;PCODE: $000013B3 VOL: 0
 ;PCODE: $000013B4 VOL: 0
-;          ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
 ;PCODE: $000013B5 VOL: 0
+;          ILI9341_WriteString(230,pointY+10,"одиниць",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $000013B6 VOL: 0
 ;PCODE: $000013B7 VOL: 0
 ;PCODE: $000013B8 VOL: 0
@@ -6563,11 +6552,13 @@ _0x1FA:
 ;PCODE: $000013BF VOL: 0
 ;PCODE: $000013C0 VOL: 0
 ;PCODE: $000013C1 VOL: 0
-;          ILI9341_WriteString(230,pointY+10,"одиниць",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $000013C2 VOL: 0
 ;PCODE: $000013C3 VOL: 0
 ;PCODE: $000013C4 VOL: 0
+;        }
 ;PCODE: $000013C5 VOL: 0
+;    }
+;    else ILI9341_WriteString(10,pointY,"рН  модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $000013C6 VOL: 0
 ;PCODE: $000013C7 VOL: 0
 ;PCODE: $000013C8 VOL: 0
@@ -6579,59 +6570,59 @@ _0x1FA:
 ;PCODE: $000013CE VOL: 0
 ;PCODE: $000013CF VOL: 0
 ;PCODE: $000013D0 VOL: 0
-;        }
 ;PCODE: $000013D1 VOL: 0
-;    }
-;    else ILI9341_WriteString(10,pointY,"рН  модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $000013D2 VOL: 0
 ;PCODE: $000013D3 VOL: 0
 ;PCODE: $000013D4 VOL: 0
 ;PCODE: $000013D5 VOL: 0
+;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
 ;PCODE: $000013D6 VOL: 0
 ;PCODE: $000013D7 VOL: 0
 ;PCODE: $000013D8 VOL: 0
 ;PCODE: $000013D9 VOL: 0
 ;PCODE: $000013DA VOL: 0
+;}
 ;PCODE: $000013DB VOL: 0
 ;PCODE: $000013DC VOL: 0
 ;PCODE: $000013DD VOL: 0
 ;PCODE: $000013DE VOL: 0
 ;PCODE: $000013DF VOL: 0
-;PCODE: $000013E0 VOL: 0
-;PCODE: $000013E1 VOL: 0
-;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
-;PCODE: $000013E2 VOL: 0
-;PCODE: $000013E3 VOL: 0
-;PCODE: $000013E4 VOL: 0
-;PCODE: $000013E5 VOL: 0
-;PCODE: $000013E6 VOL: 0
-;}
-;PCODE: $000013E7 VOL: 0
-;PCODE: $000013E8 VOL: 0
-;PCODE: $000013E9 VOL: 0
-;PCODE: $000013EA VOL: 0
-;PCODE: $000013EB VOL: 0
 
 	.DSEG
-_0x247:
+_0x248:
 	.BYTE 0x75
 ;
 ;//-------------------------------- СТАН ГРУНТУ. -------------------------------------------
 ;void displ_1(void){
 
 	.CSEG
-;PCODE: $000013EC VOL: 0
-;PCODE: $000013ED VOL: 0
+;PCODE: $000013E0 VOL: 0
+;PCODE: $000013E1 VOL: 0
 ; unsigned char i, num = 1;
 ; unsigned int fillWindow = YELLOW2, bordWindow = BLACK, temp;
 ;    pointY = 7;
-;PCODE: $000013EE VOL: 0
-;PCODE: $000013EF VOL: 0
+;PCODE: $000013E2 VOL: 0
+;PCODE: $000013E3 VOL: 0
 ;	i -> R17
 ;	num -> R16
 ;	fillWindow -> R18,R19
 ;	bordWindow -> R20,R21
 ;	temp -> Y+6
+;PCODE: $000013E4 VOL: 0
+;PCODE: $000013E5 VOL: 0
+;PCODE: $000013E6 VOL: 0
+;PCODE: $000013E7 VOL: 0
+;PCODE: $000013E8 VOL: 0
+;PCODE: $000013E9 VOL: 0
+;PCODE: $000013EA VOL: 0
+;PCODE: $000013EB VOL: 0
+;    if(newSetButt){
+;PCODE: $000013EC VOL: 0
+;PCODE: $000013ED VOL: 0
+;        newSetButt = 0;
+;PCODE: $000013EE VOL: 0
+;        ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
+;PCODE: $000013EF VOL: 0
 ;PCODE: $000013F0 VOL: 0
 ;PCODE: $000013F1 VOL: 0
 ;PCODE: $000013F2 VOL: 0
@@ -6640,31 +6631,29 @@ _0x247:
 ;PCODE: $000013F5 VOL: 0
 ;PCODE: $000013F6 VOL: 0
 ;PCODE: $000013F7 VOL: 0
-;    if(newSetButt){
 ;PCODE: $000013F8 VOL: 0
+;        initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
 ;PCODE: $000013F9 VOL: 0
-;        newSetButt = 0;
 ;PCODE: $000013FA VOL: 0
-;        ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
 ;PCODE: $000013FB VOL: 0
 ;PCODE: $000013FC VOL: 0
 ;PCODE: $000013FD VOL: 0
 ;PCODE: $000013FE VOL: 0
+;        //---------- фон ------- рамкa --- текст - номер -текст ---------
+;        drawButton(WHITE, WHITE, BLACK, 0, "Повытря");
 ;PCODE: $000013FF VOL: 0
 ;PCODE: $00001400 VOL: 0
 ;PCODE: $00001401 VOL: 0
 ;PCODE: $00001402 VOL: 0
 ;PCODE: $00001403 VOL: 0
 ;PCODE: $00001404 VOL: 0
-;        initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
 ;PCODE: $00001405 VOL: 0
 ;PCODE: $00001406 VOL: 0
 ;PCODE: $00001407 VOL: 0
 ;PCODE: $00001408 VOL: 0
 ;PCODE: $00001409 VOL: 0
+;        drawButton(fillWindow, fillWindow, bordWindow, 1, "Грунт");
 ;PCODE: $0000140A VOL: 0
-;        //---------- фон ------- рамкa --- текст - номер -текст ---------
-;        drawButton(WHITE, WHITE, BLACK, 0, "Повытря");
 ;PCODE: $0000140B VOL: 0
 ;PCODE: $0000140C VOL: 0
 ;PCODE: $0000140D VOL: 0
@@ -6672,11 +6661,11 @@ _0x247:
 ;PCODE: $0000140F VOL: 0
 ;PCODE: $00001410 VOL: 0
 ;PCODE: $00001411 VOL: 0
+;        drawButton(WHITE, WHITE, BLACK, 2, "Управл");
 ;PCODE: $00001412 VOL: 0
 ;PCODE: $00001413 VOL: 0
 ;PCODE: $00001414 VOL: 0
 ;PCODE: $00001415 VOL: 0
-;        drawButton(fillWindow, fillWindow, bordWindow, 1, "Грунт");
 ;PCODE: $00001416 VOL: 0
 ;PCODE: $00001417 VOL: 0
 ;PCODE: $00001418 VOL: 0
@@ -6684,8 +6673,8 @@ _0x247:
 ;PCODE: $0000141A VOL: 0
 ;PCODE: $0000141B VOL: 0
 ;PCODE: $0000141C VOL: 0
+;        drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
 ;PCODE: $0000141D VOL: 0
-;        drawButton(WHITE, WHITE, BLACK, 2, "Управл");
 ;PCODE: $0000141E VOL: 0
 ;PCODE: $0000141F VOL: 0
 ;PCODE: $00001420 VOL: 0
@@ -6696,8 +6685,8 @@ _0x247:
 ;PCODE: $00001425 VOL: 0
 ;PCODE: $00001426 VOL: 0
 ;PCODE: $00001427 VOL: 0
+;        ILI9341_WriteString(100,pointY,"СТАН ГРУНТУ",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $00001428 VOL: 0
-;        drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
 ;PCODE: $00001429 VOL: 0
 ;PCODE: $0000142A VOL: 0
 ;PCODE: $0000142B VOL: 0
@@ -6709,13 +6698,16 @@ _0x247:
 ;PCODE: $00001431 VOL: 0
 ;PCODE: $00001432 VOL: 0
 ;PCODE: $00001433 VOL: 0
-;        ILI9341_WriteString(100,pointY,"СТАН ГРУНТУ",Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $00001434 VOL: 0
 ;PCODE: $00001435 VOL: 0
+;    }
+;//--- Индикация t ГРУНТА ---
+;    pointY += 20;
 ;PCODE: $00001436 VOL: 0
 ;PCODE: $00001437 VOL: 0
 ;PCODE: $00001438 VOL: 0
 ;PCODE: $00001439 VOL: 0
+;    for (i=0;i<ds18b20;i++){
 ;PCODE: $0000143A VOL: 0
 ;PCODE: $0000143B VOL: 0
 ;PCODE: $0000143C VOL: 0
@@ -6724,14 +6716,11 @@ _0x247:
 ;PCODE: $0000143F VOL: 0
 ;PCODE: $00001440 VOL: 0
 ;PCODE: $00001441 VOL: 0
-;    }
-;//--- Индикация t ГРУНТА ---
-;    pointY += 20;
 ;PCODE: $00001442 VOL: 0
+;        sprintf(buff,"датчик %u",i+1);
 ;PCODE: $00001443 VOL: 0
 ;PCODE: $00001444 VOL: 0
 ;PCODE: $00001445 VOL: 0
-;    for (i=0;i<ds18b20;i++){
 ;PCODE: $00001446 VOL: 0
 ;PCODE: $00001447 VOL: 0
 ;PCODE: $00001448 VOL: 0
@@ -6741,9 +6730,9 @@ _0x247:
 ;PCODE: $0000144C VOL: 0
 ;PCODE: $0000144D VOL: 0
 ;PCODE: $0000144E VOL: 0
-;        sprintf(buff,"датчик %u",i+1);
 ;PCODE: $0000144F VOL: 0
 ;PCODE: $00001450 VOL: 0
+;        ILI9341_WriteString(5,pointY+12,buff,Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $00001451 VOL: 0
 ;PCODE: $00001452 VOL: 0
 ;PCODE: $00001453 VOL: 0
@@ -6756,9 +6745,9 @@ _0x247:
 ;PCODE: $0000145A VOL: 0
 ;PCODE: $0000145B VOL: 0
 ;PCODE: $0000145C VOL: 0
-;        ILI9341_WriteString(5,pointY+12,buff,Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $0000145D VOL: 0
 ;PCODE: $0000145E VOL: 0
+;        temp = t.point[i];
 ;PCODE: $0000145F VOL: 0
 ;PCODE: $00001460 VOL: 0
 ;PCODE: $00001461 VOL: 0
@@ -6766,12 +6755,12 @@ _0x247:
 ;PCODE: $00001463 VOL: 0
 ;PCODE: $00001464 VOL: 0
 ;PCODE: $00001465 VOL: 0
+;        if(temp>1250) sprintf(buff,"**.*");
 ;PCODE: $00001466 VOL: 0
 ;PCODE: $00001467 VOL: 0
 ;PCODE: $00001468 VOL: 0
 ;PCODE: $00001469 VOL: 0
 ;PCODE: $0000146A VOL: 0
-;        temp = t.point[i];
 ;PCODE: $0000146B VOL: 0
 ;PCODE: $0000146C VOL: 0
 ;PCODE: $0000146D VOL: 0
@@ -6779,11 +6768,13 @@ _0x247:
 ;PCODE: $0000146F VOL: 0
 ;PCODE: $00001470 VOL: 0
 ;PCODE: $00001471 VOL: 0
-;        if(temp>1250) sprintf(buff,"**.*");
+;        else {
 ;PCODE: $00001472 VOL: 0
 ;PCODE: $00001473 VOL: 0
+;            fraction(temp);     // проверка знака температуры
 ;PCODE: $00001474 VOL: 0
 ;PCODE: $00001475 VOL: 0
+;            sprintf(buff,"%2u.%u",intval,frcval); // T датчиков показываем с десятичным знаком
 ;PCODE: $00001476 VOL: 0
 ;PCODE: $00001477 VOL: 0
 ;PCODE: $00001478 VOL: 0
@@ -6792,17 +6783,16 @@ _0x247:
 ;PCODE: $0000147B VOL: 0
 ;PCODE: $0000147C VOL: 0
 ;PCODE: $0000147D VOL: 0
-;        else {
 ;PCODE: $0000147E VOL: 0
 ;PCODE: $0000147F VOL: 0
-;            fraction(temp);     // проверка знака температуры
 ;PCODE: $00001480 VOL: 0
 ;PCODE: $00001481 VOL: 0
-;            sprintf(buff,"%2u.%u",intval,frcval); // T датчиков показываем с десятичным знаком
 ;PCODE: $00001482 VOL: 0
 ;PCODE: $00001483 VOL: 0
 ;PCODE: $00001484 VOL: 0
+;        }
 ;PCODE: $00001485 VOL: 0
+;        ILI9341_WriteString(120,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
 ;PCODE: $00001486 VOL: 0
 ;PCODE: $00001487 VOL: 0
 ;PCODE: $00001488 VOL: 0
@@ -6814,95 +6804,94 @@ _0x247:
 ;PCODE: $0000148E VOL: 0
 ;PCODE: $0000148F VOL: 0
 ;PCODE: $00001490 VOL: 0
-;        }
 ;PCODE: $00001491 VOL: 0
-;        ILI9341_WriteString(120,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
 ;PCODE: $00001492 VOL: 0
+;        pointY += 35;
 ;PCODE: $00001493 VOL: 0
 ;PCODE: $00001494 VOL: 0
 ;PCODE: $00001495 VOL: 0
+;    };
 ;PCODE: $00001496 VOL: 0
 ;PCODE: $00001497 VOL: 0
 ;PCODE: $00001498 VOL: 0
 ;PCODE: $00001499 VOL: 0
 ;PCODE: $0000149A VOL: 0
+;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
 ;PCODE: $0000149B VOL: 0
 ;PCODE: $0000149C VOL: 0
 ;PCODE: $0000149D VOL: 0
 ;PCODE: $0000149E VOL: 0
-;        pointY += 35;
+;}
 ;PCODE: $0000149F VOL: 0
 ;PCODE: $000014A0 VOL: 0
 ;PCODE: $000014A1 VOL: 0
-;    };
 ;PCODE: $000014A2 VOL: 0
 ;PCODE: $000014A3 VOL: 0
-;PCODE: $000014A4 VOL: 0
-;PCODE: $000014A5 VOL: 0
-;PCODE: $000014A6 VOL: 0
-;    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки *************************** ...
-;PCODE: $000014A7 VOL: 0
-;PCODE: $000014A8 VOL: 0
-;PCODE: $000014A9 VOL: 0
-;PCODE: $000014AA VOL: 0
-;}
-;PCODE: $000014AB VOL: 0
-;PCODE: $000014AC VOL: 0
-;PCODE: $000014AD VOL: 0
-;PCODE: $000014AE VOL: 0
-;PCODE: $000014AF VOL: 0
 
 	.DSEG
-_0x264:
+_0x265:
 	.BYTE 0xC
 ;
 ;//------------------------------ РЕЛЕЙНЫЕ ВЫХОДЫ --------------------------------------------
 ;void displ_2(void){
 
 	.CSEG
-;PCODE: $000014B0 VOL: 0
-;PCODE: $000014B1 VOL: 0
+;PCODE: $000014A4 VOL: 0
+;PCODE: $000014A5 VOL: 0
 ; signed char i,x;
 ; unsigned int fillWindow = GRAY1, bordWindow = BLACK, color_box;
 ;    pointY=7;
-;PCODE: $000014B2 VOL: 0
-;PCODE: $000014B3 VOL: 0
+;PCODE: $000014A6 VOL: 0
+;PCODE: $000014A7 VOL: 0
 ;	i -> R17
 ;	x -> R16
 ;	fillWindow -> R18,R19
 ;	bordWindow -> R20,R21
 ;	color_box -> Y+6
+;PCODE: $000014A8 VOL: 0
+;PCODE: $000014A9 VOL: 0
+;PCODE: $000014AA VOL: 0
+;PCODE: $000014AB VOL: 0
+;PCODE: $000014AC VOL: 0
+;PCODE: $000014AD VOL: 0
+;    if(newSetButt){
+;PCODE: $000014AE VOL: 0
+;PCODE: $000014AF VOL: 0
+;        newSetButt = 0;
+;PCODE: $000014B0 VOL: 0
+;        ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
+;PCODE: $000014B1 VOL: 0
+;PCODE: $000014B2 VOL: 0
+;PCODE: $000014B3 VOL: 0
 ;PCODE: $000014B4 VOL: 0
 ;PCODE: $000014B5 VOL: 0
 ;PCODE: $000014B6 VOL: 0
 ;PCODE: $000014B7 VOL: 0
 ;PCODE: $000014B8 VOL: 0
 ;PCODE: $000014B9 VOL: 0
-;    if(newSetButt){
 ;PCODE: $000014BA VOL: 0
+;        initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
 ;PCODE: $000014BB VOL: 0
-;        newSetButt = 0;
 ;PCODE: $000014BC VOL: 0
-;        ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
 ;PCODE: $000014BD VOL: 0
 ;PCODE: $000014BE VOL: 0
 ;PCODE: $000014BF VOL: 0
 ;PCODE: $000014C0 VOL: 0
+;        //---------- фон ------- рамкa --- текст - номер -текст ---------
+;        drawButton(WHITE, WHITE, BLACK, 0, "Повытря");
 ;PCODE: $000014C1 VOL: 0
 ;PCODE: $000014C2 VOL: 0
 ;PCODE: $000014C3 VOL: 0
 ;PCODE: $000014C4 VOL: 0
 ;PCODE: $000014C5 VOL: 0
 ;PCODE: $000014C6 VOL: 0
-;        initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
 ;PCODE: $000014C7 VOL: 0
 ;PCODE: $000014C8 VOL: 0
 ;PCODE: $000014C9 VOL: 0
 ;PCODE: $000014CA VOL: 0
 ;PCODE: $000014CB VOL: 0
+;        drawButton(WHITE, WHITE, BLACK, 1, "Грунт");
 ;PCODE: $000014CC VOL: 0
-;        //---------- фон ------- рамкa --- текст - номер -текст ---------
-;        drawButton(WHITE, WHITE, BLACK, 0, "Повытря");
 ;PCODE: $000014CD VOL: 0
 ;PCODE: $000014CE VOL: 0
 ;PCODE: $000014CF VOL: 0
@@ -6913,8 +6902,8 @@ _0x264:
 ;PCODE: $000014D4 VOL: 0
 ;PCODE: $000014D5 VOL: 0
 ;PCODE: $000014D6 VOL: 0
+;        drawButton(fillWindow, fillWindow, bordWindow, 2, "Управл");
 ;PCODE: $000014D7 VOL: 0
-;        drawButton(WHITE, WHITE, BLACK, 1, "Грунт");
 ;PCODE: $000014D8 VOL: 0
 ;PCODE: $000014D9 VOL: 0
 ;PCODE: $000014DA VOL: 0
@@ -6922,11 +6911,11 @@ _0x264:
 ;PCODE: $000014DC VOL: 0
 ;PCODE: $000014DD VOL: 0
 ;PCODE: $000014DE VOL: 0
+;        drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
 ;PCODE: $000014DF VOL: 0
 ;PCODE: $000014E0 VOL: 0
 ;PCODE: $000014E1 VOL: 0
 ;PCODE: $000014E2 VOL: 0
-;        drawButton(fillWindow, fillWindow, bordWindow, 2, "Управл");
 ;PCODE: $000014E3 VOL: 0
 ;PCODE: $000014E4 VOL: 0
 ;PCODE: $000014E5 VOL: 0
@@ -6934,21 +6923,21 @@ _0x264:
 ;PCODE: $000014E7 VOL: 0
 ;PCODE: $000014E8 VOL: 0
 ;PCODE: $000014E9 VOL: 0
+;        //--
+;        initializePlus(pointY+25, 8, 16);
 ;PCODE: $000014EA VOL: 0
-;        drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
 ;PCODE: $000014EB VOL: 0
 ;PCODE: $000014EC VOL: 0
 ;PCODE: $000014ED VOL: 0
 ;PCODE: $000014EE VOL: 0
 ;PCODE: $000014EF VOL: 0
 ;PCODE: $000014F0 VOL: 0
+;        for (i=0;i<plusCount;i++) drawPlus(i, fillWindow);
 ;PCODE: $000014F1 VOL: 0
 ;PCODE: $000014F2 VOL: 0
 ;PCODE: $000014F3 VOL: 0
 ;PCODE: $000014F4 VOL: 0
 ;PCODE: $000014F5 VOL: 0
-;        //--
-;        initializePlus(pointY+25, 8, 16);
 ;PCODE: $000014F6 VOL: 0
 ;PCODE: $000014F7 VOL: 0
 ;PCODE: $000014F8 VOL: 0
@@ -6956,7 +6945,6 @@ _0x264:
 ;PCODE: $000014FA VOL: 0
 ;PCODE: $000014FB VOL: 0
 ;PCODE: $000014FC VOL: 0
-;        for (i=0;i<plusCount;i++) drawPlus(i, fillWindow);
 ;PCODE: $000014FD VOL: 0
 ;PCODE: $000014FE VOL: 0
 ;PCODE: $000014FF VOL: 0
@@ -6979,10 +6967,16 @@ _0x264:
 ;PCODE: $00001510 VOL: 0
 ;PCODE: $00001511 VOL: 0
 ;PCODE: $00001512 VOL: 0
+;    }
+;//***************************** проверим кнопки управления реле ***************************************
+;    if(checkTouch()){
 ;PCODE: $00001513 VOL: 0
 ;PCODE: $00001514 VOL: 0
 ;PCODE: $00001515 VOL: 0
 ;PCODE: $00001516 VOL: 0
+;//sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
+;//ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
+;      if(point_X>220&&point_Y<100){
 ;PCODE: $00001517 VOL: 0
 ;PCODE: $00001518 VOL: 0
 ;PCODE: $00001519 VOL: 0
@@ -6991,16 +6985,11 @@ _0x264:
 ;PCODE: $0000151C VOL: 0
 ;PCODE: $0000151D VOL: 0
 ;PCODE: $0000151E VOL: 0
-;    }
-;//***************************** проверим кнопки управления реле ***************************************
-;    if(checkTouch()){
 ;PCODE: $0000151F VOL: 0
 ;PCODE: $00001520 VOL: 0
+;        for (i=0; i<8; i++){if(containsPlus(i)) break;}// проверка верхней половины кнопок
 ;PCODE: $00001521 VOL: 0
 ;PCODE: $00001522 VOL: 0
-;//      sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
-;//      ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
-;      if(point_X>220&&point_Y<100){
 ;PCODE: $00001523 VOL: 0
 ;PCODE: $00001524 VOL: 0
 ;PCODE: $00001525 VOL: 0
@@ -7011,7 +7000,6 @@ _0x264:
 ;PCODE: $0000152A VOL: 0
 ;PCODE: $0000152B VOL: 0
 ;PCODE: $0000152C VOL: 0
-;        for (i=0; i<8; i++){if(containsPlus(i)) break;}// проверка верхней половины кнопок
 ;PCODE: $0000152D VOL: 0
 ;PCODE: $0000152E VOL: 0
 ;PCODE: $0000152F VOL: 0
@@ -7020,11 +7008,14 @@ _0x264:
 ;PCODE: $00001532 VOL: 0
 ;PCODE: $00001533 VOL: 0
 ;PCODE: $00001534 VOL: 0
+;        if(i<8){
 ;PCODE: $00001535 VOL: 0
 ;PCODE: $00001536 VOL: 0
 ;PCODE: $00001537 VOL: 0
+;            BeepT = 20;
 ;PCODE: $00001538 VOL: 0
 ;PCODE: $00001539 VOL: 0
+;            if(i%2) x=-1; else x=1;   // кнопка "+" или кнопка "-"
 ;PCODE: $0000153A VOL: 0
 ;PCODE: $0000153B VOL: 0
 ;PCODE: $0000153C VOL: 0
@@ -7032,34 +7023,31 @@ _0x264:
 ;PCODE: $0000153E VOL: 0
 ;PCODE: $0000153F VOL: 0
 ;PCODE: $00001540 VOL: 0
-;        if(i<8){
 ;PCODE: $00001541 VOL: 0
 ;PCODE: $00001542 VOL: 0
 ;PCODE: $00001543 VOL: 0
-;            BeepT = 20;
 ;PCODE: $00001544 VOL: 0
 ;PCODE: $00001545 VOL: 0
-;            if(i%2) x=-1; else x=1;   // кнопка "+" или кнопка "-"
+;            i /= 2;
 ;PCODE: $00001546 VOL: 0
 ;PCODE: $00001547 VOL: 0
 ;PCODE: $00001548 VOL: 0
 ;PCODE: $00001549 VOL: 0
 ;PCODE: $0000154A VOL: 0
 ;PCODE: $0000154B VOL: 0
+;            relay[i]+=x; if(relay[i]>2) relay[i]=0; else if(relay[i]<0) relay[i]=2;}
 ;PCODE: $0000154C VOL: 0
 ;PCODE: $0000154D VOL: 0
 ;PCODE: $0000154E VOL: 0
 ;PCODE: $0000154F VOL: 0
 ;PCODE: $00001550 VOL: 0
 ;PCODE: $00001551 VOL: 0
-;            i /= 2;
 ;PCODE: $00001552 VOL: 0
 ;PCODE: $00001553 VOL: 0
 ;PCODE: $00001554 VOL: 0
 ;PCODE: $00001555 VOL: 0
 ;PCODE: $00001556 VOL: 0
 ;PCODE: $00001557 VOL: 0
-;            relay[i]+=x; if(relay[i]>2) relay[i]=0; else if(relay[i]<0) relay[i]=2;}
 ;PCODE: $00001558 VOL: 0
 ;PCODE: $00001559 VOL: 0
 ;PCODE: $0000155A VOL: 0
@@ -7080,33 +7068,34 @@ _0x264:
 ;PCODE: $00001569 VOL: 0
 ;PCODE: $0000156A VOL: 0
 ;PCODE: $0000156B VOL: 0
+;      }
 ;PCODE: $0000156C VOL: 0
+;      else checkDisplNum();
 ;PCODE: $0000156D VOL: 0
 ;PCODE: $0000156E VOL: 0
 ;PCODE: $0000156F VOL: 0
+;    }
 ;PCODE: $00001570 VOL: 0
+;//---- РЕЛЕЙНЫЕ ВЫХОДЫ ----
+;    pointY += 20;
 ;PCODE: $00001571 VOL: 0
 ;PCODE: $00001572 VOL: 0
 ;PCODE: $00001573 VOL: 0
 ;PCODE: $00001574 VOL: 0
+;    for (i=0;i<4;i++){
 ;PCODE: $00001575 VOL: 0
 ;PCODE: $00001576 VOL: 0
 ;PCODE: $00001577 VOL: 0
-;      }
 ;PCODE: $00001578 VOL: 0
-;      else checkDisplNum();
 ;PCODE: $00001579 VOL: 0
 ;PCODE: $0000157A VOL: 0
 ;PCODE: $0000157B VOL: 0
-;    }
 ;PCODE: $0000157C VOL: 0
-;//---- РЕЛЕЙНЫЕ ВЫХОДЫ ----
-;    pointY += 20;
 ;PCODE: $0000157D VOL: 0
+;    sprintf(buff,"РЕЛЕ  N%u: ",i+1);
 ;PCODE: $0000157E VOL: 0
 ;PCODE: $0000157F VOL: 0
 ;PCODE: $00001580 VOL: 0
-;    for (i=0;i<4;i++){
 ;PCODE: $00001581 VOL: 0
 ;PCODE: $00001582 VOL: 0
 ;PCODE: $00001583 VOL: 0
@@ -7116,14 +7105,15 @@ _0x264:
 ;PCODE: $00001587 VOL: 0
 ;PCODE: $00001588 VOL: 0
 ;PCODE: $00001589 VOL: 0
-;    sprintf(buff,"РЕЛЕ  N%u: ",i+1);
 ;PCODE: $0000158A VOL: 0
 ;PCODE: $0000158B VOL: 0
+;    switch (relay[i]){
 ;PCODE: $0000158C VOL: 0
 ;PCODE: $0000158D VOL: 0
 ;PCODE: $0000158E VOL: 0
 ;PCODE: $0000158F VOL: 0
 ;PCODE: $00001590 VOL: 0
+;      case 2: strcat(buff,"АВТ"); break;
 ;PCODE: $00001591 VOL: 0
 ;PCODE: $00001592 VOL: 0
 ;PCODE: $00001593 VOL: 0
@@ -7131,13 +7121,12 @@ _0x264:
 ;PCODE: $00001595 VOL: 0
 ;PCODE: $00001596 VOL: 0
 ;PCODE: $00001597 VOL: 0
-;    switch (relay[i]){
 ;PCODE: $00001598 VOL: 0
+;      case 1: strcat(buff,"ON "); relOut[i]=1; break;
 ;PCODE: $00001599 VOL: 0
 ;PCODE: $0000159A VOL: 0
 ;PCODE: $0000159B VOL: 0
 ;PCODE: $0000159C VOL: 0
-;      case 2: strcat(buff,"АВТ"); break;
 ;PCODE: $0000159D VOL: 0
 ;PCODE: $0000159E VOL: 0
 ;PCODE: $0000159F VOL: 0
@@ -7146,9 +7135,9 @@ _0x264:
 ;PCODE: $000015A2 VOL: 0
 ;PCODE: $000015A3 VOL: 0
 ;PCODE: $000015A4 VOL: 0
-;      case 1: strcat(buff,"ON "); relOut[i]=1; break;
 ;PCODE: $000015A5 VOL: 0
 ;PCODE: $000015A6 VOL: 0
+;      case 0: strcat(buff,"OFF"); relOut[i]=0; break;
 ;PCODE: $000015A7 VOL: 0
 ;PCODE: $000015A8 VOL: 0
 ;PCODE: $000015A9 VOL: 0
@@ -7161,10 +7150,11 @@ _0x264:
 ;PCODE: $000015B0 VOL: 0
 ;PCODE: $000015B1 VOL: 0
 ;PCODE: $000015B2 VOL: 0
-;      case 0: strcat(buff,"OFF"); relOut[i]=0; break;
 ;PCODE: $000015B3 VOL: 0
 ;PCODE: $000015B4 VOL: 0
+;    };
 ;PCODE: $000015B5 VOL: 0
+;    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $000015B6 VOL: 0
 ;PCODE: $000015B7 VOL: 0
 ;PCODE: $000015B8 VOL: 0
@@ -7176,10 +7166,9 @@ _0x264:
 ;PCODE: $000015BE VOL: 0
 ;PCODE: $000015BF VOL: 0
 ;PCODE: $000015C0 VOL: 0
-;    };
 ;PCODE: $000015C1 VOL: 0
-;    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $000015C2 VOL: 0
+;    if(relOut[i]) color_box=YELLOW; else color_box=BLACK;
 ;PCODE: $000015C3 VOL: 0
 ;PCODE: $000015C4 VOL: 0
 ;PCODE: $000015C5 VOL: 0
@@ -7192,7 +7181,7 @@ _0x264:
 ;PCODE: $000015CC VOL: 0
 ;PCODE: $000015CD VOL: 0
 ;PCODE: $000015CE VOL: 0
-;    if(relOut[i]) color_box=YELLOW; else color_box=BLACK;
+;    ILI9341_FillRectangle(160,pointY,40,18,color_box);
 ;PCODE: $000015CF VOL: 0
 ;PCODE: $000015D0 VOL: 0
 ;PCODE: $000015D1 VOL: 0
@@ -7205,37 +7194,39 @@ _0x264:
 ;PCODE: $000015D8 VOL: 0
 ;PCODE: $000015D9 VOL: 0
 ;PCODE: $000015DA VOL: 0
-;    ILI9341_FillRectangle(160,pointY,40,18,color_box);
+;    pointY = pointY+22;
 ;PCODE: $000015DB VOL: 0
 ;PCODE: $000015DC VOL: 0
 ;PCODE: $000015DD VOL: 0
+;    }
 ;PCODE: $000015DE VOL: 0
 ;PCODE: $000015DF VOL: 0
 ;PCODE: $000015E0 VOL: 0
 ;PCODE: $000015E1 VOL: 0
 ;PCODE: $000015E2 VOL: 0
+;
+;//***************************** проверим кнопки управления 0-10v ***************************************
+;    if(checkTouch()){
 ;PCODE: $000015E3 VOL: 0
 ;PCODE: $000015E4 VOL: 0
 ;PCODE: $000015E5 VOL: 0
+;//sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
+;//ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
+;      if(point_X>220&&point_Y>100&&point_Y<200){
 ;PCODE: $000015E6 VOL: 0
-;    pointY = pointY+22;
 ;PCODE: $000015E7 VOL: 0
 ;PCODE: $000015E8 VOL: 0
 ;PCODE: $000015E9 VOL: 0
-;    }
 ;PCODE: $000015EA VOL: 0
 ;PCODE: $000015EB VOL: 0
 ;PCODE: $000015EC VOL: 0
 ;PCODE: $000015ED VOL: 0
 ;PCODE: $000015EE VOL: 0
-;
-;//***************************** проверим кнопки управления 0-10v ***************************************
-;    if(checkTouch()){
 ;PCODE: $000015EF VOL: 0
 ;PCODE: $000015F0 VOL: 0
 ;PCODE: $000015F1 VOL: 0
-;      sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
 ;PCODE: $000015F2 VOL: 0
+;        for (i=8; i<16; i++){if(containsPlus(i)) break;}// проверка нижней половины кнопок
 ;PCODE: $000015F3 VOL: 0
 ;PCODE: $000015F4 VOL: 0
 ;PCODE: $000015F5 VOL: 0
@@ -7250,13 +7241,13 @@ _0x264:
 ;PCODE: $000015FE VOL: 0
 ;PCODE: $000015FF VOL: 0
 ;PCODE: $00001600 VOL: 0
-;      ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
 ;PCODE: $00001601 VOL: 0
 ;PCODE: $00001602 VOL: 0
 ;PCODE: $00001603 VOL: 0
 ;PCODE: $00001604 VOL: 0
 ;PCODE: $00001605 VOL: 0
 ;PCODE: $00001606 VOL: 0
+;        sprintf(buff,"i=%2u",i);
 ;PCODE: $00001607 VOL: 0
 ;PCODE: $00001608 VOL: 0
 ;PCODE: $00001609 VOL: 0
@@ -7265,11 +7256,11 @@ _0x264:
 ;PCODE: $0000160C VOL: 0
 ;PCODE: $0000160D VOL: 0
 ;PCODE: $0000160E VOL: 0
-;      if(point_X>220&&point_Y>100&&point_Y<200){
 ;PCODE: $0000160F VOL: 0
 ;PCODE: $00001610 VOL: 0
 ;PCODE: $00001611 VOL: 0
 ;PCODE: $00001612 VOL: 0
+;        ILI9341_WriteString(5,TFTBUTTON-30,buff,Font_11x18,WHITE,BLACK,1);
 ;PCODE: $00001613 VOL: 0
 ;PCODE: $00001614 VOL: 0
 ;PCODE: $00001615 VOL: 0
@@ -7279,17 +7270,19 @@ _0x264:
 ;PCODE: $00001619 VOL: 0
 ;PCODE: $0000161A VOL: 0
 ;PCODE: $0000161B VOL: 0
-;        for (i=8; i<16; i++){if(containsPlus(i)) break;}// проверка нижней половины кнопок
 ;PCODE: $0000161C VOL: 0
 ;PCODE: $0000161D VOL: 0
 ;PCODE: $0000161E VOL: 0
 ;PCODE: $0000161F VOL: 0
 ;PCODE: $00001620 VOL: 0
+;        if(i<16){
 ;PCODE: $00001621 VOL: 0
 ;PCODE: $00001622 VOL: 0
 ;PCODE: $00001623 VOL: 0
+;            BeepT = 20;
 ;PCODE: $00001624 VOL: 0
 ;PCODE: $00001625 VOL: 0
+;            if(i%2) x=-1; else x=1;   // кнопка "+" или кнопка "-"
 ;PCODE: $00001626 VOL: 0
 ;PCODE: $00001627 VOL: 0
 ;PCODE: $00001628 VOL: 0
@@ -7300,9 +7293,9 @@ _0x264:
 ;PCODE: $0000162D VOL: 0
 ;PCODE: $0000162E VOL: 0
 ;PCODE: $0000162F VOL: 0
-;        sprintf(buff,"i=%2u",i);
 ;PCODE: $00001630 VOL: 0
 ;PCODE: $00001631 VOL: 0
+;            i /= 2; i -= 4;
 ;PCODE: $00001632 VOL: 0
 ;PCODE: $00001633 VOL: 0
 ;PCODE: $00001634 VOL: 0
@@ -7311,9 +7304,11 @@ _0x264:
 ;PCODE: $00001637 VOL: 0
 ;PCODE: $00001638 VOL: 0
 ;PCODE: $00001639 VOL: 0
+;//sprintf(buff,"i=%2u; x=%2i",i,x);
+;//ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
+;            analog[i]+=x*10; if(analog[i]>100) analog[i]=100; else if(analog[i]==9) analog[i]=10; else if(analog[i]<-1)  ...
 ;PCODE: $0000163A VOL: 0
 ;PCODE: $0000163B VOL: 0
-;        ILI9341_WriteString(5,TFTBUTTON-30,buff,Font_11x18,WHITE,BLACK,1);
 ;PCODE: $0000163C VOL: 0
 ;PCODE: $0000163D VOL: 0
 ;PCODE: $0000163E VOL: 0
@@ -7328,14 +7323,11 @@ _0x264:
 ;PCODE: $00001647 VOL: 0
 ;PCODE: $00001648 VOL: 0
 ;PCODE: $00001649 VOL: 0
-;        if(i<16){
 ;PCODE: $0000164A VOL: 0
 ;PCODE: $0000164B VOL: 0
 ;PCODE: $0000164C VOL: 0
-;            BeepT = 20;
 ;PCODE: $0000164D VOL: 0
 ;PCODE: $0000164E VOL: 0
-;            if(i%2) x=-1; else x=1;   // кнопка "+" или кнопка "-"
 ;PCODE: $0000164F VOL: 0
 ;PCODE: $00001650 VOL: 0
 ;PCODE: $00001651 VOL: 0
@@ -7348,7 +7340,6 @@ _0x264:
 ;PCODE: $00001658 VOL: 0
 ;PCODE: $00001659 VOL: 0
 ;PCODE: $0000165A VOL: 0
-;            i /= 2; i -= 4;
 ;PCODE: $0000165B VOL: 0
 ;PCODE: $0000165C VOL: 0
 ;PCODE: $0000165D VOL: 0
@@ -7357,7 +7348,6 @@ _0x264:
 ;PCODE: $00001660 VOL: 0
 ;PCODE: $00001661 VOL: 0
 ;PCODE: $00001662 VOL: 0
-;            sprintf(buff,"i=%2u; x=%2i",i,x);
 ;PCODE: $00001663 VOL: 0
 ;PCODE: $00001664 VOL: 0
 ;PCODE: $00001665 VOL: 0
@@ -7367,13 +7357,17 @@ _0x264:
 ;PCODE: $00001669 VOL: 0
 ;PCODE: $0000166A VOL: 0
 ;PCODE: $0000166B VOL: 0
+;      }
 ;PCODE: $0000166C VOL: 0
+;      else checkDisplNum();
 ;PCODE: $0000166D VOL: 0
 ;PCODE: $0000166E VOL: 0
 ;PCODE: $0000166F VOL: 0
+;    }
 ;PCODE: $00001670 VOL: 0
+;//---- АНАЛОГОВЫЕ ВЫХОДЫ ----
+;    for (i=0;i<4;i++){
 ;PCODE: $00001671 VOL: 0
-;            ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
 ;PCODE: $00001672 VOL: 0
 ;PCODE: $00001673 VOL: 0
 ;PCODE: $00001674 VOL: 0
@@ -7383,12 +7377,12 @@ _0x264:
 ;PCODE: $00001678 VOL: 0
 ;PCODE: $00001679 VOL: 0
 ;PCODE: $0000167A VOL: 0
+;    sprintf(buff,"ВИХЫД N%u: ",i+1);
 ;PCODE: $0000167B VOL: 0
 ;PCODE: $0000167C VOL: 0
 ;PCODE: $0000167D VOL: 0
 ;PCODE: $0000167E VOL: 0
 ;PCODE: $0000167F VOL: 0
-;            analog[i]+=x*10; if(analog[i]>100) analog[i]=100; else if(analog[i]==9) analog[i]=10; else if(analog[i]<-1)  ...
 ;PCODE: $00001680 VOL: 0
 ;PCODE: $00001681 VOL: 0
 ;PCODE: $00001682 VOL: 0
@@ -7398,6 +7392,7 @@ _0x264:
 ;PCODE: $00001686 VOL: 0
 ;PCODE: $00001687 VOL: 0
 ;PCODE: $00001688 VOL: 0
+;    if(analog[i]==-1) strcat(buff,"АВТ"); else {strcat(buff,"РУЧ"); analogOut[i]=analog[i];}
 ;PCODE: $00001689 VOL: 0
 ;PCODE: $0000168A VOL: 0
 ;PCODE: $0000168B VOL: 0
@@ -7425,6 +7420,7 @@ _0x264:
 ;PCODE: $000016A1 VOL: 0
 ;PCODE: $000016A2 VOL: 0
 ;PCODE: $000016A3 VOL: 0
+;    sprintf(txt," %3u%% ",analogOut[i]);
 ;PCODE: $000016A4 VOL: 0
 ;PCODE: $000016A5 VOL: 0
 ;PCODE: $000016A6 VOL: 0
@@ -7439,16 +7435,13 @@ _0x264:
 ;PCODE: $000016AF VOL: 0
 ;PCODE: $000016B0 VOL: 0
 ;PCODE: $000016B1 VOL: 0
-;      }
 ;PCODE: $000016B2 VOL: 0
-;      else checkDisplNum();
+;    strcat(buff,txt);
 ;PCODE: $000016B3 VOL: 0
 ;PCODE: $000016B4 VOL: 0
 ;PCODE: $000016B5 VOL: 0
-;    }
 ;PCODE: $000016B6 VOL: 0
-;//---- АНАЛОГОВЫЕ ВЫХОДЫ ----
-;    for (i=0;i<4;i++){
+;    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $000016B7 VOL: 0
 ;PCODE: $000016B8 VOL: 0
 ;PCODE: $000016B9 VOL: 0
@@ -7459,42 +7452,65 @@ _0x264:
 ;PCODE: $000016BE VOL: 0
 ;PCODE: $000016BF VOL: 0
 ;PCODE: $000016C0 VOL: 0
-;    sprintf(buff,"ВИХЫД N%u: ",i+1);
 ;PCODE: $000016C1 VOL: 0
 ;PCODE: $000016C2 VOL: 0
 ;PCODE: $000016C3 VOL: 0
+;    pointY = pointY+22;
 ;PCODE: $000016C4 VOL: 0
 ;PCODE: $000016C5 VOL: 0
 ;PCODE: $000016C6 VOL: 0
+;    };
 ;PCODE: $000016C7 VOL: 0
 ;PCODE: $000016C8 VOL: 0
 ;PCODE: $000016C9 VOL: 0
 ;PCODE: $000016CA VOL: 0
 ;PCODE: $000016CB VOL: 0
+;   if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки **************************** ...
 ;PCODE: $000016CC VOL: 0
 ;PCODE: $000016CD VOL: 0
 ;PCODE: $000016CE VOL: 0
-;    if(analog[i]==-1) strcat(buff,"АВТ"); else {strcat(buff,"РУЧ"); analogOut[i]=analog[i];}
 ;PCODE: $000016CF VOL: 0
+;}
 ;PCODE: $000016D0 VOL: 0
 ;PCODE: $000016D1 VOL: 0
 ;PCODE: $000016D2 VOL: 0
 ;PCODE: $000016D3 VOL: 0
 ;PCODE: $000016D4 VOL: 0
+
+	.DSEG
+_0x270:
+	.BYTE 0x24
+;
+;void displ_3(void){
+
+	.CSEG
 ;PCODE: $000016D5 VOL: 0
 ;PCODE: $000016D6 VOL: 0
+; char item, X_left;
+; signed char x;
+; unsigned int fillWindow = GREEN1, bordWindow = BLACK, temp;
+;  pointY=7;
 ;PCODE: $000016D7 VOL: 0
 ;PCODE: $000016D8 VOL: 0
 ;PCODE: $000016D9 VOL: 0
 ;PCODE: $000016DA VOL: 0
 ;PCODE: $000016DB VOL: 0
 ;PCODE: $000016DC VOL: 0
+;	item -> R17
+;	X_left -> R16
+;	x -> R19
+;	fillWindow -> R20,R21
+;	bordWindow -> Y+8
+;	temp -> Y+6
 ;PCODE: $000016DD VOL: 0
 ;PCODE: $000016DE VOL: 0
 ;PCODE: $000016DF VOL: 0
 ;PCODE: $000016E0 VOL: 0
+;  if (newSetButt){
 ;PCODE: $000016E1 VOL: 0
 ;PCODE: $000016E2 VOL: 0
+;//    drawButtEdit(fillWindow);
+;    initializePlus(pointY+25, 4, 30);
 ;PCODE: $000016E3 VOL: 0
 ;PCODE: $000016E4 VOL: 0
 ;PCODE: $000016E5 VOL: 0
@@ -7502,7 +7518,7 @@ _0x264:
 ;PCODE: $000016E7 VOL: 0
 ;PCODE: $000016E8 VOL: 0
 ;PCODE: $000016E9 VOL: 0
-;    sprintf(txt," %3u%% ",analogOut[i]);
+;    for (item=0;item<plusCount;item++) drawPlus(item, fillWindow);
 ;PCODE: $000016EA VOL: 0
 ;PCODE: $000016EB VOL: 0
 ;PCODE: $000016EC VOL: 0
@@ -7518,12 +7534,10 @@ _0x264:
 ;PCODE: $000016F6 VOL: 0
 ;PCODE: $000016F7 VOL: 0
 ;PCODE: $000016F8 VOL: 0
-;    strcat(buff,txt);
 ;PCODE: $000016F9 VOL: 0
 ;PCODE: $000016FA VOL: 0
 ;PCODE: $000016FB VOL: 0
 ;PCODE: $000016FC VOL: 0
-;    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $000016FD VOL: 0
 ;PCODE: $000016FE VOL: 0
 ;PCODE: $000016FF VOL: 0
@@ -7534,151 +7548,55 @@ _0x264:
 ;PCODE: $00001704 VOL: 0
 ;PCODE: $00001705 VOL: 0
 ;PCODE: $00001706 VOL: 0
+;    ILI9341_WriteString(50,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
 ;PCODE: $00001707 VOL: 0
 ;PCODE: $00001708 VOL: 0
 ;PCODE: $00001709 VOL: 0
-;    pointY = pointY+22;
 ;PCODE: $0000170A VOL: 0
 ;PCODE: $0000170B VOL: 0
 ;PCODE: $0000170C VOL: 0
-;    };
 ;PCODE: $0000170D VOL: 0
 ;PCODE: $0000170E VOL: 0
 ;PCODE: $0000170F VOL: 0
 ;PCODE: $00001710 VOL: 0
 ;PCODE: $00001711 VOL: 0
-;
-;}
 ;PCODE: $00001712 VOL: 0
 ;PCODE: $00001713 VOL: 0
 ;PCODE: $00001714 VOL: 0
-;PCODE: $00001715 VOL: 0
-
-	.DSEG
-_0x26F:
-	.BYTE 0x24
-;
-;void displ_3(void){
-
-	.CSEG
-;PCODE: $00001716 VOL: 0
-;PCODE: $00001717 VOL: 0
-; char item, X_left;
-; signed char x;
-; unsigned int fillWindow = GREEN1, bordWindow = BLACK, temp;
-;  pointY=7;
-;PCODE: $00001718 VOL: 0
-;PCODE: $00001719 VOL: 0
-;PCODE: $0000171A VOL: 0
-;PCODE: $0000171B VOL: 0
-;PCODE: $0000171C VOL: 0
-;PCODE: $0000171D VOL: 0
-;	item -> R17
-;	X_left -> R16
-;	x -> R19
-;	fillWindow -> R20,R21
-;	bordWindow -> Y+8
-;	temp -> Y+6
-;PCODE: $0000171E VOL: 0
-;PCODE: $0000171F VOL: 0
-;PCODE: $00001720 VOL: 0
-;PCODE: $00001721 VOL: 0
-;  if (newSetButt){
-;PCODE: $00001722 VOL: 0
-;PCODE: $00001723 VOL: 0
-;//    drawButtEdit(fillWindow);
-;    initializePlus(pointY+25, 4, 30);
-;PCODE: $00001724 VOL: 0
-;PCODE: $00001725 VOL: 0
-;PCODE: $00001726 VOL: 0
-;PCODE: $00001727 VOL: 0
-;PCODE: $00001728 VOL: 0
-;PCODE: $00001729 VOL: 0
-;PCODE: $0000172A VOL: 0
-;    for (item=0;item<plusCount;item++) drawPlus(item, fillWindow);
-;PCODE: $0000172B VOL: 0
-;PCODE: $0000172C VOL: 0
-;PCODE: $0000172D VOL: 0
-;PCODE: $0000172E VOL: 0
-;PCODE: $0000172F VOL: 0
-;PCODE: $00001730 VOL: 0
-;PCODE: $00001731 VOL: 0
-;PCODE: $00001732 VOL: 0
-;PCODE: $00001733 VOL: 0
-;PCODE: $00001734 VOL: 0
-;PCODE: $00001735 VOL: 0
-;PCODE: $00001736 VOL: 0
-;PCODE: $00001737 VOL: 0
-;PCODE: $00001738 VOL: 0
-;PCODE: $00001739 VOL: 0
-;PCODE: $0000173A VOL: 0
-;PCODE: $0000173B VOL: 0
-;PCODE: $0000173C VOL: 0
-;PCODE: $0000173D VOL: 0
-;PCODE: $0000173E VOL: 0
-;PCODE: $0000173F VOL: 0
-;PCODE: $00001740 VOL: 0
-;PCODE: $00001741 VOL: 0
-;PCODE: $00001742 VOL: 0
-;PCODE: $00001743 VOL: 0
-;PCODE: $00001744 VOL: 0
-;PCODE: $00001745 VOL: 0
-;PCODE: $00001746 VOL: 0
-;PCODE: $00001747 VOL: 0
-;    ILI9341_WriteString(50,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
-;PCODE: $00001748 VOL: 0
-;PCODE: $00001749 VOL: 0
-;PCODE: $0000174A VOL: 0
-;PCODE: $0000174B VOL: 0
-;PCODE: $0000174C VOL: 0
-;PCODE: $0000174D VOL: 0
-;PCODE: $0000174E VOL: 0
-;PCODE: $0000174F VOL: 0
-;PCODE: $00001750 VOL: 0
-;PCODE: $00001751 VOL: 0
-;PCODE: $00001752 VOL: 0
-;PCODE: $00001753 VOL: 0
-;PCODE: $00001754 VOL: 0
-;PCODE: $00001755 VOL: 0
 ;  }
 ;  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;
 ;}
-;PCODE: $00001756 VOL: 0
-;PCODE: $00001757 VOL: 0
-;PCODE: $00001758 VOL: 0
-;PCODE: $00001759 VOL: 0
-;PCODE: $0000175A VOL: 0
+;PCODE: $00001715 VOL: 0
+;PCODE: $00001716 VOL: 0
+;PCODE: $00001717 VOL: 0
+;PCODE: $00001718 VOL: 0
+;PCODE: $00001719 VOL: 0
 ;
 ;void display(void){
-;PCODE: $0000175B VOL: 0
-;PCODE: $0000175C VOL: 0
+;PCODE: $0000171A VOL: 0
+;PCODE: $0000171B VOL: 0
 ; switch (displ_num){
-;PCODE: $0000175D VOL: 0
-;PCODE: $0000175E VOL: 0
+;PCODE: $0000171C VOL: 0
+;PCODE: $0000171D VOL: 0
 ;    case 0: displ_0(); break;
-;PCODE: $0000175F VOL: 0
-;PCODE: $00001760 VOL: 0
-;PCODE: $00001761 VOL: 0
-;PCODE: $00001762 VOL: 0
+;PCODE: $0000171E VOL: 0
+;PCODE: $0000171F VOL: 0
+;PCODE: $00001720 VOL: 0
+;PCODE: $00001721 VOL: 0
 ;    case 1: displ_1(); break;
-;PCODE: $00001763 VOL: 0
-;PCODE: $00001764 VOL: 0
-;PCODE: $00001765 VOL: 0
-;PCODE: $00001766 VOL: 0
-;PCODE: $00001767 VOL: 0
+;PCODE: $00001722 VOL: 0
+;PCODE: $00001723 VOL: 0
+;PCODE: $00001724 VOL: 0
+;PCODE: $00001725 VOL: 0
+;PCODE: $00001726 VOL: 0
 ;    case 2: displ_2(); break;
-;PCODE: $00001768 VOL: 0
-;PCODE: $00001769 VOL: 0
-;PCODE: $0000176A VOL: 0
-;PCODE: $0000176B VOL: 0
-;PCODE: $0000176C VOL: 0
-;    case 3: displ_3(); break;
-;PCODE: $0000176D VOL: 0
-;PCODE: $0000176E VOL: 0
-;PCODE: $0000176F VOL: 0
-;PCODE: $00001770 VOL: 0
-;PCODE: $00001771 VOL: 0
+;PCODE: $00001727 VOL: 0
+;PCODE: $00001728 VOL: 0
+;PCODE: $00001729 VOL: 0
+;PCODE: $0000172A VOL: 0
+;PCODE: $0000172B VOL: 0
+;//    case 3: displ_3(); break;
 ;//    case 4: displ_4(); break;
 ;//    case 5: displ_5(); break;
 ;//    case 6: displ_6(); break;
@@ -7686,100 +7604,100 @@ _0x26F:
 ;//    case 8: displ_8(); break;
 ;//    case 9: displ_9(); break;
 ;    default: displ_0(); break;
-;PCODE: $00001772 VOL: 0
-;PCODE: $00001773 VOL: 0
-;PCODE: $00001774 VOL: 0
+;PCODE: $0000172C VOL: 0
+;PCODE: $0000172D VOL: 0
+;PCODE: $0000172E VOL: 0
 ;  }
-;PCODE: $00001775 VOL: 0
+;PCODE: $0000172F VOL: 0
 ;}
-;PCODE: $00001776 VOL: 0
-;PCODE: $00001777 VOL: 0
+;PCODE: $00001730 VOL: 0
+;PCODE: $00001731 VOL: 0
 ;
 ;// External Interrupt 0 service routine
 ;interrupt [EXT_INT0] void ext_int0_isr(void){
 ; 0000 0066 interrupt [2] void ext_int0_isr(void){
-;PCODE: $00001778 VOL: 0
-;PCODE: $00001779 VOL: 0
+;PCODE: $00001732 VOL: 0
+;PCODE: $00001733 VOL: 0
 ; 0000 0067  static unsigned int count1;
 ; 0000 0068  count1++;
-;PCODE: $0000177A VOL: 0
-;PCODE: $0000177B VOL: 0
-;PCODE: $0000177C VOL: 0
-;PCODE: $0000177D VOL: 0
+;PCODE: $00001734 VOL: 0
+;PCODE: $00001735 VOL: 0
+;PCODE: $00001736 VOL: 0
+;PCODE: $00001737 VOL: 0
 ; 0000 0069 }
-;PCODE: $0000177E VOL: 0
-;PCODE: $0000177F VOL: 0
-;PCODE: $00001780 VOL: 0
+;PCODE: $00001738 VOL: 0
+;PCODE: $00001739 VOL: 0
+;PCODE: $0000173A VOL: 0
 ;// 0.25 Hz timer interrupt generated by Timer1 overflow;  Timer Period: 4,1943 s
 ;interrupt [TIM1_OVF] void timer_comp_isr(void){
 ; 0000 006B interrupt [10] void timer_comp_isr(void){
-;PCODE: $00001781 VOL: 0
-;PCODE: $00001782 VOL: 0
+;PCODE: $0000173B VOL: 0
+;PCODE: $0000173C VOL: 0
 ; 0000 006C  Sec=1;
-;PCODE: $00001783 VOL: 0
-;PCODE: $00001784 VOL: 0
-;PCODE: $00001785 VOL: 0
+;PCODE: $0000173D VOL: 0
+;PCODE: $0000173E VOL: 0
+;PCODE: $0000173F VOL: 0
 ; 0000 006D }
-;PCODE: $00001786 VOL: 0
-;PCODE: $00001787 VOL: 0
-;PCODE: $00001788 VOL: 0
+;PCODE: $00001740 VOL: 0
+;PCODE: $00001741 VOL: 0
+;PCODE: $00001742 VOL: 0
 ;
 ;
 ;void main(void){
 ; 0000 0070 void main(void){
-;PCODE: $00001789 VOL: 0
+;PCODE: $00001743 VOL: 0
 ; 0000 0071 // Declare your local variables here
 ; 0000 0072 char byte;
 ; 0000 0073 #include "init.c"
 ;// Port D initialization
 ;PORTD=0x00;// State7=0 State6=T State5=T State4=T State3=T State2=T State1=T State0=T
 ;	byte -> R17
-;PCODE: $0000178A VOL: 0
-;PCODE: $0000178B VOL: 0
+;PCODE: $00001744 VOL: 0
+;PCODE: $00001745 VOL: 0
 ;DDRD=0x00;// Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func0=In
-;PCODE: $0000178C VOL: 0
-;PCODE: $0000178D VOL: 0
+;PCODE: $00001746 VOL: 0
+;PCODE: $00001747 VOL: 0
 ;
 ;// Timer/Counter 0 initialization
 ;
 ;// Timer/Counter 1 initialization
 ;
 ;TCCR1A=0x00;// initialize Timer1 overflow interrupts in Mode 0 (Normal)
-;PCODE: $0000178E VOL: 0
-;PCODE: $0000178F VOL: 0
+;PCODE: $00001748 VOL: 0
+;PCODE: $00001749 VOL: 0
 ;TCCR1B=(1<<CS12)|(1<<CS10);// clkio/1024; Clock value: 15,625 kHz
-;PCODE: $00001790 VOL: 0
-;PCODE: $00001791 VOL: 0
+;PCODE: $0000174A VOL: 0
+;PCODE: $0000174B VOL: 0
 ;TCNT1H=0;
-;PCODE: $00001792 VOL: 0
-;PCODE: $00001793 VOL: 0
+;PCODE: $0000174C VOL: 0
+;PCODE: $0000174D VOL: 0
 ;TCNT1L=0;// timer overflow interrupts will occur with 0.25Hz frequency
-;PCODE: $00001794 VOL: 0
-;PCODE: $00001795 VOL: 0
+;PCODE: $0000174E VOL: 0
+;PCODE: $0000174F VOL: 0
 ;
 ;// Timer/Counter 2 initialization
 ;
 ;// External Interrupt(s) initialization
 ;// INT0: On Mode: Falling Edge INT1: Off INT2: Off
 ;GICR|=0x40;
-;PCODE: $00001796 VOL: 0
-;PCODE: $00001797 VOL: 0
-;PCODE: $00001798 VOL: 0
+;PCODE: $00001750 VOL: 0
+;PCODE: $00001751 VOL: 0
+;PCODE: $00001752 VOL: 0
 ;MCUCR=0x02;
-;PCODE: $00001799 VOL: 0
-;PCODE: $0000179A VOL: 0
+;PCODE: $00001753 VOL: 0
+;PCODE: $00001754 VOL: 0
 ;MCUCSR=0x00;
-;PCODE: $0000179B VOL: 0
-;PCODE: $0000179C VOL: 0
+;PCODE: $00001755 VOL: 0
+;PCODE: $00001756 VOL: 0
 ;GIFR=0x40;
-;PCODE: $0000179D VOL: 0
-;PCODE: $0000179E VOL: 0
+;PCODE: $00001757 VOL: 0
+;PCODE: $00001758 VOL: 0
 ;
 ;// Timer(s)/Counter(s) Interrupt(s) initialization
 ;//TIMSK=0x10;
 ;TIMSK=1<<TOIE1;// enable Timer1 overflow interrupt
-;PCODE: $0000179F VOL: 0
-;PCODE: $000017A0 VOL: 0
+;PCODE: $00001759 VOL: 0
+;PCODE: $0000175A VOL: 0
 ;
 ;// USART initialization
 ;// Communication Parameters: 8 Data, 1 Stop, No Parity
@@ -7788,91 +7706,184 @@ _0x26F:
 ;// USART Mode: Asynchronous
 ;// USART Baud Rate: 9600
 ;UCSRA=0x00;
-;PCODE: $000017A1 VOL: 0
-;PCODE: $000017A2 VOL: 0
+;PCODE: $0000175B VOL: 0
+;PCODE: $0000175C VOL: 0
 ;UCSRB=0xD8;
-;PCODE: $000017A3 VOL: 0
-;PCODE: $000017A4 VOL: 0
+;PCODE: $0000175D VOL: 0
+;PCODE: $0000175E VOL: 0
 ;UCSRC=0x86;
-;PCODE: $000017A5 VOL: 0
-;PCODE: $000017A6 VOL: 0
+;PCODE: $0000175F VOL: 0
+;PCODE: $00001760 VOL: 0
 ;UBRRH=0x00;
-;PCODE: $000017A7 VOL: 0
-;PCODE: $000017A8 VOL: 0
+;PCODE: $00001761 VOL: 0
+;PCODE: $00001762 VOL: 0
 ;UBRRL=0x67;
-;PCODE: $000017A9 VOL: 0
-;PCODE: $000017AA VOL: 0
+;PCODE: $00001763 VOL: 0
+;PCODE: $00001764 VOL: 0
 ;
 ;// Analog Comparator initialization
 ;ACSR=0x80;// Analog Comparator: Off
-;PCODE: $000017AB VOL: 0
-;PCODE: $000017AC VOL: 0
+;PCODE: $00001765 VOL: 0
+;PCODE: $00001766 VOL: 0
 ;SFIOR=0x00;
-;PCODE: $000017AD VOL: 0
-;PCODE: $000017AE VOL: 0
+;PCODE: $00001767 VOL: 0
+;PCODE: $00001768 VOL: 0
 ;
 ;// TWI initialization
 ;//TWBR=0x0C;// Bit Rate: 400,000 kHz
 ;TWBR=0x48;// Bit Rate: 100,000 kHz
-;PCODE: $000017AF VOL: 0
-;PCODE: $000017B0 VOL: 0
+;PCODE: $00001769 VOL: 0
+;PCODE: $0000176A VOL: 0
 ;TWAR=0x00;// Two Wire Bus Slave Address: 0x0; General Call Recognition: Off
-;PCODE: $000017B1 VOL: 0
-;PCODE: $000017B2 VOL: 0
+;PCODE: $0000176B VOL: 0
+;PCODE: $0000176C VOL: 0
 ;TWCR=0x44;// Generate Acknowledge Pulse: On; TWI Interrupt: Off
-;PCODE: $000017B3 VOL: 0
-;PCODE: $000017B4 VOL: 0
+;PCODE: $0000176D VOL: 0
+;PCODE: $0000176E VOL: 0
 ;TWSR=0x00;
-;PCODE: $000017B5 VOL: 0
-;PCODE: $000017B6 VOL: 0
+;PCODE: $0000176F VOL: 0
+;PCODE: $00001770 VOL: 0
 ;
 ;// ADC initialization
 ;// ADC Clock frequency: 125,000 kHz
 ;// ADC Voltage Reference: AREF pin
 ;ADMUX=ADC_VREF_TYPE & 0xff;
-;PCODE: $000017B7 VOL: 0
-;PCODE: $000017B8 VOL: 0
+;PCODE: $00001771 VOL: 0
+;PCODE: $00001772 VOL: 0
 ;ADCSRA=0x84;
-;PCODE: $000017B9 VOL: 0
-;PCODE: $000017BA VOL: 0
+;PCODE: $00001773 VOL: 0
+;PCODE: $00001774 VOL: 0
 ;
 ;offsetT = set[4][0];
+;PCODE: $00001775 VOL: 0
+;PCODE: $00001776 VOL: 0
+;PCODE: $00001777 VOL: 0
+;PCODE: $00001778 VOL: 0
+;offsetRH = set[4][1];
+;PCODE: $00001779 VOL: 0
+;PCODE: $0000177A VOL: 0
+;PCODE: $0000177B VOL: 0
+;PCODE: $0000177C VOL: 0
+;typeS = set[4][2];
+;PCODE: $0000177D VOL: 0
+;PCODE: $0000177E VOL: 0
+;PCODE: $0000177F VOL: 0
+;PCODE: $00001780 VOL: 0
+;PCODE: $00001781 VOL: 0
+;PCODE: $00001782 VOL: 0
+;//setDAC();           // подать напряжение на аналоговые выходы
+;delay_ms(1000);
+;PCODE: $00001783 VOL: 0
+;PCODE: $00001784 VOL: 0
+;Dht = readDHT();    // detect DHT-21/11
+;PCODE: $00001785 VOL: 0
+;PCODE: $00001786 VOL: 0
+;PCODE: $00001787 VOL: 0
+;PCODE: $00001788 VOL: 0
+;//------ 1 Wire Protocol Functions ----------------------------------------------------------------------
+;ds18b20 = w1_search(0xf0,familycode);// detect how many DS1820/DS18S20 devices are connected to the 1 Wire bus
+;PCODE: $00001789 VOL: 0
+;PCODE: $0000178A VOL: 0
+;PCODE: $0000178B VOL: 0
+;PCODE: $0000178C VOL: 0
+;PCODE: $0000178D VOL: 0
+;if((ds18b20+Dht)>MAX_DEVICES) ds18b20=(MAX_DEVICES-Dht);
+;PCODE: $0000178E VOL: 0
+;PCODE: $0000178F VOL: 0
+;PCODE: $00001790 VOL: 0
+;PCODE: $00001791 VOL: 0
+;PCODE: $00001792 VOL: 0
+;PCODE: $00001793 VOL: 0
+;PCODE: $00001794 VOL: 0
+;PCODE: $00001795 VOL: 0
+;PCODE: $00001796 VOL: 0
+;PCODE: $00001797 VOL: 0
+;PCODE: $00001798 VOL: 0
+;PCODE: $00001799 VOL: 0
+;PCODE: $0000179A VOL: 0
+;if(ds18b20)           // если датчики были найдены
+;PCODE: $0000179B VOL: 0
+;PCODE: $0000179C VOL: 0
+;PCODE: $0000179D VOL: 0
+; {
+;   w1_init();      // 1 Wire Bus initialization
+;PCODE: $0000179E VOL: 0
+;   w1_write(0xCC); // Load Skip ROM [CCH] command
+;PCODE: $0000179F VOL: 0
+;PCODE: $000017A0 VOL: 0
+;   w1_write(0x44); // Load Convert T [44H] command
+;PCODE: $000017A1 VOL: 0
+;PCODE: $000017A2 VOL: 0
+; }
+;//------------------------ once per second --------------------------------------
+;clock_buffer[0] = 0;// EOSC=0 BBSQW=0 CONV=0 RS2=0 RS1=0 INTCN=0 A2IE=0 A1IE=0
+;PCODE: $000017A3 VOL: 0
+;PCODE: $000017A4 VOL: 0
+;PCODE: $000017A5 VOL: 0
+;clock_buffer[1] = 0;//  EN32kHz=0 BSY=0 A2F=0 A1F=0
+;PCODE: $000017A6 VOL: 0
+;PCODE: $000017A7 VOL: 0
+;PCODE: $000017A8 VOL: 0
+;Clock_Ok = write_TWI(DS3231,0x0E,clock_buffer,2);
+;PCODE: $000017A9 VOL: 0
+;PCODE: $000017AA VOL: 0
+;PCODE: $000017AB VOL: 0
+;PCODE: $000017AC VOL: 0
+;PCODE: $000017AD VOL: 0
+;PCODE: $000017AE VOL: 0
+;PCODE: $000017AF VOL: 0
+;PCODE: $000017B0 VOL: 0
+;PCODE: $000017B1 VOL: 0
+;PCODE: $000017B2 VOL: 0
+;PCODE: $000017B3 VOL: 0
+;
+;// Global enable interrupts
+;#asm("sei")
+;PCODE: $000017B4 VOL: 0
+	sei
+;PCODE: $000017B5 VOL: 0
+;
+;InitInterface();
+;PCODE: $000017B6 VOL: 0
+;ILI9341_Init();
+;PCODE: $000017B7 VOL: 0
+;//TFT_SetOrientation(3);  //0
+;ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
+;PCODE: $000017B8 VOL: 0
+;PCODE: $000017B9 VOL: 0
+;PCODE: $000017BA VOL: 0
 ;PCODE: $000017BB VOL: 0
 ;PCODE: $000017BC VOL: 0
 ;PCODE: $000017BD VOL: 0
 ;PCODE: $000017BE VOL: 0
-;offsetRH = set[4][1];
 ;PCODE: $000017BF VOL: 0
 ;PCODE: $000017C0 VOL: 0
 ;PCODE: $000017C1 VOL: 0
+;pointY = 10;
 ;PCODE: $000017C2 VOL: 0
-;typeS = set[4][2];
 ;PCODE: $000017C3 VOL: 0
+;ILI9341_WriteString(60, pointY, "www.graviton.com.ua", Font_11x18, WHITE, fillScreen, 1);
 ;PCODE: $000017C4 VOL: 0
 ;PCODE: $000017C5 VOL: 0
 ;PCODE: $000017C6 VOL: 0
 ;PCODE: $000017C7 VOL: 0
 ;PCODE: $000017C8 VOL: 0
-;//setDAC();           // подать напряжение на аналоговые выходы
-;delay_ms(1000);
 ;PCODE: $000017C9 VOL: 0
 ;PCODE: $000017CA VOL: 0
-;Dht = readDHT();    // detect DHT-21/11
 ;PCODE: $000017CB VOL: 0
 ;PCODE: $000017CC VOL: 0
 ;PCODE: $000017CD VOL: 0
 ;PCODE: $000017CE VOL: 0
-;//------ 1 Wire Protocol Functions ----------------------------------------------------------------------
-;ds18b20 = w1_search(0xf0,familycode);// detect how many DS1820/DS18S20 devices are connected to the 1 Wire bus
 ;PCODE: $000017CF VOL: 0
 ;PCODE: $000017D0 VOL: 0
 ;PCODE: $000017D1 VOL: 0
 ;PCODE: $000017D2 VOL: 0
 ;PCODE: $000017D3 VOL: 0
-;if((ds18b20+Dht)>MAX_DEVICES) ds18b20=(MAX_DEVICES-Dht);
+;pointY += 30;
 ;PCODE: $000017D4 VOL: 0
 ;PCODE: $000017D5 VOL: 0
 ;PCODE: $000017D6 VOL: 0
+;ILI9341_WriteString(80, pointY, "Розумна", Font_11x18, WHITE, fillScreen, 2);
 ;PCODE: $000017D7 VOL: 0
 ;PCODE: $000017D8 VOL: 0
 ;PCODE: $000017D9 VOL: 0
@@ -7883,30 +7894,22 @@ _0x26F:
 ;PCODE: $000017DE VOL: 0
 ;PCODE: $000017DF VOL: 0
 ;PCODE: $000017E0 VOL: 0
-;if(ds18b20)           // если датчики были найдены
 ;PCODE: $000017E1 VOL: 0
 ;PCODE: $000017E2 VOL: 0
 ;PCODE: $000017E3 VOL: 0
-; {
-;   w1_init();      // 1 Wire Bus initialization
 ;PCODE: $000017E4 VOL: 0
-;   w1_write(0xCC); // Load Skip ROM [CCH] command
 ;PCODE: $000017E5 VOL: 0
 ;PCODE: $000017E6 VOL: 0
-;   w1_write(0x44); // Load Convert T [44H] command
+;pointY += 30;
 ;PCODE: $000017E7 VOL: 0
 ;PCODE: $000017E8 VOL: 0
-; }
-;//------------------------ once per second --------------------------------------
-;clock_buffer[0] = 0;// EOSC=0 BBSQW=0 CONV=0 RS2=0 RS1=0 INTCN=0 A2IE=0 A1IE=0
 ;PCODE: $000017E9 VOL: 0
+;ILI9341_WriteString(80, pointY, "теплиця", Font_11x18, WHITE, fillScreen, 2);
 ;PCODE: $000017EA VOL: 0
 ;PCODE: $000017EB VOL: 0
-;clock_buffer[1] = 0;//  EN32kHz=0 BSY=0 A2F=0 A1F=0
 ;PCODE: $000017EC VOL: 0
 ;PCODE: $000017ED VOL: 0
 ;PCODE: $000017EE VOL: 0
-;Clock_Ok = write_TWI(DS3231,0x0E,clock_buffer,2);
 ;PCODE: $000017EF VOL: 0
 ;PCODE: $000017F0 VOL: 0
 ;PCODE: $000017F1 VOL: 0
@@ -7918,19 +7921,12 @@ _0x26F:
 ;PCODE: $000017F7 VOL: 0
 ;PCODE: $000017F8 VOL: 0
 ;PCODE: $000017F9 VOL: 0
-;
-;// Global enable interrupts
-;#asm("sei")
+;pointY = pointY+45;
 ;PCODE: $000017FA VOL: 0
-	sei
 ;PCODE: $000017FB VOL: 0
-;
-;InitInterface();
 ;PCODE: $000017FC VOL: 0
-;ILI9341_Init();
+;sprintf(buff,"Датчикыв температури %u",ds18b20+Dht);    // количество датчиков
 ;PCODE: $000017FD VOL: 0
-;//TFT_SetOrientation(3);  //0
-;ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
 ;PCODE: $000017FE VOL: 0
 ;PCODE: $000017FF VOL: 0
 ;PCODE: $00001800 VOL: 0
@@ -7941,14 +7937,13 @@ _0x26F:
 ;PCODE: $00001805 VOL: 0
 ;PCODE: $00001806 VOL: 0
 ;PCODE: $00001807 VOL: 0
-;pointY = 10;
 ;PCODE: $00001808 VOL: 0
 ;PCODE: $00001809 VOL: 0
-;ILI9341_WriteString(60, pointY, "www.graviton.com.ua", Font_11x18, WHITE, fillScreen, 1);
 ;PCODE: $0000180A VOL: 0
 ;PCODE: $0000180B VOL: 0
 ;PCODE: $0000180C VOL: 0
 ;PCODE: $0000180D VOL: 0
+;ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
 ;PCODE: $0000180E VOL: 0
 ;PCODE: $0000180F VOL: 0
 ;PCODE: $00001810 VOL: 0
@@ -7961,14 +7956,14 @@ _0x26F:
 ;PCODE: $00001817 VOL: 0
 ;PCODE: $00001818 VOL: 0
 ;PCODE: $00001819 VOL: 0
-;pointY += 30;
 ;PCODE: $0000181A VOL: 0
 ;PCODE: $0000181B VOL: 0
 ;PCODE: $0000181C VOL: 0
-;ILI9341_WriteString(80, pointY, "Розумна", Font_11x18, WHITE, fillScreen, 2);
+;pointY = pointY+20;
 ;PCODE: $0000181D VOL: 0
 ;PCODE: $0000181E VOL: 0
 ;PCODE: $0000181F VOL: 0
+;sprintf(buff,"Датчик вологосты %u",Dht);                // датчик AM2301
 ;PCODE: $00001820 VOL: 0
 ;PCODE: $00001821 VOL: 0
 ;PCODE: $00001822 VOL: 0
@@ -7982,11 +7977,10 @@ _0x26F:
 ;PCODE: $0000182A VOL: 0
 ;PCODE: $0000182B VOL: 0
 ;PCODE: $0000182C VOL: 0
-;pointY += 30;
+;ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
 ;PCODE: $0000182D VOL: 0
 ;PCODE: $0000182E VOL: 0
 ;PCODE: $0000182F VOL: 0
-;ILI9341_WriteString(80, pointY, "теплиця", Font_11x18, WHITE, fillScreen, 2);
 ;PCODE: $00001830 VOL: 0
 ;PCODE: $00001831 VOL: 0
 ;PCODE: $00001832 VOL: 0
@@ -7999,36 +7993,48 @@ _0x26F:
 ;PCODE: $00001839 VOL: 0
 ;PCODE: $0000183A VOL: 0
 ;PCODE: $0000183B VOL: 0
+;//  pointY = pointY+20;
+;
+;newSetButt = 1;
 ;PCODE: $0000183C VOL: 0
 ;PCODE: $0000183D VOL: 0
+;temperature_check();
 ;PCODE: $0000183E VOL: 0
+;//display();
+; 0000 0074 
+; 0000 0075 while (1){
 ;PCODE: $0000183F VOL: 0
-;pointY = pointY+45;
+; 0000 0076    //----------- функция 1 секунда ---------------------------
+; 0000 0077    if(Sec){
 ;PCODE: $00001840 VOL: 0
 ;PCODE: $00001841 VOL: 0
 ;PCODE: $00001842 VOL: 0
-;sprintf(buff,"Датчикыв температури %u",ds18b20+Dht);    // количество датчиков
+; 0000 0078      Sec=0;
 ;PCODE: $00001843 VOL: 0
 ;PCODE: $00001844 VOL: 0
 ;PCODE: $00001845 VOL: 0
+; 0000 0079      if(ds18b20) temperature_check();
 ;PCODE: $00001846 VOL: 0
 ;PCODE: $00001847 VOL: 0
 ;PCODE: $00001848 VOL: 0
+; 0000 007A      if(Dht){                                         // присутствует датчик влажности
 ;PCODE: $00001849 VOL: 0
 ;PCODE: $0000184A VOL: 0
 ;PCODE: $0000184B VOL: 0
 ;PCODE: $0000184C VOL: 0
+; 0000 007B        if(readDHT()) DHTexist = 3;
 ;PCODE: $0000184D VOL: 0
 ;PCODE: $0000184E VOL: 0
 ;PCODE: $0000184F VOL: 0
 ;PCODE: $00001850 VOL: 0
 ;PCODE: $00001851 VOL: 0
+; 0000 007C        else if(DHTexist) DHTexist--;                   // датчик влажности работает?
 ;PCODE: $00001852 VOL: 0
 ;PCODE: $00001853 VOL: 0
-;ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
 ;PCODE: $00001854 VOL: 0
 ;PCODE: $00001855 VOL: 0
 ;PCODE: $00001856 VOL: 0
+; 0000 007D        else {pvT = 1900; pvRH = 190;}
 ;PCODE: $00001857 VOL: 0
 ;PCODE: $00001858 VOL: 0
 ;PCODE: $00001859 VOL: 0
@@ -8037,15 +8043,15 @@ _0x26F:
 ;PCODE: $0000185C VOL: 0
 ;PCODE: $0000185D VOL: 0
 ;PCODE: $0000185E VOL: 0
+; 0000 007E      }
+; 0000 007F      for(byte=0; byte<4; byte++){if(relay[byte]<2) relOut[byte]=relay[byte];}
 ;PCODE: $0000185F VOL: 0
 ;PCODE: $00001860 VOL: 0
 ;PCODE: $00001861 VOL: 0
 ;PCODE: $00001862 VOL: 0
-;pointY = pointY+20;
 ;PCODE: $00001863 VOL: 0
 ;PCODE: $00001864 VOL: 0
 ;PCODE: $00001865 VOL: 0
-;sprintf(buff,"Датчик вологосты %u",Dht);                // датчик AM2301
 ;PCODE: $00001866 VOL: 0
 ;PCODE: $00001867 VOL: 0
 ;PCODE: $00001868 VOL: 0
@@ -8059,7 +8065,6 @@ _0x26F:
 ;PCODE: $00001870 VOL: 0
 ;PCODE: $00001871 VOL: 0
 ;PCODE: $00001872 VOL: 0
-;ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
 ;PCODE: $00001873 VOL: 0
 ;PCODE: $00001874 VOL: 0
 ;PCODE: $00001875 VOL: 0
@@ -8070,53 +8075,41 @@ _0x26F:
 ;PCODE: $0000187A VOL: 0
 ;PCODE: $0000187B VOL: 0
 ;PCODE: $0000187C VOL: 0
+; 0000 0080      for(byte=0; byte<4; byte++){
 ;PCODE: $0000187D VOL: 0
 ;PCODE: $0000187E VOL: 0
 ;PCODE: $0000187F VOL: 0
 ;PCODE: $00001880 VOL: 0
 ;PCODE: $00001881 VOL: 0
-;//  pointY = pointY+20;
-;
-;newSetButt = 1;
 ;PCODE: $00001882 VOL: 0
 ;PCODE: $00001883 VOL: 0
-;temperature_check();
 ;PCODE: $00001884 VOL: 0
-;//display();
-; 0000 0074 
-; 0000 0075 while (1){
 ;PCODE: $00001885 VOL: 0
-; 0000 0076    //----------- функция 1 секунда ---------------------------
-; 0000 0077    if(Sec){
+; 0000 0081         if(analog[byte]>=0) analogOut[byte] = analog[byte]; else analogOut[byte] = 0; //??????????????
 ;PCODE: $00001886 VOL: 0
 ;PCODE: $00001887 VOL: 0
 ;PCODE: $00001888 VOL: 0
-; 0000 0078      Sec=0;
 ;PCODE: $00001889 VOL: 0
 ;PCODE: $0000188A VOL: 0
 ;PCODE: $0000188B VOL: 0
-; 0000 0079      if(ds18b20) temperature_check();
 ;PCODE: $0000188C VOL: 0
 ;PCODE: $0000188D VOL: 0
 ;PCODE: $0000188E VOL: 0
-; 0000 007A      if(Dht){                                         // присутствует датчик влажности
 ;PCODE: $0000188F VOL: 0
 ;PCODE: $00001890 VOL: 0
 ;PCODE: $00001891 VOL: 0
 ;PCODE: $00001892 VOL: 0
-; 0000 007B        if(readDHT()) DHTexist = 3;
 ;PCODE: $00001893 VOL: 0
 ;PCODE: $00001894 VOL: 0
 ;PCODE: $00001895 VOL: 0
 ;PCODE: $00001896 VOL: 0
 ;PCODE: $00001897 VOL: 0
-; 0000 007C        else if(DHTexist) DHTexist--;                   // датчик влажности работает?
 ;PCODE: $00001898 VOL: 0
 ;PCODE: $00001899 VOL: 0
 ;PCODE: $0000189A VOL: 0
+; 0000 0082         dacU[byte] = adapt(analogOut[byte]);// конверсия для ЦАП
 ;PCODE: $0000189B VOL: 0
 ;PCODE: $0000189C VOL: 0
-; 0000 007D        else {pvT = 1900; pvRH = 190;}
 ;PCODE: $0000189D VOL: 0
 ;PCODE: $0000189E VOL: 0
 ;PCODE: $0000189F VOL: 0
@@ -8125,89 +8118,14 @@ _0x26F:
 ;PCODE: $000018A2 VOL: 0
 ;PCODE: $000018A3 VOL: 0
 ;PCODE: $000018A4 VOL: 0
-; 0000 007E      }
-; 0000 007F      for(byte=0; byte<4; byte++){if(relay[byte]<2) relOut[byte]=relay[byte];}
 ;PCODE: $000018A5 VOL: 0
 ;PCODE: $000018A6 VOL: 0
+; 0000 0083      }
 ;PCODE: $000018A7 VOL: 0
 ;PCODE: $000018A8 VOL: 0
 ;PCODE: $000018A9 VOL: 0
 ;PCODE: $000018AA VOL: 0
 ;PCODE: $000018AB VOL: 0
-;PCODE: $000018AC VOL: 0
-;PCODE: $000018AD VOL: 0
-;PCODE: $000018AE VOL: 0
-;PCODE: $000018AF VOL: 0
-;PCODE: $000018B0 VOL: 0
-;PCODE: $000018B1 VOL: 0
-;PCODE: $000018B2 VOL: 0
-;PCODE: $000018B3 VOL: 0
-;PCODE: $000018B4 VOL: 0
-;PCODE: $000018B5 VOL: 0
-;PCODE: $000018B6 VOL: 0
-;PCODE: $000018B7 VOL: 0
-;PCODE: $000018B8 VOL: 0
-;PCODE: $000018B9 VOL: 0
-;PCODE: $000018BA VOL: 0
-;PCODE: $000018BB VOL: 0
-;PCODE: $000018BC VOL: 0
-;PCODE: $000018BD VOL: 0
-;PCODE: $000018BE VOL: 0
-;PCODE: $000018BF VOL: 0
-;PCODE: $000018C0 VOL: 0
-;PCODE: $000018C1 VOL: 0
-;PCODE: $000018C2 VOL: 0
-; 0000 0080      for(byte=0; byte<4; byte++){
-;PCODE: $000018C3 VOL: 0
-;PCODE: $000018C4 VOL: 0
-;PCODE: $000018C5 VOL: 0
-;PCODE: $000018C6 VOL: 0
-;PCODE: $000018C7 VOL: 0
-;PCODE: $000018C8 VOL: 0
-;PCODE: $000018C9 VOL: 0
-;PCODE: $000018CA VOL: 0
-;PCODE: $000018CB VOL: 0
-; 0000 0081         if(analog[byte]>=0) analogOut[byte] = analog[byte]; else analogOut[byte] = 0; //??????????????
-;PCODE: $000018CC VOL: 0
-;PCODE: $000018CD VOL: 0
-;PCODE: $000018CE VOL: 0
-;PCODE: $000018CF VOL: 0
-;PCODE: $000018D0 VOL: 0
-;PCODE: $000018D1 VOL: 0
-;PCODE: $000018D2 VOL: 0
-;PCODE: $000018D3 VOL: 0
-;PCODE: $000018D4 VOL: 0
-;PCODE: $000018D5 VOL: 0
-;PCODE: $000018D6 VOL: 0
-;PCODE: $000018D7 VOL: 0
-;PCODE: $000018D8 VOL: 0
-;PCODE: $000018D9 VOL: 0
-;PCODE: $000018DA VOL: 0
-;PCODE: $000018DB VOL: 0
-;PCODE: $000018DC VOL: 0
-;PCODE: $000018DD VOL: 0
-;PCODE: $000018DE VOL: 0
-;PCODE: $000018DF VOL: 0
-;PCODE: $000018E0 VOL: 0
-; 0000 0082         dacU[byte] = adapt(analogOut[byte]);// конверсия для ЦАП
-;PCODE: $000018E1 VOL: 0
-;PCODE: $000018E2 VOL: 0
-;PCODE: $000018E3 VOL: 0
-;PCODE: $000018E4 VOL: 0
-;PCODE: $000018E5 VOL: 0
-;PCODE: $000018E6 VOL: 0
-;PCODE: $000018E7 VOL: 0
-;PCODE: $000018E8 VOL: 0
-;PCODE: $000018E9 VOL: 0
-;PCODE: $000018EA VOL: 0
-;PCODE: $000018EB VOL: 0
-;PCODE: $000018EC VOL: 0
-; 0000 0083      }
-;PCODE: $000018ED VOL: 0
-;PCODE: $000018EE VOL: 0
-;PCODE: $000018EF VOL: 0
-;PCODE: $000018F0 VOL: 0
-;PCODE: $000018F1 VOL: 0
 ; 0000 0084  //    setDAC();                           // подать напряжение на аналоговые выходы
 ; 0000 0085      // --------КАНАЛ 1 ---------
 ; 0000 0086 //     if(Dht){
@@ -8233,18 +8151,18 @@ _0x26F:
 ; 0000 009A //   if(newButton==100) display();
 ; 0000 009B //   else {touchpad(newButton); newButton=100; display();}
 ; 0000 009C     display();
-;PCODE: $000018F2 VOL: 0
-;PCODE: $000018F3 VOL: 0
+;PCODE: $000018AC VOL: 0
+;PCODE: $000018AD VOL: 0
 ; 0000 009D //   sprintf(buff,"X%4u; Y%4u; D%u newB=%3u",point_X,point_Y, displ_num, newButton);
 ; 0000 009E //   ILI9341_WriteString(5,TFTBUTTON-10,buff,Font_11x18,WHITE,BLACK,1);
 ; 0000 009F  }
-;PCODE: $000018F4 VOL: 0
-;PCODE: $000018F5 VOL: 0
+;PCODE: $000018AE VOL: 0
+;PCODE: $000018AF VOL: 0
 ; 0000 00A0 }
-;PCODE: $000018F6 VOL: 0
-;PCODE: $000018F7 VOL: 0
-;PCODE: $000018F8 VOL: 0
+;PCODE: $000018B0 VOL: 0
+;PCODE: $000018B1 VOL: 0
+;PCODE: $000018B2 VOL: 0
 
 	.DSEG
-_0x2AE:
+_0x2AF:
 	.BYTE 0x24

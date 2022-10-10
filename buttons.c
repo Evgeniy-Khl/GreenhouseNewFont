@@ -26,8 +26,8 @@
 
 unsigned char buttonCount, plusCount;
 unsigned int point_X, point_Y, point_Z, bottom_Y, left_X;
-struct ram_structure {int x,y; char w,h;} buttons[4];// Global structure located in RAM
-struct {int x,y; char w,h;} plus[8];// Global structure located in RAM
+struct {int x,y; char w,h;} buttons[4];// Global structure located in RAM
+struct {int x,y; char w,h;} plus[16];  // Global structure located in RAM
 
 // Read the AD conversion result
 unsigned int read_adc(unsigned char adc_input)
@@ -45,65 +45,58 @@ return ADCW;
 }
 
 void initializePlus(char y, char row, char h){// высота кнопки
- char i,j,indx, w=40, col=2;
+ char i,j,indx=0;
  unsigned int x;
-  if(h<14) h=14;
-  y = y - 4;      // Y начало контура кнопки
-  indx = 0;
-  for (j=0; j<row; j++){
+    if(h<14) h=14;
+    if(y>3)  y-=4;  // Y начало контура кнопки
+    for (j=0; j<row; j++){
     x = TFTWIDTH-90;// X начало 1 кнопки
-#pragma warn-
-    for (i=0; i<col; i++){
-        plus[indx].x = x+i*(w+5);// интервал между кнопками
-        plus[indx].w = w;
+    for (i=0; i<2; i++){
+        plus[indx].x = (int)x+i*45;// интервал между кнопками
+        plus[indx].w = 40;
         plus[indx].h = h;
         plus[indx].y = y;
         indx++;
     }
     y += (h+6);// интервал между кнопками
-#pragma warn+ 
-  }
-  left_X = x;// лева€ граница до которой можно закрашивать экран
-  plusCount = col * row;// обшее количество кнопок
+    }
+    left_X = x;// лева€ граница до которой можно закрашивать экран
+    plusCount = row*2;// обшее количество кнопок
 }
 
 void initializeButtons(char col, char row, char h){// высота кнопки
  char i,j,indx, w;
  unsigned int x,y;
-  switch (col)                  // ширина кнопки зависит от кол-ва кнопок в строке
-   {
-    case 4: w = max_X/4-6; break;  // 72
-    case 3: w = max_X/3-6; break;  // 100
-    case 2: w = max_X/2-9; break;  // 150 
-    default: w = max_X-6;
-   };
-  if(h<20) h=20;
-  y = max_Y - h - 4;      // начало контура кнопки
-  indx = 0;
-  for (j=0; j<row; j++){
-    x = 4;// начало 1 кнопки
-    #pragma warn-
-    for (i=0; i<col; i++){
-        buttons[indx].x = x+i*(w+5);// интервал между кнопками
-        buttons[indx].w = w;
-        buttons[indx].h = h;
-        buttons[indx].y = y;
-        indx++;
+    switch (col){                  // ширина кнопки зависит от кол-ва кнопок в строке
+        case 4:  w = max_X/4-6; break;  // 72
+        case 3:  w = max_X/3-6; break;  // 100
+        case 2:  w = max_X/2-9; break;  // 150 
+        default: w = max_X-6;
+    };
+    if(h<20) h=20;
+    y = max_Y - h - 4;      // начало контура кнопки
+    indx = 0;
+    for (j=0; j<row; j++){
+        x = 4;// начало 1 кнопки
+        for (i=0; i<col; i++){
+            buttons[indx].x = (int)x+i*(w+5);// интервал между кнопками
+            buttons[indx].w = w;
+            buttons[indx].h = h;
+            buttons[indx].y = y;
+            indx++;
+        }
+        y -= (h+5);// интервал между кнопками
     }
-    y -= (h+5);// интервал между кнопками
-    #pragma warn+ 
-  }
-  bottom_Y = y;// верхн€€ граница меню до которой можно закрашивать экран
-  buttonCount = col * row;// обшее количество кнопок
+    bottom_Y = y;// верхн€€ граница меню до которой можно закрашивать экран
+    buttonCount = col * row;// обшее количество кнопок
 }
 //---------------- цвет фона ------- цвет рамки -------- цвет текста --- номер --- текст ---------
 void drawButton(unsigned int fill, unsigned int bord, unsigned int text, char b, char flash *str){
- int x, y, w, h;//, r;
+ int x, y, w, h;
    w = buttons[b].w;      // ширина кнопки
    h = buttons[b].h;      // высота кнопки
    x = buttons[b].x;      // начало контура кнопки
    y = buttons[b].y;      // начало контура кнопки
-//   r = min(w,h)/4;
    //TFT_FillRoundRect(x, y, w, h, r, fill);
    ILI9341_FillRectangle(x, y, w, h, fill);
    //TFT_DrawRoundRect(x, y, w, h, r, bord);
@@ -136,23 +129,21 @@ void drawPlus(char i, unsigned int fill){
 //in_max: верхний предел текущего диапазона переменной value
 //out_min:    нижний предел нового диапазона переменной value
 //out_max:   верхний предел нового диапазона переменной value
-unsigned int map(unsigned int x, char in_min, unsigned int in_max, char out_min, unsigned int out_max)
-{
-long val;
- val = (x - in_min); val *= (out_max - out_min); val /= (in_max - in_min); val += out_min;
- return val;
+unsigned int map(unsigned int x, char in_min, unsigned int in_max, char out_min, unsigned int out_max){
+ long val;
+    val = (x - in_min); val *= (out_max - out_min); val /= (in_max - in_min); val += out_min;
+    return val;
 }
 
-char contains(char b)// проверка попадани€ пересчитаной координаты в область кнопки.
- {
+char contains(char b){// проверка попадани€ пересчитаной координаты в область кнопки.
  int beg, end;
-   beg = buttons[b].x;
-   end = beg + buttons[b].w-3;
-   if ((point_X < beg)||(point_X > end)) return 0;
-   beg = buttons[b].y;
-   end = beg + buttons[b].h-3;
-   if ((point_Y < beg)||(point_Y > end)) return 0;
-   return 1;
+    beg = buttons[b].x-3;
+    end = beg + buttons[b].w;
+    if ((point_X < beg)||(point_X > end)) return 0;
+    beg = buttons[b].y-3;
+    end = beg + buttons[b].h;
+    if ((point_Y < beg)||(point_Y > end)) return 0;
+    return 1;
  }
  
 char containsPlus(char b)// проверка попадани€ пересчитаной координаты в область кнопки.
@@ -189,49 +180,48 @@ int val, samples[2];
   
   if(val < 200){
     InitInterface();
-//    sprintf(buff,"слабое нажатие v=%3u",val);
-//    ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1); 
+//sprintf(buff,"слабое нажатие v=%3u",val);
+//ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1); 
     return 0;         // если слабое нажатие то выход
   }
-  else                // иначе определ€ем координаты
-   {
-     YP_DIR = INPUT;   // TFT_WRX ?????????????
-     YP_PORT = LOW;    // TFT_WRX ?????????????
+  else{                // иначе определ€ем координаты
+     YP_DIR = INPUT;   // TFT_WRX
+     YP_PORT = LOW;    // TFT_WRX
      YM_DIR = INPUT;   // DDRC.7
      YM_PORT = LOW;    // DDRC.7
-     XP_DIR = OUTPUT;  // DDRC.6  ?????????????
+     XP_DIR = OUTPUT;  // DDRC.6
      XP_PORT = HIGH;   // DDRC.6
      XM_DIR = OUTPUT;  // TFT_DCX
-     XM_PORT = LOW;    // TFT_DCX ?????????????
+     XM_PORT = LOW;    // TFT_DCX
      do{
         for (i=0; i<2; i++){samples[i] = read_adc(YP_PIN);}
         val = abs(samples[0]-samples[1]);
-       } while (val>4);
+     } while (val>4);
     //point_Y = (1023-(samples[0]+samples[1])/2);  // Orientation=0
      point_X = (samples[0]+samples[1])/2;           // Orientation=3
 
      XP_DIR = INPUT;  // DDRC.6
      XP_PORT = LOW;   // DDRC.6
      XM_DIR = INPUT;  // TFT_DCX
-     XM_PORT = LOW;   // TFT_DCX ?????????????
+     XM_PORT = LOW;   // TFT_DCX
      YP_DIR = OUTPUT; // TFT_WRX
      YP_PORT = HIGH;  // TFT_WRX
      YM_DIR = OUTPUT; // DDRC.7
-     YM_PORT = LOW;   // DDRC.7  ?????????????
+     YM_PORT = LOW;   // DDRC.7
      do{
         for (i=0; i<2; i++){samples[i] = read_adc(XM_PIN);}
         val = abs(samples[0]-samples[1]);
-       } while (val>4);
+     } while (val>4);
      //point_X = (1023-(samples[0]+samples[1])/2);   // Orientation=0
      point_Y = (1023-(samples[0]+samples[1])/2);     // Orientation=3
      
      InitInterface();
      point_X = map(point_X, TS_MINX, TS_MAXX, 0, max_X);// пересчет координаты резистивной матрицы на пиксельную метрицу
      point_Y = map(point_Y, TS_MINY, TS_MAXY, 0, max_Y);// пересчет координаты резистивной матрицы на пиксельную метрицу
-ILI9341_FillRectangle(point_X, point_Y, 5, 5, RED);
+//ILI9341_FillRectangle(point_X, point_Y, 5, 5, RED);
 //sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
 //ILI9341_WriteString(5,TFTBUTTON-15,buff,Font_11x18,WHITE,BLACK,1);
      return 1;
-   }
+  }
 }
 

@@ -168,8 +168,8 @@ void displ_2(void){
     }
 //***************************** проверим кнопки управления реле ***************************************
     if(checkTouch()){
-//      sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
-//      ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
+//sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
+//ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
       if(point_X>220&&point_Y<100){
         for (i=0; i<8; i++){if(containsPlus(i)) break;}// проверка верхней половины кнопок
         if(i<8){
@@ -197,8 +197,8 @@ void displ_2(void){
 
 //***************************** проверим кнопки управления 0-10v ***************************************
     if(checkTouch()){
-      sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
-      ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
+//sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
+//ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
       if(point_X>220&&point_Y>100&&point_Y<200){
         for (i=8; i<16; i++){if(containsPlus(i)) break;}// проверка нижней половины кнопок
         sprintf(buff,"i=%2u",i);
@@ -207,8 +207,8 @@ void displ_2(void){
             BeepT = 20; 
             if(i%2) x=-1; else x=1;   // кнопка "+" или кнопка "-"
             i /= 2; i -= 4;
-            sprintf(buff,"i=%2u; x=%2i",i,x);
-            ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
+//sprintf(buff,"i=%2u; x=%2i",i,x);
+//ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
             analog[i]+=x*10; if(analog[i]>100) analog[i]=100; else if(analog[i]==9) analog[i]=10; else if(analog[i]<-1) analog[i]=-1;}
       }
       else checkDisplNum();
@@ -222,7 +222,7 @@ void displ_2(void){
     ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
     pointY = pointY+22;    
     };
-
+   if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
 }
 
 void displ_3(void){
@@ -246,7 +246,7 @@ void display(void){
     case 0: displ_0(); break;
     case 1: displ_1(); break;
     case 2: displ_2(); break;
-    case 3: displ_3(); break;
+//    case 3: displ_3(); break;
 //    case 4: displ_4(); break;
 //    case 5: displ_5(); break;
 //    case 6: displ_6(); break;
