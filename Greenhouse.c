@@ -30,10 +30,6 @@ Programm size       : 11358 words (22716 bytes), 69,3% of FLASH 11.09.2022
 #define MAX_MENU        5
 #define MAX_SET         4
 #define MAX_DATE        5
-
-#define ON              1
-#define OFF             0
-#define UNCHANGED       2
 #define MISTAKE         3
 #define ZERO	        50
 
@@ -67,15 +63,24 @@ union {unsigned char buffer[4]; unsigned int val[2];} out;
 //---------------------------------------------------------------------------------
 signed char analog[4]={-1,30,90,-1};
 signed char relay[4]={2,2,2,2};
+unsigned int iPart[4];
 float Told1[5], Told2[5];
 
 //-------------------------
-eeprom signed int set[5][4]={
-                     {270,10, 5, 0},  // Tset; dTalarm; hysteresis;  mode=0 -> нагрев / mode=1 -> охлаждение;
-                     { 55, 5, 5, 0},  // RHset; dRHalarm; hysteresis;  mode=0 -> увлажнение / mode=1 -> осушение;
-                     {250, 8, 4, 0},  // Tset; dTalarm; hysteresis;  mode=0 -> увлажнение / mode=1 -> осушение;
-                     {  5,10, 1, 0},  // tmOn; tmOff; dimension=0 -> секунды / direction=1 -> минуты; dimension=0 -> секунды / direction=1 -> минуты;;
-                     {  0, 0, 0, 0}}; // корекция датчика T; корекция датчика Вл; тип датчика = 0 -> DHT21; Other = 1 -> DHT11
+eeprom signed int set[6][5]={
+                     {270,20,10, 1, 0},  // (ВОЗД.) Tset;  dTalarm;  hysteresis;  mode=1 -> нагрев / mode=0 -> охлаждение;   выход №
+                     { 55,10, 5, 1, 1},  // (ВОЗД.) RHset; dRHalarm; hysteresis;  mode=1 -> увлажнение / mode=0 -> осушение; выход №
+                     {200,20,10, 0, 2},  // (ГРУНТ) Tset;  dTalarm;  hysteresis;  mode=1 -> нагрев / mode=0 -> охлаждение;   выход №
+                     {400,90,50, 0, 3},  // (ГРУНТ) RHset;  dTalarm;  hysteresis;  mode=1 -> нагрев / mode=0 -> охлаждение;   выход №   
+                     {  5,10, 1, 0, 3},  // tmOn; tmOff; dim=0 -> сек. / dim=1 -> мин.; dim=0 -> сек. / dim=1 -> мин.; выход №
+                     {  0, 0, 0, 0, 4}}; // 
+
+eeprom unsigned char limit[4][3]={
+                    // max  kP   kI 
+                      {100, 20, 200}, // 4
+                      {100, 20, 200}, // 5
+                      {100, 20, 200}, // 6
+                      {100, 20, 200}};// 7 
 
 bit Sec;
 bit Clock_Ok;
@@ -117,41 +122,44 @@ char byte;
 
 while (1){
    //----------- функция 1 секунда ---------------------------
-   if(Sec){                     
-     Sec=0; 
-     if(ds18b20) temperature_check();
-     if(Dht){                                         // присутствует датчик влажности
-       if(readDHT()) DHTexist = 3; 
-       else if(DHTexist) DHTexist--;                   // датчик влажности работает? 
-       else {pvT = 1900; pvRH = 190;}
-     }
-     for(byte=0; byte<4; byte++){if(relay[byte]<2) relOut[byte]=relay[byte];}
-     for(byte=0; byte<4; byte++){
-        if(analog[byte]>=0) analogOut[byte] = analog[byte]; else analogOut[byte] = 0; //??????????????
-        dacU[byte] = adapt(analogOut[byte]);// конверсия для ЦАП
-     }
- //    setDAC();                           // подать напряжение на аналоговые выходы
-     // --------КАНАЛ 1 ---------
-     if(Dht){
-       RelayControl(pvT,0);
-       RelayControl(pvRH,1);
-     } 
-     else {
-       RelayControl(t.point[0],0);
-       RelayControl(t.point[1],1);
-     }
-     // --------КАНАЛ 2 --------- 
-//     relayHadl();
-//     analogHadl();
-//     if (displ_num<3) display();
-//     //-- CO2 ----------------------------------
-//     if(CO2module){
-//       byte = readCO2();     // если модуль подключен то обмениваемся командами и обновляем только pvCO2
-//       if(byte) pvCO2 = LowPassF2(pvCO2,3);// если идет измерение СО2 то обновляем Tf[3]
-//       controlCompressorCO2(4);  // Компрессор СО2.
-//     }
-   }
-   //---------------------------------------------------------
+    if(Sec){                     
+        Sec=0; 
+        if(ds18b20) temperature_check();
+        if(Dht){                                         // присутствует датчик влажности
+            if(readDHT()) DHTexist = 3; 
+            else if(DHTexist) DHTexist--;                   // датчик влажности работает? 
+            else {pvT = 1900; pvRH = 190;}
+        }
+        for(byte=0; byte<4; byte++){if(relay[byte]<2) relOut[byte]=relay[byte];}
+        for(byte=0; byte<4; byte++){
+            if(analog[byte]>=0) analogOut[byte] = analog[byte]; else analogOut[byte] = 0; //??????????????
+            dacU[byte] = adapt(analogOut[byte]);// конверсия для ЦАП
+        }
+        //    setDAC();                           // подать напряжение на аналоговые выходы
+        // --------КАНАЛ температура воздуха ---------
+        byte = set[0][4];  // номер выхода
+        if(byte<4){
+         if(Dht) RelaySensor(pvT,0);
+         else if(ds18b20) RelaySensor((t.point[0]+t.point[1])/2,3);  // средняя грунта
+        }
+        else {
+         if(Dht) analogOut[byte-4] = UpdatePI(pvT,0);
+         else if(ds18b20) analogOut[byte-4] = UpdatePI((t.point[0]+t.point[1])/2,3);  // средняя грунта
+        }
+        // --------КАНАЛ влажность воздуха --------- 
+        byte = set[1][4];  // номер выхода
+        if(byte<4) if(Dht) RelaySensor(pvRH,1);
+        else if(Dht) analogOut[byte-4] = UpdatePI(pvRH,1);
+        // --------КАНАЛ температура грунта ---------
+        byte = set[2][4];  // номер выхода
+        if(byte<4){
+         if(Dht && ds18b20) RelaySensor((t.point[0]+t.point[1])/2,3);  // средняя грунта
+        }
+        else {
+         if(Dht && ds18b20) analogOut[byte-4] = UpdatePI((t.point[0]+t.point[1])/2,3);  // средняя грунта
+        }
+    }
+   //---------- функция 1 секунда --------------------------
 //   if(newButton==100) display();
 //   else {touchpad(newButton); newButton=100; display();}
     display();

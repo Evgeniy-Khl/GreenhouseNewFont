@@ -53,9 +53,9 @@ TWSR=0x00;
 ADMUX=ADC_VREF_TYPE & 0xff;
 ADCSRA=0x84;
 
-offsetT = set[4][0];
-offsetRH = set[4][1];
-typeS = set[4][2];
+offsetT = 0;// set[4][0];
+offsetRH = 0;// set[4][1];
+typeS = 0;// set[4][2];
 //setDAC();           // подать напряжение на аналоговые выходы
 delay_ms(1000);
 Dht = readDHT();    // detect DHT-21/11

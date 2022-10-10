@@ -64,7 +64,7 @@ void displ_0(void){
     switch (alarm[0]) {
         case 0: temp=GREEN; break;
         case 1: temp=RED;   break;
-        default: temp=GREEN;
+        default: temp=fillWindow;
     }; 
     ILI9341_FillRectangle(280,pointY+2,30,45,temp);
     pointY += 55;
@@ -73,13 +73,13 @@ void displ_0(void){
     sprintf(buff,"[%3u%%]",set[1][0]); // ЗАДАНИЕ RH
     ILI9341_WriteString(5,pointY+5,buff,Font_11x18,bordWindow,fillWindow,1);
     ILI9341_WriteString(5,pointY+25,"вологысть",Font_11x18,bordWindow,fillWindow,1);
-    if (pvRH>100) sprintf(buff,"***%%",pvRH); else sprintf(buff,"%3u%% ",pvRH);
+    if(pvRH>100) sprintf(buff,"***%%",pvRH); else sprintf(buff,"%3u%% ",pvRH);
     ILI9341_WriteString(142,pointY,buff,Font_11x18,bordWindow,fillWindow,3); 
     // индикация тревоги alarm[1]
     switch (alarm[1]) {
         case 0: temp=GREEN; break;
         case 1: temp=RED;   break;
-        default: temp=GREEN;
+        default: temp=fillWindow;
     };
     ILI9341_FillRectangle(280,pointY+2,30,45,temp);
     if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************      
