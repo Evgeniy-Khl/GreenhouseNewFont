@@ -48,7 +48,7 @@ Programm size       : 11358 words (22716 bytes), 69,3% of FLASH 11.09.2022
 #define ADC_VREF_TYPE   0x40
 
 // Declare your global variables here
-unsigned char BeepT, displ_num, newSetButt, ds18b20, pointY, DHTexist, signchar, intval, frcval, error;
+unsigned char BeepT, displ_num, portOut, newSetButt, ds18b20, pointY, DHTexist, signchar, intval, frcval, error;
 signed char numMenu, numSet/*, displCO2, timerCO2*/;
 unsigned char relOut[4]={0}, analogOut[4]={0}, dacU[4]={ZERO}, buff[40], familycode[MAX_DEVICES][9], clock_buffer[7], alarm[4]={2,2,2,2};
 unsigned int  max_X, max_Y, fillScreen = BLACK;
@@ -95,6 +95,7 @@ bit CheckCO2;           // разрешено использование данных измерителя СО2
 #include "dht.c"
 #include "buttons.c"
 #include "proc.c"
+#include "control.c"
 #include "touchpad.c"
 #include "displ.c"
 
@@ -131,14 +132,14 @@ while (1){
      }
  //    setDAC();                           // подать напряжение на аналоговые выходы
      // --------КАНАЛ 1 ---------
-//     if(Dht){
-//       RelayControl(pvT,0);
-//       RelayControl(pvRH,1);
-//     } 
-//     else {
-//       RelayControl(t.point[0],0);
-//       RelayControl(t.point[1],1);
-//     }
+     if(Dht){
+       RelayControl(pvT,0);
+       RelayControl(pvRH,1);
+     } 
+     else {
+       RelayControl(t.point[0],0);
+       RelayControl(t.point[1],1);
+     }
      // --------КАНАЛ 2 --------- 
 //     relayHadl();
 //     analogHadl();

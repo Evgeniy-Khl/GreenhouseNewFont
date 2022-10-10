@@ -168,60 +168,57 @@ void displ_2(void){
     }
 //***************************** проверим кнопки управления реле ***************************************
     if(checkTouch()){
-//sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
-//ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
-      if(point_X>220&&point_Y<100){
-        for (i=0; i<8; i++){if(containsPlus(i)) break;}// проверка верхней половины кнопок
-        if(i<8){
-            BeepT = 20; 
-            if(i%2) x=-1; else x=1;   // кнопка "+" или кнопка "-"
-            i /= 2;
-            relay[i]+=x; if(relay[i]>2) relay[i]=0; else if(relay[i]<0) relay[i]=2;}
-      }
-      else checkDisplNum();
+    //sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
+    //ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
+        if(point_X>220&&point_Y<100){
+            for (i=0; i<8; i++){if(containsPlus(i)) break;}// проверка верхней половины кнопок
+            if(i<8){
+                BeepT = 20; 
+                if(i%2) x=-1; else x=1;   // кнопка "+" или кнопка "-"
+                i /= 2;
+                relay[i]+=x; if(relay[i]>2) relay[i]=0; else if(relay[i]<0) relay[i]=2;
+            }
+        }
+        else checkDisplNum();
     }
 //---- РЕЛЕЙНЫЕ ВЫХОДЫ ----
     pointY += 20;
     for (i=0;i<4;i++){
-    sprintf(buff,"РЕЛЕ  N%u: ",i+1);
-    switch (relay[i]){
-      case 2: strcat(buff,"АВТ"); break;
-      case 1: strcat(buff,"ON "); relOut[i]=1; break;
-      case 0: strcat(buff,"OFF"); relOut[i]=0; break;
-    };
-    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
-    if(relOut[i]) color_box=YELLOW; else color_box=BLACK;
-    ILI9341_FillRectangle(160,pointY,40,18,color_box);
-    pointY = pointY+22;
+        sprintf(buff,"РЕЛЕ  N%u: ",i+1);
+        if(relay[i]==2) strcat(buff,"АВТ"); else strcat(buff,"РУЧ");
+        ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
+        if(relOut[i]) color_box=YELLOW; else color_box=BLACK;
+        ILI9341_FillRectangle(160,pointY,40,18,color_box);
+        pointY = pointY+22;
     }
-
 //***************************** проверим кнопки управления 0-10v ***************************************
     if(checkTouch()){
-//sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
-//ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
-      if(point_X>220&&point_Y>100&&point_Y<200){
-        for (i=8; i<16; i++){if(containsPlus(i)) break;}// проверка нижней половины кнопок
-        sprintf(buff,"i=%2u",i);
-        ILI9341_WriteString(5,TFTBUTTON-30,buff,Font_11x18,WHITE,BLACK,1);
-        if(i<16){
-            BeepT = 20; 
-            if(i%2) x=-1; else x=1;   // кнопка "+" или кнопка "-"
-            i /= 2; i -= 4;
-//sprintf(buff,"i=%2u; x=%2i",i,x);
-//ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
-            analog[i]+=x*10; if(analog[i]>100) analog[i]=100; else if(analog[i]==9) analog[i]=10; else if(analog[i]<-1) analog[i]=-1;}
-      }
-      else checkDisplNum();
+    //sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
+    //ILI9341_WriteString(5,TFTBUTTON-60,buff,Font_11x18,WHITE,BLACK,1);
+        if(point_X>220&&point_Y>100&&point_Y<200){
+            for (i=8; i<16; i++){if(containsPlus(i)) break;}// проверка нижней половины кнопок
+            sprintf(buff,"i=%2u",i);
+            ILI9341_WriteString(5,TFTBUTTON-30,buff,Font_11x18,WHITE,BLACK,1);
+            if(i<16){
+                BeepT = 20; 
+                if(i%2) x=-1; else x=1;   // кнопка "+" или кнопка "-"
+                i /= 2; i -= 4;
+            //sprintf(buff,"i=%2u; x=%2i",i,x);
+            //ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
+                analog[i]+=x*10; if(analog[i]>100) analog[i]=100; else if(analog[i]==9) analog[i]=10; else if(analog[i]<-1) analog[i]=-1;
+            }
+        }
+        else checkDisplNum();
     }
 //---- АНАЛОГОВЫЕ ВЫХОДЫ ----
     for (i=0;i<4;i++){
-    sprintf(buff,"ВИХЫД N%u: ",i+1);
-    if(analog[i]==-1) strcat(buff,"АВТ"); else {strcat(buff,"РУЧ"); analogOut[i]=analog[i];}
-    sprintf(txt," %3u%% ",analogOut[i]);
-    strcat(buff,txt);
-    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
-    pointY = pointY+22;    
-    };
+        sprintf(buff,"ВИХЫД N%u: ",i+1);
+        if(analog[i]==-1) strcat(buff,"АВТ"); else {strcat(buff,"РУЧ"); analogOut[i]=analog[i];}
+        sprintf(txt," %3u%% ",analogOut[i]);
+        strcat(buff,txt);
+        ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
+        pointY = pointY+22;    
+    }
    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
 }
 
