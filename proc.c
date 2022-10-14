@@ -285,9 +285,7 @@ void timerRTC(unsigned char prg){
     else  if(--timerOn==0){
         timerOn = 1;
         portOut &= ~byte; relOut[port] = 0;
-        
-//        timerOff = ;
-         
+        sprintf(txtTimer,"OFF режим роботи %u",prg);        
     }
     else {
         dimOn = timerOn/3600;

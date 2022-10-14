@@ -1,4 +1,4 @@
-unsigned char txt[10];
+unsigned char txt[20];
 
 void fraction(signed int t){
   if (t<0) {t = -t; signchar = '-';} else signchar = ' ';
@@ -31,8 +31,8 @@ void displ_0(void){
         ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
         initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
         //---------- фон ------- рамкa --- текст - номер -текст ---------
-        drawButton(fillWindow, fillWindow, bordWindow, 0, "Повытря");
-        drawButton(WHITE, WHITE, BLACK, 1, "Грунт");
+        drawButton(fillWindow, fillWindow, bordWindow, 0, "Перший");
+        drawButton(WHITE, WHITE, BLACK, 1, "Другий");
         drawButton(WHITE, WHITE, BLACK, 2, "Управл");
         drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
     }
@@ -84,34 +84,18 @@ void displ_0(void){
         default: temp=fillWindow;
     };
     ILI9341_FillRectangle(280,pointY+2,30,45,temp);
-    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************      
-//--- Индикация CO2 ----
-//CO2module = 1;
-//pHsensor = 1;
-//pvCO2 = 2500;
-//pvPH = 75;
-    pointY += 55;
-    if(CO2module){
-    if(error&0x08) ILI9341_WriteString(10,pointY,"CO2 помилка модуля!",Font_11x18,YELLOW,RED,1);
-    else {
-        sprintf(buff,"CO2   %4u",pvCO2);
-        ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
-        ILI9341_WriteString(250,pointY+10,"ppm",Font_11x18,bordWindow,fillWindow,1);
-    }
-    }
-    else ILI9341_WriteString(10,pointY,"CO2 модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
-//--- Индикация рH-4502 -----
-    pointY += 35;
-    if(pHsensor){
-        if(error&0x08) ILI9341_WriteString(10,pointY,"рН помилка модуля!",Font_11x18,YELLOW,RED,1);
-        else {
-          temp = pvPH; fraction(temp);
-          sprintf(buff,"рН   %2u.%u",intval,frcval);
-          ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
-          ILI9341_WriteString(230,pointY+10,"одиниць",Font_11x18,bordWindow,fillWindow,1);
-        }
-    }
-    else ILI9341_WriteString(10,pointY,"рН  модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
+    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
+// --- Состояние ТАЙМЕРОВ -------
+    pointY += 60;
+    ILI9341_WriteString(90,pointY,"СТАН ТАЙМЕРЫВ",Font_11x18,bordWindow,fillWindow,1);
+    pointY += 20;
+    sprintf(buff,"таймер 1 ");
+    strcat(buff,txtTimer);
+    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
+    pointY += 20;
+    sprintf(buff,"таймер 2 ");
+    strcat(buff,txt);
+    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);      
     if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
 }
 
@@ -125,8 +109,8 @@ void displ_1(void){
         ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
         initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
         //---------- фон ------- рамкa --- текст - номер -текст ---------
-        drawButton(WHITE, WHITE, BLACK, 0, "Повытря");
-        drawButton(fillWindow, fillWindow, bordWindow, 1, "Грунт");
+        drawButton(WHITE, WHITE, BLACK, 0, "Перший");
+        drawButton(fillWindow, fillWindow, bordWindow, 1, "Другий");
         drawButton(WHITE, WHITE, BLACK, 2, "Управл");
         drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
         ILI9341_WriteString(100,pointY,"СТАН ГРУНТУ",Font_11x18,bordWindow,fillWindow,1);
@@ -145,16 +129,43 @@ void displ_1(void){
         ILI9341_WriteString(90,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
         pointY += 35;
     };
-    pointY += 5;
-    ILI9341_WriteString(90,pointY,"СТАН ТАЙМЕРЫВ",Font_11x18,bordWindow,fillWindow,1);
-    pointY += 20;
-    sprintf(buff,"таймер 1 ");
-    strcat(buff,txtTimer);
-    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
-    pointY += 20;
-    sprintf(buff,"таймер 2 ");
-    strcat(buff,txt);
-    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
+    pointY += 10;
+//--- Модуль грунта ---
+    if(Soilmodule){
+        if(error&0x08) ILI9341_WriteString(10,pointY,"Помилка модуля грунту!",Font_11x18,YELLOW,RED,1);
+        else {
+            sprintf(buff,"грунт   ---%%");
+            ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+        }
+    }
+    else ILI9341_WriteString(10,pointY,"Модуль грунту выдсутный.",Font_11x18,bordWindow,fillWindow,1);
+    pointY += 30;
+//--- Модуль CO2 ----
+//CO2module = 1;
+//pHsensor = 1;
+//pvCO2 = 2500;
+//pvPH = 75;
+    if(CO2module){
+        if(error&0x08) ILI9341_WriteString(10,pointY,"CO2 помилка модуля!",Font_11x18,YELLOW,RED,1);
+        else {
+            sprintf(buff,"CO2   %4u",pvCO2);
+            ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+            ILI9341_WriteString(250,pointY+10,"ppm",Font_11x18,bordWindow,fillWindow,1);
+        }
+    }
+    else ILI9341_WriteString(10,pointY,"CO2 модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
+//--- Модуль рH-4502 -----
+    pointY += 30;
+    if(pHsensor){
+        if(error&0x08) ILI9341_WriteString(10,pointY,"рН помилка модуля!",Font_11x18,YELLOW,RED,1);
+        else {
+          temp = pvPH; fraction(temp);
+          sprintf(buff,"рН   %2u.%u",intval,frcval);
+          ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+          ILI9341_WriteString(230,pointY+10,"одиниць",Font_11x18,bordWindow,fillWindow,1);
+        }
+    }
+    else ILI9341_WriteString(10,pointY,"рН  модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
     if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
 }
 
@@ -168,8 +179,8 @@ void displ_2(void){
         ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
         initializeButtons(4,1,25);// 4 колонки; одна строка; высота 25
         //---------- фон ------- рамкa --- текст - номер -текст ---------
-        drawButton(WHITE, WHITE, BLACK, 0, "Повытря");
-        drawButton(WHITE, WHITE, BLACK, 1, "Грунт");
+        drawButton(WHITE, WHITE, BLACK, 0, "Перший");
+        drawButton(WHITE, WHITE, BLACK, 1, "Другий");
         drawButton(fillWindow, fillWindow, bordWindow, 2, "Управл");
         drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
         //--

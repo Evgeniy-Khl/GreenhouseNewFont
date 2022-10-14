@@ -67,8 +67,8 @@ eeprom signed char relaySet[4]={2,2,2,2};
 eeprom signed char analogSet[4]={-1,30,90,-1};
 
 eeprom signed int set[6][7]={
-{ 270, 200,  50,  10,   1,   0,   0},  // (ВОЗД.) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход № РЕЛЕ1
-{  55,  50,  10,   5,   1,   0,   1},  // (ВОЗД.) RHday; RHnight; dRHalarm; hysteresis;  mode=1(увлажнение)/mode=0(осушение); DHT22=0; выход № РЕЛЕ2
+{ 270, 200,  50,  10,   0,   0,   0},  // (ВОЗД.) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход № РЕЛЕ1
+{  55,  50,  10,   5,   0,   0,   1},  // (ВОЗД.) RHday; RHnight; dRHalarm; hysteresis;  mode=1(увлажнение)/mode=0(осушение); DHT22=0; выход № РЕЛЕ2
 { 200, 180,  50,  10,   0,   0,   4},  // (ГРУНТ) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход №
 { 400, 350, 100,  50,   0,   0,   5},  // (ГРУНТ) RHday; RHnight;  dTalarm;  hysteresis; mode=1(увлажнение)/mode=0(осушение); резерв;  выход №   
 {  10,  10,   1,   0,0x07,   0,   2},  // tmOn; tmOff; dim=0(сек.)/dim=1(мин.)/dim=2(час.); dim; HourStart; Programm;                  выход № РЕЛЕ3
@@ -116,7 +116,7 @@ interrupt [TIM1_OVF] void timer_comp_isr(void){
 
 void main(void){
 // Declare your local variables here
-char x, byte;
+signed char x, byte;
 #include "init.c"
 
 while (1){
@@ -130,20 +130,22 @@ while (1){
         if(byte==0) timerCheck();                   // простой таймер
         else timerRTC(byte);                        // таймер по программе
         
-        if(clock_buffer[2]>=set[5][2]&&clock_buffer[2]<set[5][3]) x=1; else x=0; // Light0Beg; Light0End;
-        if(x==0){if(clock_buffer[2]>=set[5][4]&&clock_buffer[2]<set[5][5]) x=1; else x=0;}//Light1Beg; Light1End;
+        if(clock_buffer[2]>=set[5][2]&&clock_buffer[2]<set[5][3]) x=1; else x=-1; // Light0Beg; Light0End;
+        if(x==0){if(clock_buffer[2]>=set[5][4]&&clock_buffer[2]<set[5][5]) x=2; else x=-2;}//Light1Beg; Light1End;
         byte = set[5][6];  // № выхода таймера
-        if(x){
+        if(x>0){
             relOut[byte] = 1;
             byte = 1 << byte;
             portOut |= byte;
-            sprintf(txt,"ON");
+            if(x==1) byte = rtcTodec(set[5][3])-1; else byte = rtcTodec(set[5][5])-1;            
+            sprintf(txt,"ON  выдкл.%02u:59:59",byte);
         } 
         else {
             relOut[byte] = 0;
             byte = 1 << byte;
             portOut &= ~byte;
-            sprintf(txt,"OFF");
+            if(x==-1) byte = rtcTodec(set[5][2]); else byte = rtcTodec(set[5][4])-1;
+            sprintf(txt,"OFF включ.%02u:00:00",byte);
         }
         
         if(ds18b20) temperature_check();
@@ -159,7 +161,7 @@ while (1){
         }
         //    setDAC();                           // подать напряжение на аналоговые выходы
         // --------КАНАЛ температура воздуха ---------
-        byte = set[0][4];  // номер выхода
+        byte = set[0][6];  // номер выхода
         if(byte<4){
          if(Dht) RelaySensor(pvT,0);
          else if(ds18b20) RelaySensor((t.point[0]+t.point[1])/2,3);  // средняя грунта
@@ -169,11 +171,11 @@ while (1){
          else if(ds18b20) analogOut[byte-4] = UpdatePI((t.point[0]+t.point[1])/2,3);  // средняя грунта
         }
         // --------КАНАЛ влажность воздуха --------- 
-        byte = set[1][4];  // номер выхода
+        byte = set[1][6];  // номер выхода
         if(byte<4) if(Dht) RelaySensor(pvRH,1);
         else if(Dht) analogOut[byte-4] = UpdatePI(pvRH,1);
         // --------КАНАЛ температура грунта ---------
-        byte = set[2][4];  // номер выхода
+        byte = set[2][6];  // номер выхода
         if(byte<4){
          if(Dht && ds18b20) RelaySensor((t.point[0]+t.point[1])/2,3);  // средняя грунта
         }
