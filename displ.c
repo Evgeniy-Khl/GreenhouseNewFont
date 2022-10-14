@@ -39,9 +39,11 @@ void displ_0(void){
 //--- Индикация часов ------
     pointY = 3;
     if(Clock_Ok){
+        if(Night) ILI9341_WriteString(5,pointY,"НЫЧ ",Font_11x18,WHITE,BLACK,1); else ILI9341_WriteString(5,pointY,"ДЕНЬ",Font_11x18,BLACK,WHITE,1);
         read_TWI(DS3231,0,clock_buffer,7);// чтение данных часовой микросхемы
         sprintf(buff,"%02x:%02x   %02x.%02x.20%02x",clock_buffer[2],clock_buffer[1],clock_buffer[4],clock_buffer[5],clock_buffer[6]);//час:мин дата.мес.год
-        ILI9341_WriteString(70,pointY,buff,Font_11x18,BLACK,WHITE,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,WHITE,BLACK,1);// "БЕГУЩАЯ СТРОКА"
+        if(Night){ILI9341_WriteString(70,pointY,buff,Font_11x18,WHITE,GRAY1,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,WHITE,BLACK,1);}// "БЕГУЩАЯ СТРОКА"
+        else {ILI9341_WriteString(70,pointY,buff,Font_11x18,BLACK,GRAY1,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,BLACK,WHITE,1);}
     }
     else {
         sprintf(buff,"Помилка часыв!"); 
@@ -50,8 +52,8 @@ void displ_0(void){
     pointY += 22;
     if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
 //--- Индикация t ВОЗДУХА -----
-    temp = set[0][0]; fraction(temp);     // проверка знака температуры
-    sprintf(buff,"[%2u.%u]",intval,frcval); // ЗАДАНИЕ T показываем с десятичным знаком
+    temp = set[0][Night]; fraction(temp);     // проверка знака температуры
+    sprintf(buff,"[%2u.%u]",intval,frcval);   // ЗАДАНИЕ T показываем с десятичным знаком
     ILI9341_WriteString(5,pointY+5,buff,Font_11x18,bordWindow,fillWindow,1);
     ILI9341_WriteString(5,pointY+25,"температура",Font_11x18,bordWindow,fillWindow,1);
     if (pvT>1250) sprintf(buff,"**.*");
@@ -70,10 +72,10 @@ void displ_0(void){
     pointY += 55;
     if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
 //--- Индикация RH ------
-    sprintf(buff,"[%3u%%]",set[1][0]); // ЗАДАНИЕ RH
+    sprintf(buff,"[%3u%%]",set[1][Night]); // ЗАДАНИЕ RH
     ILI9341_WriteString(5,pointY+5,buff,Font_11x18,bordWindow,fillWindow,1);
     ILI9341_WriteString(5,pointY+25,"вологысть",Font_11x18,bordWindow,fillWindow,1);
-    if(pvRH>100) sprintf(buff,"***%%",pvRH); else sprintf(buff,"%3u%% ",pvRH);
+    if(pvRH>100) sprintf(buff,"***%%",pvRH); else sprintf(buff,"%3u%%",pvRH);
     ILI9341_WriteString(142,pointY,buff,Font_11x18,bordWindow,fillWindow,3); 
     // индикация тревоги alarm[1]
     switch (alarm[1]) {
@@ -132,17 +134,30 @@ void displ_1(void){
 //--- Индикация t ГРУНТА ---
     pointY += 20;
     for (i=0;i<ds18b20;i++){
-        sprintf(buff,"датчик %u",i+1);
+        sprintf(buff,"зона %u",i+1);
         ILI9341_WriteString(5,pointY+12,buff,Font_11x18,bordWindow,fillWindow,1);
         temp = t.point[i];
         if(temp>1250) sprintf(buff,"**.*");
         else {
             fraction(temp);     // проверка знака температуры
-            sprintf(buff,"%2u.%u",intval,frcval); // T датчиков показываем с десятичным знаком 
+            sprintf(buff,"%2u.%u  ---%%",intval,frcval); // T датчиков показываем с десятичным знаком 
         }
-        ILI9341_WriteString(120,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+        ILI9341_WriteString(90,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
         pointY += 35;
     };
+    pointY += 5;
+    ILI9341_WriteString(90,pointY,"СТАН ТАЙМЕРЫВ",Font_11x18,bordWindow,fillWindow,1);
+    pointY += 20;
+    i=0;
+    sprintf(buff,"таймер %u ",i+1);
+    strcat(buff,txtTimer);
+    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
+//    for (i=0;i<3;i++){
+//        sprintf(buff,"таймер %u ВКЛ залиш. 00:00:00",i+1);
+//        ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
+//        
+//        pointY += 20;
+//    };
     if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
 }
 
@@ -176,7 +191,7 @@ void displ_2(void){
                 BeepT = 20; 
                 if(i%2) x=-1; else x=1;   // кнопка "+" или кнопка "-"
                 i /= 2;
-                relay[i]+=x; if(relay[i]>2) relay[i]=0; else if(relay[i]<0) relay[i]=2;
+                relaySet[i]+=x; if(relaySet[i]>2) relaySet[i]=0; else if(relaySet[i]<0) relaySet[i]=2;
             }
         }
         else checkDisplNum();
@@ -185,7 +200,7 @@ void displ_2(void){
     pointY += 20;
     for (i=0;i<4;i++){
         sprintf(buff,"РЕЛЕ  N%u: ",i+1);
-        if(relay[i]==2) strcat(buff,"АВТ"); else strcat(buff,"РУЧ");
+        if(relaySet[i]==2) strcat(buff,"АВТ"); else strcat(buff,"РУЧ");
         ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
         if(relOut[i]) color_box=YELLOW; else color_box=BLACK;
         ILI9341_FillRectangle(160,pointY,40,18,color_box);
@@ -205,7 +220,7 @@ void displ_2(void){
                 i /= 2; i -= 4;
             //sprintf(buff,"i=%2u; x=%2i",i,x);
             //ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1);
-                analog[i]+=x*10; if(analog[i]>100) analog[i]=100; else if(analog[i]==9) analog[i]=10; else if(analog[i]<-1) analog[i]=-1;
+                analogSet[i]+=x*10; if(analogSet[i]>100) analogSet[i]=100; else if(analogSet[i]==9) analogSet[i]=10; else if(analogSet[i]<-1) analogSet[i]=-1;
             }
         }
         else checkDisplNum();
@@ -213,7 +228,7 @@ void displ_2(void){
 //---- АНАЛОГОВЫЕ ВЫХОДЫ ----
     for (i=0;i<4;i++){
         sprintf(buff,"ВИХЫД N%u: ",i+1);
-        if(analog[i]==-1) strcat(buff,"АВТ"); else {strcat(buff,"РУЧ"); analogOut[i]=analog[i];}
+        if(analogSet[i]==-1) strcat(buff,"АВТ"); else {strcat(buff,"РУЧ"); analogOut[i]=analogSet[i];}
         sprintf(txt," %3u%% ",analogOut[i]);
         strcat(buff,txt);
         ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);

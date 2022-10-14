@@ -3,7 +3,7 @@
 #define dhtpin PINB.0
 
 unsigned char startDHT(void){
-   unsigned char flag=0;
+   unsigned char flag=0,typeS = set[1][5];
    dhtport = 0;
    dhtddr = 1;   // MCU pull down
    if(typeS) delay_ms(30); // MCU Sends out Start Signal to DHT and pull down voltage for at least 18ms to let DHT11 detect the signal.

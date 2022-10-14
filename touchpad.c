@@ -176,7 +176,7 @@ void touchpad(char byte){
             case 1: if (--numSet<0) numSet = 0;    break;
             case 2: if (++numSet>MAX_SET-1) numSet = MAX_SET-1;    break;
             case 3: displ_num = 8; newSetButt = 1; 
-                for (byte=0;byte<MAX_SET;byte++) newval[byte] = analog[byte]; break;
+                for (byte=0;byte<MAX_SET;byte++) newval[byte] = analogSet[byte]; break;
             break;
           }
           byte = 10;
@@ -188,7 +188,7 @@ void touchpad(char byte){
             case 1: if (--numSet<0) numSet = 0;    break;
             case 2: if (++numSet>MAX_SET-1) numSet = MAX_SET-1;    break;
             case 3: displ_num = 9; newSetButt = 1; 
-                for (byte=0;byte<MAX_SET;byte++) newval[byte] = relay[byte]; break;
+                for (byte=0;byte<MAX_SET;byte++) newval[byte] = relaySet[byte]; break;
             break;
           }
           byte = 10;
@@ -201,7 +201,7 @@ void touchpad(char byte){
             case 2: if(--newval[numSet]<-1) newval[numSet] = -1; break;
             case 3: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
                   ILI9341_WriteString(5,100,"ÂÛÏÎËÍßÞ  ÇÀÏÈÑÜ",Font_11x18,GREEN,fillScreen,1);
-                  analog[numSet] = newval[numSet];
+                  analogSet[numSet] = newval[numSet];
                   delay_ms(1000);
                   displ_num = 6; newSetButt = 1; break;
           }
@@ -215,7 +215,7 @@ void touchpad(char byte){
             case 2: if(--newval[numSet]<0) newval[numSet]= 0; break;
             case 3: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
                   ILI9341_WriteString(5,100,"ÂÛÏÎËÍßÞ  ÇÀÏÈÑÜ",Font_11x18,GREEN,fillScreen,1);
-                  relay[numSet] = newval[numSet];
+                  relaySet[numSet] = newval[numSet];
                   delay_ms(1000);
                   displ_num = 7; newSetButt = 1; break;
           }

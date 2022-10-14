@@ -7,11 +7,13 @@
 // ch = 2 -> (ГРУНТ) [0]Tday;  [1]Tnight;  [2]dTalarm;  [3]hysteresis;  [4]mode=1 -> нагрев / mode=0 -> отключен;   [5]выход № 4 или 0
 // ch = 3 -> (ГРУНТ) [0]RHday; [1]RHnight; [2]dTalarm;  [3]hysteresis;  [4]mode=1 -> увлажн / mode=0 -> отключен;   [5]выход № 5 или 1
 void RelaySensor(signed int val, unsigned char ch){
- char x=UNCHANGED, byte;
+ char x=UNCHANGED, byte;                           
  signed int error;
-    error = set[ch][night]-val;              // ошибка регулирования
-    if(abs(error)>set[ch][2])alarm[ch] = 1;  // maxError
-    else alarm[ch] = 0;
+    byte = set[ch][2];                       // уставка аварии
+    error = set[ch][Night]-val;              // ошибка регулирования
+    if(abs(error)<(byte/2)) ok |= (1<<ch);   // достигли заданного значения
+    if(abs(error)>byte) byte |= (1<<ch); else byte = 0;// авария
+    if(ok&byte) alarm[ch] = 1; else if(ok&(1<<ch)) alarm[ch] = 0; else alarm[ch] = 2;// авария или норма или еще не вышли на заданное значение
     if(set[ch][4]){                          // mode=1 -> нагрев / увлажнение
         if(error-set[ch][3] > 0) x = ON;     // включить
         if(error < 0) x = OFF;               // отключить
@@ -21,7 +23,7 @@ void RelaySensor(signed int val, unsigned char ch){
         if(error > 0) x = OFF;               // отключить
     }
     if(x<UNCHANGED) {
-        byte = 1 << set[ch][5];              // № реле
+        byte = 1 << set[ch][6];              // № реле
         if(x) {portOut |= byte; relOut[ch] = 1;}
         else {portOut &= ~byte; relOut[ch] = 0;}
     }
@@ -32,8 +34,8 @@ unsigned char UpdatePI(signed int val, char i){// i-> индекс iPart[i]; time-> пе
   float pPart, Kp, Ki, Ud;
     Kp = (float) limit[i][1]/4;               // Пропорциональный    limit[i][1]=20/4=5
     Ki = (float) limit[i][2]*100;             // Интегральный        limit[i][2]=200*100=20000
-    if(set[i][4]) error = set[i][night]-val;  // mode=1 ошибка регулирования
-    else error = val - set[i][night];         // mode=0 ошибка регулирования
+    if(set[i][4]) error = set[i][Night]-val;  // mode=1 ошибка регулирования
+    else error = val - set[i][Night];         // mode=0 ошибка регулирования
     pPart = (float) Kp * error;               // расчет пропорциональной части
 //---- функция ограничения pPart -----------------------------
     if(pPart <0){pPart = 0; iPart[i] = 0;} else if(pPart > 100) pPart = 100; // функция ограничения ????? if(pPart <=0)

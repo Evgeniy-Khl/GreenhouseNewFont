@@ -1,5 +1,7 @@
 #define TUNING    170
 
+unsigned char txtTimer[20];
+
 void temperature_check(void)
 {
  int val;
@@ -99,31 +101,84 @@ char Bcd2ToByte(char Value)
 //  return val;
 //}
 
-void setDAC(void) // V = Vref x (255/256)
-{
-unsigned char i, val;
-  for (i=0; i<4; i++){
-     switch (i){
-        case 0: CSDAC1 = 0; break;
-        case 1: CSDAC2 = 0; break;
-        case 2: CSDAC3 = 0; break;
-        case 3: CSDAC4 = 0; break;
-     }
-     SPCR = SPI_MOUD_FL;// SPI port enabled
-     val = dacU[i]>>4;
-     SPDR = val & 0x0F; // Load Register to DAC
-     while (!(SPSR & (1<<SPIF)));     // ожидаем конца передачи по SPI Opcode
-     val = dacU[i]<<4;
-     SPDR = val & 0xF0;
-     while (!(SPSR & (1<<SPIF)));     // ожидаем конца передачи по SPI Opcode
-     PORTD|=0xF0;       // INSTRUCTION EXECUTED
-  };
-  SPCR = 0;             //disable SPI
+void setDAC(void){ // V = Vref x (255/256)
+  unsigned char i, val;
+    for (i=0; i<4; i++){
+        switch (i){
+            case 0: CSDAC1 = 0; break;
+            case 1: CSDAC2 = 0; break;
+            case 2: CSDAC3 = 0; break;
+            case 3: CSDAC4 = 0; break;
+        }
+        SPCR = SPI_MOUD_FL;// SPI port enabled
+        val = dacU[i]>>4;
+        SPDR = val & 0x0F; // Load Register to DAC
+        while (!(SPSR & (1<<SPIF)));     // ожидаем конца передачи по SPI Opcode
+        val = dacU[i]<<4;
+        SPDR = val & 0xF0;
+        while (!(SPSR & (1<<SPIF)));     // ожидаем конца передачи по SPI Opcode
+        PORTD|=0xF0;       // INSTRUCTION EXECUTED
+    };
+    SPCR = 0;             //disable SPI
 }
 
-unsigned char adapt(unsigned char n)
-{
-  if (n>100) n=100;
-  n <<= 1; n += ZERO;
-  return n;
+unsigned char adapt(unsigned char n){
+    if (n>100) n=100;
+    n <<= 1; n += ZERO;
+    return n;
+}
+
+unsigned char rtcTodec(unsigned char rtc){
+  unsigned char res;
+    res = (rtc>>4)*10;
+    res += (rtc&0x0F);
+    return res;
+}
+
+unsigned char decToRtc(unsigned char dec){
+  unsigned char res;
+    res = (dec / 10)*16;
+    res <<= 4;
+    res += dec%10;
+    return res;
+}
+
+unsigned char calcRtc(unsigned char rtc, signed char val){
+  unsigned char res;
+    res = rtcTodec(rtc);
+    res += val;
+    res = decToRtc(res);
+    return res;
+}
+
+void timerCheck(void){
+ unsigned char byte, port, dimOn=set[4][3], dimOff=set[4][4];
+    port = set[4][6];  // № выхода таймера
+    byte = 1 << port;
+    if(portOut&byte){
+        if(--timerOn==0){
+            if(dimOff) timerOff = (int)set[4][1]*60; 
+            else timerOff = set[4][1];
+            portOut &= ~byte; relOut[port] = 0; 
+        }
+        else {
+            dimOff = timerOn/3600;
+            port = (timerOn%3600)/60;
+            byte = (timerOn%3600)%60;
+            sprintf(txtTimer,"ON  залиш.%02u:%02u:%02u",dimOff,port,byte);
+        }
+    }
+    else {
+        if(--timerOff==0){
+            if(dimOn) timerOn = (int)set[4][0]*60; 
+            else timerOn = set[4][0];
+            portOut |= byte; relOut[port] = 1; 
+        }
+        else {
+            dimOff = timerOff/3600;
+            port = (timerOff%3600)/60;
+            byte = (timerOff%3600)%60;
+            sprintf(txtTimer,"OFF залиш.%02u:%02u:%02u",dimOff,port,byte);
+        }    
+    }
 }

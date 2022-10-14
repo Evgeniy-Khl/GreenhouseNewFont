@@ -44,10 +44,10 @@ Programm size       : 11358 words (22716 bytes), 69,3% of FLASH 11.09.2022
 #define ADC_VREF_TYPE   0x40
 
 // Declare your global variables here
-unsigned char BeepT, displ_num, night, portOut, newSetButt, ds18b20, pointY, DHTexist, signchar, intval, frcval, error;
+unsigned char BeepT, displ_num, ok, portOut, newSetButt, ds18b20, pointY, DHTexist, signchar, intval, frcval, error;
 signed char numMenu, numSet/*, displCO2, timerCO2*/;
 unsigned char relOut[4]={0}, analogOut[4]={0}, dacU[4]={ZERO}, buff[40], familycode[MAX_DEVICES][9], clock_buffer[7], alarm[4]={2,2,2,2};
-unsigned int  max_X, max_Y, fillScreen = BLACK;
+unsigned int  max_X, max_Y, timerOn, timerOff, fillScreen = BLACK;
 signed int pvT=1990, offsetT, pvRH=1990, offsetRH, pvCO2, pvPH, newval[MAX_DATE];
 unsigned char *ptr_char;
 const char* setMenu[MAX_MENU]={"Температура","Влажность","Таймер","Настройки","Время и Дата"};
@@ -61,19 +61,20 @@ union {unsigned char buffer[8]; unsigned int pvT;} ds;          // буффер микрос
 union {unsigned char buffer[4]; unsigned int val[2];} in;
 union {unsigned char buffer[4]; unsigned int val[2];} out;
 //---------------------------------------------------------------------------------
-signed char analog[4]={-1,30,90,-1};
-signed char relay[4]={2,2,2,2};
 signed int iPart[4];
 float Told1[5], Told2[5];
 
 //-------------------------
-eeprom signed int set[6][6]={
-                     {270,200,20,10, 1, 0},  // (ВОЗД.) Tday; Tnight;  dTalarm;  hysteresis;  mode=1 -> нагрев / mode=0 -> охлаждение;   выход №
-                     { 55, 50,10, 5, 1, 1},  // (ВОЗД.) RHday; RHnight; dRHalarm; hysteresis;  mode=1 -> увлажнение / mode=0 -> осушение; выход №
-                     {200,180,20,10, 0, 2},  // (ГРУНТ) Tday; Tnight;  dTalarm;  hysteresis;  mode=1 -> нагрев / mode=0 -> охлаждение;   выход №
-                     {400,350,90,50, 0, 3},  // (ГРУНТ) RHday; RHnight;  dTalarm;  hysteresis;  mode=1 -> нагрев / mode=0 -> охлаждение;   выход №   
-                     {  5, 10, 0, 1, 0, 3},  // tmOn; tmOff; dim=0 -> сек. / dim=1 -> мин.; dim=0 -> сек. / dim=1 -> мин.; выход №
-                     {  0,  0, 0, 0, 0, 4}}; // 
+eeprom signed char relaySet[4]={2,2,2,2};
+eeprom signed char analogSet[4]={-1,30,90,-1};
+
+eeprom signed int set[6][7]={
+{ 270, 200,  50,  10,   1,   0,   0},  // (ВОЗД.) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход № РЕЛЕ1
+{  55,  50,  10,   5,   1,   0,   1},  // (ВОЗД.) RHday; RHnight; dRHalarm; hysteresis;  mode=1(увлажнение)/mode=0(осушение); DHT22=0; выход № РЕЛЕ2
+{ 200, 180,  50,  10,   0,   0,   4},  // (ГРУНТ) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход №
+{ 400, 350, 100,  50,   0,   0,   5},  // (ГРУНТ) RHday; RHnight;  dTalarm;  hysteresis; mode=1(увлажнение)/mode=0(осушение); резерв;  выход №   
+{  30,  10,   1,   0,0x07,   0,   2},  // tmOn; tmOff; dim=0(сек.)/dim=1(мин.)/dim=2(час.); dim; HourStart; Programm;                  выход № РЕЛЕ3
+{0x07,0x20,0x05,0x09,0x18,0x23,   3}}; // DayBeg; DayEnd; Light0Beg; Light0End; Light1Beg; Light1End;                                  выход № РЕЛЕ4
 
 eeprom unsigned char limit[4][3]={
                     // max  kP   kI 
@@ -82,14 +83,14 @@ eeprom unsigned char limit[4][3]={
                       {100, 20, 200}, // 6
                       {100, 20, 200}};// 7 
 
+bit Night;
 bit Sec;
-bit Clock_Ok;
 bit Dht;
-bit Soil;
+bit Clock_Ok;
 bit pHsensor;
-bit typeS;
-bit CO2module;          // подключен измеритель СО2
-bit CheckCO2;           // разрешено использование данных измерителя СО2
+bit Soilmodule;
+bit CO2module;       // подключен измеритель СО2
+bit typeS;           // DHT11/DHT22
 
 //- prototypes ------
 
@@ -123,16 +124,19 @@ char byte;
 while (1){
    //----------- функция 1 секунда ---------------------------
     if(Sec){                     
-        Sec=0; 
+        Sec=0;
+        if(clock_buffer[2]>=set[5][0]&&clock_buffer[2]<set[5][1]) byte=0; else byte=1;
+        if(byte!=Night){Night = byte; ok = 0;}
+        if(set[4][5]==0) timerCheck();                   // простой таймер
         if(ds18b20) temperature_check();
         if(Dht){                                         // присутствует датчик влажности
             if(readDHT()) DHTexist = 3; 
             else if(DHTexist) DHTexist--;                   // датчик влажности работает? 
             else {pvT = 1900; pvRH = 190;}
         }
-        for(byte=0; byte<4; byte++){if(relay[byte]<2) relOut[byte]=relay[byte];}
+        for(byte=0; byte<4; byte++){if(relaySet[byte]<2) relOut[byte]=relaySet[byte];}
         for(byte=0; byte<4; byte++){
-            if(analog[byte]>=0) analogOut[byte] = analog[byte]; else analogOut[byte] = 0; //??????????????
+            if(analogSet[byte]>=0) analogOut[byte] = analogSet[byte]; else analogOut[byte] = 0; //??????????????
             dacU[byte] = adapt(analogOut[byte]);// конверсия для ЦАП
         }
         //    setDAC();                           // подать напряжение на аналоговые выходы

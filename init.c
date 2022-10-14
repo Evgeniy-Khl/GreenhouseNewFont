@@ -55,7 +55,7 @@ ADCSRA=0x84;
 
 offsetT = 0;// set[4][0];
 offsetRH = 0;// set[4][1];
-typeS = 0;// set[4][2];
+typeS = set[1][5];
 //setDAC();           // подать напряжение на аналоговые выходы
 delay_ms(1000);
 Dht = readDHT();    // detect DHT-21/11
@@ -95,5 +95,7 @@ ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
 //  pointY = pointY+20;
 
 newSetButt = 1;
+timerOn = 1;
+timerOff = 1;
 temperature_check();
 //display();
