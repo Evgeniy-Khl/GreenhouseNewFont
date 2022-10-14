@@ -44,7 +44,7 @@ Programm size       : 11358 words (22716 bytes), 69,3% of FLASH 11.09.2022
 #define ADC_VREF_TYPE   0x40
 
 // Declare your global variables here
-unsigned char BeepT, displ_num, portOut, newSetButt, ds18b20, pointY, DHTexist, signchar, intval, frcval, error;
+unsigned char BeepT, displ_num, night, portOut, newSetButt, ds18b20, pointY, DHTexist, signchar, intval, frcval, error;
 signed char numMenu, numSet/*, displCO2, timerCO2*/;
 unsigned char relOut[4]={0}, analogOut[4]={0}, dacU[4]={ZERO}, buff[40], familycode[MAX_DEVICES][9], clock_buffer[7], alarm[4]={2,2,2,2};
 unsigned int  max_X, max_Y, fillScreen = BLACK;
@@ -63,17 +63,17 @@ union {unsigned char buffer[4]; unsigned int val[2];} out;
 //---------------------------------------------------------------------------------
 signed char analog[4]={-1,30,90,-1};
 signed char relay[4]={2,2,2,2};
-unsigned int iPart[4];
+signed int iPart[4];
 float Told1[5], Told2[5];
 
 //-------------------------
-eeprom signed int set[6][5]={
-                     {270,20,10, 1, 0},  // (ВОЗД.) Tset;  dTalarm;  hysteresis;  mode=1 -> нагрев / mode=0 -> охлаждение;   выход №
-                     { 55,10, 5, 1, 1},  // (ВОЗД.) RHset; dRHalarm; hysteresis;  mode=1 -> увлажнение / mode=0 -> осушение; выход №
-                     {200,20,10, 0, 2},  // (ГРУНТ) Tset;  dTalarm;  hysteresis;  mode=1 -> нагрев / mode=0 -> охлаждение;   выход №
-                     {400,90,50, 0, 3},  // (ГРУНТ) RHset;  dTalarm;  hysteresis;  mode=1 -> нагрев / mode=0 -> охлаждение;   выход №   
-                     {  5,10, 1, 0, 3},  // tmOn; tmOff; dim=0 -> сек. / dim=1 -> мин.; dim=0 -> сек. / dim=1 -> мин.; выход №
-                     {  0, 0, 0, 0, 4}}; // 
+eeprom signed int set[6][6]={
+                     {270,200,20,10, 1, 0},  // (ВОЗД.) Tday; Tnight;  dTalarm;  hysteresis;  mode=1 -> нагрев / mode=0 -> охлаждение;   выход №
+                     { 55, 50,10, 5, 1, 1},  // (ВОЗД.) RHday; RHnight; dRHalarm; hysteresis;  mode=1 -> увлажнение / mode=0 -> осушение; выход №
+                     {200,180,20,10, 0, 2},  // (ГРУНТ) Tday; Tnight;  dTalarm;  hysteresis;  mode=1 -> нагрев / mode=0 -> охлаждение;   выход №
+                     {400,350,90,50, 0, 3},  // (ГРУНТ) RHday; RHnight;  dTalarm;  hysteresis;  mode=1 -> нагрев / mode=0 -> охлаждение;   выход №   
+                     {  5, 10, 0, 1, 0, 3},  // tmOn; tmOff; dim=0 -> сек. / dim=1 -> мин.; dim=0 -> сек. / dim=1 -> мин.; выход №
+                     {  0,  0, 0, 0, 0, 4}}; // 
 
 eeprom unsigned char limit[4][3]={
                     // max  kP   kI 
