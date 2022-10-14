@@ -5,11 +5,9 @@ DDRD=0x00;// Func7=In Func6=In Func5=In Func4=In Func3=In Func2=In Func1=In Func
 // Timer/Counter 0 initialization
 
 // Timer/Counter 1 initialization
+TCCR1A=(0<<COM1A1) | (0<<COM1A0) | (0<<COM1B1) | (0<<COM1B0) | (0<<WGM11) | (0<<WGM10); // Clock value: 62,500 kHz
+TCCR1B=(0<<ICNC1) | (0<<ICES1) | (0<<WGM13) | (0<<WGM12) | (1<<CS12) | (0<<CS11) | (0<<CS10);// Timer Period: 1,0486 s
 
-TCCR1A=0x00;// initialize Timer1 overflow interrupts in Mode 0 (Normal)
-TCCR1B=(1<<CS12)|(1<<CS10);// clkio/1024; Clock value: 15,625 kHz
-TCNT1H=0;
-TCNT1L=0;// timer overflow interrupts will occur with 0.25Hz frequency
 
 // Timer/Counter 2 initialization
 

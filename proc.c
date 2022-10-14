@@ -182,3 +182,132 @@ void timerCheck(void){
         }    
     }
 }
+
+void timerRTC(unsigned char prg){
+  unsigned char byte, port, dimOn=set[4][3];
+    port = set[4][6];  // № выхода таймера
+    byte = 1 << port;
+    if(clock_buffer[0]<2){
+        switch(prg){
+            case 1: portOut |= byte; relOut[port] = 1; 
+                    if(dimOn) timerOn = (int)set[4][0]*60; 
+                    else timerOn = set[4][0];
+                break;
+            case 2: if(clock_buffer[1]%3==0){   
+                        portOut |= byte; relOut[port] = 1; 
+                        if(dimOn) timerOn = (int)set[4][0]*60; 
+                        else timerOn = set[4][0];
+                    } break;
+            case 3: if(clock_buffer[1]%5==0){   
+                        portOut |= byte; relOut[port] = 1; 
+                        if(dimOn) timerOn = (int)set[4][0]*60; 
+                        else timerOn = set[4][0];
+                    } break;
+            case 4: if(clock_buffer[1]%10==0){   
+                        portOut |= byte; relOut[port] = 1; 
+                        if(dimOn) timerOn = (int)set[4][0]*60; 
+                        else timerOn = set[4][0];
+                    } break;
+            case 5: if(clock_buffer[1]%15==0){   
+                        portOut |= byte; relOut[port] = 1; 
+                        if(dimOn) timerOn = (int)set[4][0]*60; 
+                        else timerOn = set[4][0];
+                    } break;
+            case 6: if(clock_buffer[1]%30==0){   
+                        portOut |= byte; relOut[port] = 1; 
+                        if(dimOn) timerOn = (int)set[4][0]*60; 
+                        else timerOn = set[4][0];
+                    } break;
+            case 7: if(clock_buffer[2]>=set[4][4]){
+                        if(clock_buffer[1]==0){   
+                            portOut |= byte; relOut[port] = 1; 
+                            if(dimOn) timerOn = (int)set[4][0]*60; 
+                            else timerOn = set[4][0];
+                        }
+                    } break;
+            case 8: if(clock_buffer[2]>=set[4][4]){
+                        clock_buffer[2]-=set[4][4];
+                        if(clock_buffer[2]%2==0&&clock_buffer[2]==0){   
+                            portOut |= byte; relOut[port] = 1; 
+                            if(dimOn) timerOn = (int)set[4][0]*60; 
+                            else timerOn = set[4][0];
+                        }
+                    } break;
+            case 9: if(clock_buffer[2]>=set[4][4]){
+                        clock_buffer[2]-=set[4][4];
+                        if(clock_buffer[2]%3==0&&clock_buffer[2]==0){   
+                            portOut |= byte; relOut[port] = 1; 
+                            if(dimOn) timerOn = (int)set[4][0]*60; 
+                            else timerOn = set[4][0];
+                        }
+                    } break;
+            case 10:if(clock_buffer[2]>=set[4][4]){
+                        clock_buffer[2]-=set[4][4];
+                        if(clock_buffer[2]%4==0&&clock_buffer[2]==0){   
+                            portOut |= byte; relOut[port] = 1; 
+                            if(dimOn) timerOn = (int)set[4][0]*60; 
+                            else timerOn = set[4][0];
+                        }
+                    } break;
+            case 11:if(clock_buffer[2]>=set[4][4]){
+                        clock_buffer[2]-=set[4][4];
+                        if(clock_buffer[2]%6==0&&clock_buffer[2]==0){   
+                            portOut |= byte; relOut[port] = 1; 
+                            if(dimOn) timerOn = (int)set[4][0]*60; 
+                            else timerOn = set[4][0];
+                        }
+                    } break;
+            case 12:if(clock_buffer[2]>=set[4][4]){
+                        clock_buffer[2]-=set[4][4];
+                        if(clock_buffer[2]%8==0&&clock_buffer[2]==0){   
+                            portOut |= byte; relOut[port] = 1; 
+                            if(dimOn) timerOn = (int)set[4][0]*60; 
+                            else timerOn = set[4][0];
+                        }
+                    } break;
+            case 13:if(clock_buffer[2]>=set[4][4]){
+                        clock_buffer[2]-=set[4][4];
+                        if(clock_buffer[2]%12==0&&clock_buffer[2]==0){   
+                            portOut |= byte; relOut[port] = 1; 
+                            if(dimOn) timerOn = (int)set[4][0]*60; 
+                            else timerOn = set[4][0];
+                        }
+                    } break;
+            case 14:if(clock_buffer[2]==set[4][4]&&clock_buffer[2]==0){   
+                        portOut |= byte; relOut[port] = 1; 
+                        if(dimOn) timerOn = (int)set[4][0]*60; 
+                        else timerOn = set[4][0];
+                    }    
+            
+                break;
+        };
+    }
+    else  if(--timerOn==0){
+        timerOn = 1;
+        portOut &= ~byte; relOut[port] = 0;
+        
+//        timerOff = ;
+         
+    }
+    else {
+        dimOn = timerOn/3600;
+        port = (timerOn%3600)/60;
+        byte = (timerOn%3600)%60;
+        sprintf(txtTimer,"ON  залиш.%02u:%02u:%02u",dimOn,port,byte);
+    }
+}
+//               Кол-во
+//#1    1 мин   1440	Каждую минуту
+//#2    3 мин   480	0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57 мин. каждого часа
+//#3    5 мин   288	0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 мин. каждого часа
+//#4    10 мин	144	0, 10, 20, 30, 40, 50 мин. каждого часа
+//#5    15 мин	96	0, 15, 30, 45 мин. каждого часа
+//#6    30 мин	48	0, 30 мин. каждого часа
+//#7    1 час   24	Каждый час
+//#8    2 часа	12	0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 часа каждого дня (+ сдвиг на стартовый час)
+//#9    3 часа	8	0, 3, 6, 9, 12, 15, 18, 21 час каждого дня (+ сдвиг на стартовый час)
+//#10   4 часа	6	0, 4, 8, 12, 16, 20 часов каждого дня (+ сдвиг на стартовый час)
+//#11   6 часов	4	0, 6, 12, 18 часов каждого дня (+ сдвиг на стартовый час)
+//#12   8 часов	3	0, 8, 16 часов каждого дня (+ сдвиг на стартовый час)
+//#13   12 часов	2	0, 12 часов каждого дня (+ сдвиг на стартовый час)
+//#14   24 часа	1	0 часов каждого дня (+ сдвиг на стартовый час)

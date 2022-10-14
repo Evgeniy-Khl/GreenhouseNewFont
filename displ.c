@@ -148,16 +148,13 @@ void displ_1(void){
     pointY += 5;
     ILI9341_WriteString(90,pointY,"СТАН ТАЙМЕРЫВ",Font_11x18,bordWindow,fillWindow,1);
     pointY += 20;
-    i=0;
-    sprintf(buff,"таймер %u ",i+1);
+    sprintf(buff,"таймер 1 ");
     strcat(buff,txtTimer);
     ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
-//    for (i=0;i<3;i++){
-//        sprintf(buff,"таймер %u ВКЛ залиш. 00:00:00",i+1);
-//        ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
-//        
-//        pointY += 20;
-//    };
+    pointY += 20;
+    sprintf(buff,"таймер 2 ");
+    strcat(buff,txt);
+    ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
     if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
 }
 
