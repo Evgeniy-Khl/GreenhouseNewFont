@@ -1,3 +1,4 @@
+#pragma warn-
 
 pointY += 30;
 ILI9341_WriteString(45, pointY, "28.5", Font_11x18, MAGENTA, fillScreen, 2);

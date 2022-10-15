@@ -10,7 +10,6 @@ Program size: 11128 words (22256 bytes), 67,9% of FLASH  14.10.2022
 #include <stdio.h>
 #include <twi.h>
 #include <delay.h>
-#include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,8 +24,9 @@ Program size: 11128 words (22256 bytes), 67,9% of FLASH  14.10.2022
 #define CSDAC4	        PORTD.7
 #define CONECT          PINB.3    // если bluetooth подключен то здесь +3,3В
 #define MAX_DEVICES     3
-#define MAX_MENU        5
-#define MAX_SET         4
+#define MAX_MENU        6
+#define MAX_SET         5
+#define MAX_OUT         6
 #define MAX_DATE        5
 #define MISTAKE         3
 #define ZERO	        50
@@ -43,16 +43,16 @@ Program size: 11128 words (22256 bytes), 67,9% of FLASH  14.10.2022
 
 // Declare your global variables here
 unsigned char BeepT, displ_num, ok, portOut, newSetButt, ds18b20, pointY, DHTexist, signchar, intval, frcval, error;
-signed char numMenu, numSet/*, displCO2, timerCO2*/;
+signed char numMenu, numSet, pauseEdit/*, displCO2, timerCO2*/;
 unsigned char relOut[4]={0}, analogOut[4]={0}, dacU[4]={ZERO}, buff[40], familycode[MAX_DEVICES][9], clock_buffer[7], alarm[4]={2,2,2,2};
 unsigned int  max_X, max_Y, timerOn, timerOff, fillScreen = BLACK;
 signed int pvT=1990, offsetT, pvRH=1990, offsetRH, pvCO2, pvPH, newval[MAX_DATE];
 unsigned char *ptr_char;
-const char* setMenu[MAX_MENU]={"Температура","Влажность","Таймер","Настройки","Время и Дата"};
-const char* setName0[MAX_SET]={"Задание","Отклон.","Гистер.","Режим"};
-const char* setName1[MAX_SET]={"Включен","Выключен", "Размерн.","Шаг"};
-const char* setName2[MAX_SET]={"Корекция Т","Корекция Вл","Датчик Вл","Резерв"};
-const char* setName3[MAX_DATE]={"минуты","часы","день","месяц","год"};
+const char* setMenu[MAX_MENU]={"Температура","Вологысть","Таймер","День Ныч","Ынше","Час Дата"};
+const char* setName0[MAX_SET]={"ДЕНЬ","НЫЧ","Выдхил.","Гыстер.","Режим"};
+const char* setName1[MAX_SET]={"Включено","Розмір.","Вимкнено","Розмір.","Крок"};
+const char* setName2[MAX_OUT]={"Вихыд НО","Вихыд П","Вихыд Гр1","Вихыд Гр2","Вихыд Тм","Вихыд ДН"};
+const char* setName3[MAX_DATE]={"хвилини","години","день","мысяц","рык"};
 //--------------- union declaration -----------------------------------------------
 union {signed int point[MAX_DEVICES]; unsigned char buff[];} t; // буффер значений температур
 union {unsigned char buffer[8]; unsigned int pvT;} ds;          // буффер микросхемы DS18B20
@@ -91,7 +91,7 @@ bit CO2module;       // подключен измеритель СО2
 bit typeS;           // DHT11/DHT22
 
 //- prototypes ------
-
+void display(void);
 
 #include "fontsN.c"
 #include "ili9341.c"
@@ -130,8 +130,8 @@ while (1){
         if(byte==0) timerCheck();                   // простой таймер
         else timerRTC(byte);                        // таймер по программе
         
-        if(clock_buffer[2]>=set[5][2]&&clock_buffer[2]<set[5][3]) x=1; else x=-1; // Light0Beg; Light0End;
-        if(x==0){if(clock_buffer[2]>=set[5][4]&&clock_buffer[2]<set[5][5]) x=2; else x=-2;}//Light1Beg; Light1End;
+        if(clock_buffer[2]>=set[5][2]&&clock_buffer[2]<set[5][3]) x=1; else x=0; // Light0Beg; Light0End;
+        if(x==0){if(clock_buffer[2]>=set[5][4]&&clock_buffer[2]<set[5][5]) x=2; else x=0;}//Light1Beg; Light1End;
         byte = set[5][6];  // № выхода таймера
         if(x>0){
             relOut[byte] = 1;
@@ -144,7 +144,7 @@ while (1){
             relOut[byte] = 0;
             byte = 1 << byte;
             portOut &= ~byte;
-            if(x==-1) byte = rtcTodec(set[5][2]); else byte = rtcTodec(set[5][4])-1;
+            if(Night) byte = rtcTodec(set[5][2]); else byte = rtcTodec(set[5][4]);
             sprintf(txt,"OFF включ.%02u:00:00",byte);
         }
         
