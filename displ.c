@@ -5,12 +5,13 @@ void fraction(signed int t){
   frcval = t%10; intval = t/10;
 }
 
-void checkDisplNum(void){
+unsigned char checkDisplNum(void){
   unsigned char i;
     if(point_Y>200){
         for (i=0; i<4; i++){if(contains(i)) break;}// проверка попадания новой координаты в область кнопки
-        if(i<4){BeepT = 20; displ_num = i; newSetButt = 1;}
+        if(i<4){BeepT = 20; displ_num = i; newSetButt = 1; i=10;}
     }
+    return i;
 }
 
 void checkSkipEdit(void){
@@ -37,6 +38,7 @@ void displ_0(void){
         drawButton(WHITE, WHITE, BLACK, 3, "Налашт");
     }
 //--- Индикация часов ------
+    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
     pointY = 3;
     if(Clock_Ok){
         if(Night) ILI9341_WriteString(5,pointY,"НЫЧ ",Font_11x18,WHITE,BLACK,1); else ILI9341_WriteString(5,pointY,"ДЕНЬ",Font_11x18,BLACK,WHITE,1);
@@ -50,7 +52,7 @@ void displ_0(void){
         ILI9341_WriteString(70,pointY,buff,Font_11x18,YELLOW,RED,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,RED,YELLOW,1);// "БЕГУЩАЯ СТРОКА"
     }
     pointY += 22;
-    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
+    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
 //--- Индикация t ВОЗДУХА -----
     temp = set[0][Night]; fraction(temp);     // проверка знака температуры
     sprintf(buff,"[%2u.%u]",intval,frcval);   // ЗАДАНИЕ T показываем с десятичным знаком
@@ -70,7 +72,7 @@ void displ_0(void){
     }; 
     ILI9341_FillRectangle(280,pointY+2,30,45,temp);
     pointY += 55;
-    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
+    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
 //--- Индикация RH ------
     sprintf(buff,"[%3u%%]",set[1][Night]); // ЗАДАНИЕ RH
     ILI9341_WriteString(5,pointY+5,buff,Font_11x18,bordWindow,fillWindow,1);
@@ -84,7 +86,7 @@ void displ_0(void){
         default: temp=fillWindow;
     };
     ILI9341_FillRectangle(280,pointY+2,30,45,temp);
-    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
+    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
 // --- Состояние ТАЙМЕРОВ -------
     pointY += 60;
     ILI9341_WriteString(90,pointY,"СТАН ТАЙМЕРЫВ",Font_11x18,bordWindow,fillWindow,1);
@@ -96,7 +98,7 @@ void displ_0(void){
     sprintf(buff,"таймер 2 ");
     strcat(buff,txt);
     ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);      
-    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
+    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
 }
 
 //-------------------------------- СТАН ГРУНТУ. -------------------------------------------
@@ -129,6 +131,7 @@ void displ_1(void){
         ILI9341_WriteString(90,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
         pointY += 35;
     };
+    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
     pointY += 10;
 //--- Модуль грунта ---
     if(Soilmodule){
@@ -139,6 +142,7 @@ void displ_1(void){
         }
     }
     else ILI9341_WriteString(10,pointY,"Модуль грунту выдсутный.",Font_11x18,bordWindow,fillWindow,1);
+    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
     pointY += 30;
 //--- Модуль CO2 ----
 //CO2module = 1;
@@ -154,6 +158,7 @@ void displ_1(void){
         }
     }
     else ILI9341_WriteString(10,pointY,"CO2 модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
+    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
 //--- Модуль рH-4502 -----
     pointY += 30;
     if(pHsensor){
@@ -166,7 +171,7 @@ void displ_1(void){
         }
     }
     else ILI9341_WriteString(10,pointY,"рН  модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
-    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
+    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
 }
 
 //------------------------------ РЕЛЕЙНЫЕ ВЫХОДЫ --------------------------------------------
@@ -214,7 +219,7 @@ void displ_2(void){
         ILI9341_FillRectangle(160,pointY,40,18,color_box);
         pointY = pointY+22;
     }
-    if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
+    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
 //========================= проверим кнопки управления 0-10v ===================================
     if(checkTouch()){
 //sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
@@ -243,7 +248,7 @@ void displ_2(void){
         ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
         pointY = pointY+22;    
     }
-   if(checkTouch()) checkDisplNum();//***************************** проверим нажатие кнопки ***************************************
+   if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
 }
 
 void drawButtEdit(unsigned int fW){
@@ -300,15 +305,15 @@ void displ_4(void){
   pointY += 25;
   switch (numMenu){
     case 0: //-------- "Температура" ---------
-        for (item = 0; item < MAX_SET;item++){
+        for (item = 0; item < MAX_5;item++){
             if (item<4){
                 temp = set[0][item]; tmpv0 = temp%10; tmpv1 = temp/10;
                 sprintf(buff,"%7s = %2u.%u", setName0[item],tmpv1,tmpv0); // T с десятичным знаком
             }
             else {
                 sprintf(buff,"%7s = ", setName0[item]);
-                if(set[0][item]==0) strcat(buff,"НАГР.");
-                else  strcat(buff,"ОХЛ."); 
+                if(set[0][item]==1) strcat(buff,"НАГРЫВ");
+                else  strcat(buff,"ОХОЛОДЖЕННЯ"); 
             }
             if (item == numSet){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
             ILI9341_WriteString(15,pointY,buff,Font_11x18,color_txt,color_fon,1);
@@ -316,12 +321,12 @@ void displ_4(void){
         }
     break;
     case 1: //-------- "Влажность" -----------
-        for (item = 0; item < MAX_SET;item++){
+        for (item = 0; item < MAX_5;item++){
             if(item<4) sprintf(buff,"%8s = %i%%", setName0[item],set[1][item]);
             else {
                 sprintf(buff,"%8s = ", setName0[item]);
-                if(set[1][item]==0) strcat(buff,"УВЛ.");
-                else  strcat(buff,"ОСУ."); 
+                if(set[1][item]==1) strcat(buff,"ЗВОЛОЖЕННЯ");
+                else  strcat(buff,"ОСУШЕННЯ"); 
             }
             if (item == numSet){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
             ILI9341_WriteString(15,pointY,buff,Font_11x18,color_txt,color_fon,1);
@@ -329,33 +334,39 @@ void displ_4(void){
         }
     break;
     case 2: //-------- "Таймер" --------------
-        for (item = 0; item < MAX_SET;item++){
-            if (item==1||item==3){
+        for (item = 0; item < MAX_6;item++){
+            if(item==1||item==3){
                 sprintf(buff,"%8s = ", setName1[item]);
-                if (set[3][item]==0) strcat(buff,"СЕК.");
-                else strcat(buff,"МИН.");
+                if (set[4][item]==0) strcat(buff,"СЕКУНД");
+                else strcat(buff,"ХВИЛИН");
             }
             else sprintf(buff,"%8s = %i", setName1[item],set[4][item]);
-            if (item == numSet){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
+            if(item == numSet){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
             ILI9341_WriteString(15,pointY,buff,Font_11x18,color_txt,color_fon,1);
             pointY += 25;
         }
     break;
     case 3: //-------- "День Ночь" -----------
-        for (item = 0; item < MAX_SET;item++){
-            sprintf(buff,"%11s = %i", setName2[item],rtcTodec(set[5][item]));
+        for (item = 0; item < MAX_6;item++){
+            sprintf(buff,"%11s = %02i:00 год.", setName2[item],rtcTodec(set[5][item]));
             if (item == numSet){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
             ILI9341_WriteString(5,pointY,buff,Font_11x18,color_txt,color_fon,1);
             pointY += 25;
         }
     break;
     case 4: //-------- "Прочее" ---------------
+        for (item = 0; item < MAX_6;item++){
+            sprintf(buff,"%11s = %i", setName6[item],rtcTodec(set[item][6]));
+            if (item == numSet){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
+            ILI9341_WriteString(5,pointY,buff,Font_11x18,color_txt,color_fon,1);
+            pointY += 25;
+        }
     break;
     case 5: //-------- "Время и Дата" ---------------
-        for (item = 0; item < MAX_DATE;item++){
+        for (item = 0; item < MAX_5;item++){
             if (item<2) tmpv0 = clock_buffer[item+1];
             else tmpv0 = clock_buffer[item+2]; 
-            sprintf(buff,"%8s = %x", setName3[item],tmpv0);
+            sprintf(buff,"%8s = %x", setName7[item],tmpv0);
             if (item == numSet){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
             ILI9341_WriteString(5,pointY,buff,Font_11x18,color_txt,color_fon,1);            
             pointY += 25;
@@ -383,36 +394,44 @@ void displ_5(void){
       if (numSet<4){
         temp = newval[numSet]; tmpv0 = temp%10; tmpv1 = temp/10;
         sprintf(buff,"%5s = %2u.%u", setName0[numSet],tmpv1,tmpv0); // T с десятичным знаком
+        ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
       }
       else {
         sprintf(buff,"%7s = ", setName0[numSet]);
-        if(newval[numSet]==0) strcat(buff,"НАГР.");
-        else strcat(buff,"ОХЛ."); 
+        if(newval[numSet]==1) strcat(buff,"НАГРЫВ     ");
+        else strcat(buff,"ОХОЛОДЖЕННЯ");
+        ILI9341_WriteString(15,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
       }
-      ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+      
     break;
     case 1: //-------- "Влажность" -----------
-      if(numSet<4) sprintf(buff,"%7s = %i%%", setName0[numSet],newval[numSet]);
-      else {
-        sprintf(buff,"%7s = ", setName0[numSet]);
-        if(newval[numSet]==0) strcat(buff,"УВЛ.");
-        else  strcat(buff,"ОСУ."); 
+      if(numSet<4){
+        sprintf(buff,"%7s = %i%%", setName0[numSet],newval[numSet]);
+        ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
       }
-      ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+      else {
+        sprintf(buff,"%8s = ", setName0[numSet]);
+        if(newval[numSet]==1) strcat(buff,"ЗВОЛОЖЕННЯ");
+        else  strcat(buff,"ОСУШЕННЯ  ");
+        ILI9341_WriteString(15,pointY,buff,Font_11x18,bordWindow,fillWindow,1); 
+      }
+      
     break;
     case 2: //-------- "Таймер" --------------
-      sprintf(buff,"%5s: %i ", setName1[numSet], newval[numSet]);
-      ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+        sprintf(buff,"%5s: %i ", setName1[numSet], newval[numSet]);
+        ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
     break;
     case 3: //-------- "День Ночь" -----------
-      sprintf(buff,"%5s: %i ", setName2[numSet], newval[numSet]);
-      ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+        sprintf(buff,"%5s: %i ", setName2[numSet], newval[numSet]);
+        ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
     break;
     case 4: //-------- "Прочее" ---------------
+        sprintf(buff,"%5s: %i ", setName6[numSet], newval[numSet]);
+        ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
     break;
     case 5: //-------- "Время и Дата" ---------------
-      sprintf(buff,"%7s: %u ", setName3[numSet], newval[numSet]);
-      ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+        sprintf(buff,"%7s: %u ", setName7[numSet], newval[numSet]);
+        ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
     break;
    }
    if(--pauseEdit==0){pauseEdit=1; if(checkTouch()) checkSkipEdit();}//***************************** проверим нажатие кнопки *************************************** 

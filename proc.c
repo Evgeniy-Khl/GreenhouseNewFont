@@ -74,24 +74,6 @@ unsigned char module_check(unsigned char fc)
 //  return byte;
 //}
 
-//- Converts a 2 digit decimal to BCD format. ---------
-char ByteToBcd2(char Value){
- char bcdhigh = 0;
-  while (Value >= 10){
-    bcdhigh++;
-    Value -= 10;
-  }
-  return ((bcdhigh << 4U) | Value);
-}
-
-// - Converts from 2 digit BCD to Binary. -----------
-char Bcd2ToByte(char Value)
-{
-  char tmp = 0;
-  tmp = ((Value & 0xF0) >> 0x4) * 10;
-  return (tmp + (Value & 0x0F));
-}
-
 //signed int LowPassF2(signed int t,unsigned char i)
 //{
 //float val;
@@ -128,6 +110,13 @@ unsigned char adapt(unsigned char n){
     return n;
 }
 
+// - Converts from 2 digit BCD to Binary. -----------
+//char Bcd2ToByte(char Value)
+//{
+//  char tmp = 0;
+//  tmp = ((Value & 0xF0) >> 0x4) * 10;
+//  return (tmp + (Value & 0x0F));
+//}
 unsigned char rtcTodec(unsigned char rtc){
   unsigned char res;
     res = (rtc>>4)*10;
@@ -135,30 +124,40 @@ unsigned char rtcTodec(unsigned char rtc){
     return res;
 }
 
-unsigned char decToRtc(unsigned char dec){
-  unsigned char res;
-    res = (dec / 10)*16;
-    res <<= 4;
-    res += dec%10;
-    return res;
+//- Converts a 2 digit decimal to BCD format. ---------
+char ByteToBcd2(char Value){
+ char bcdhigh = 0;
+  while (Value >= 10){
+    bcdhigh++;
+    Value -= 10;
+  }
+  return ((bcdhigh << 4U) | Value);
 }
+
+//unsigned char decToRtc(unsigned char dec){
+//  unsigned char res;
+//    res = (dec / 10)*16;
+//    res <<= 4;
+//    res += dec%10;
+//    return res;
+//}
 
 unsigned char calcRtc(unsigned char rtc, signed char val){
   unsigned char res;
     res = rtcTodec(rtc);
     res += val;
-    res = decToRtc(res);
+    res = ByteToBcd2(res);
     return res;
 }
 
 void timerCheck(void){
- unsigned char byte, port, dimOn=set[4][3], dimOff=set[4][4];
+ unsigned char byte, port, dimOn=set[4][1], dimOff=set[4][3];
     port = set[4][6];  // № выхода таймера
     byte = 1 << port;
     if(portOut&byte){
         if(--timerOn==0){
-            if(dimOff) timerOff = (int)set[4][1]*60; 
-            else timerOff = set[4][1];
+            if(dimOff) timerOff = (int)set[4][2]*60; 
+            else timerOff = set[4][2];
             portOut &= ~byte; relOut[port] = 0; 
         }
         else {

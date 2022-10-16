@@ -3,7 +3,7 @@ Project : Greenhouse
 Version : 0.0
 Date    : 07.10.2022
 Clock   : 16 MHz
-Program size: 11128 words (22256 bytes), 67,9% of FLASH  14.10.2022
+Program size: 14365 words (28730 bytes), 87,7% of FLASH  16.10.2022
 *******************************************************/
 
 #include <mega32.h>
@@ -25,9 +25,8 @@ Program size: 11128 words (22256 bytes), 67,9% of FLASH  14.10.2022
 #define CONECT          PINB.3    // если bluetooth подключен то здесь +3,3В
 #define MAX_DEVICES     3
 #define MAX_MENU        6
-#define MAX_SET         5
-#define MAX_OUT         6
-#define MAX_DATE        5
+#define MAX_5           5
+#define MAX_6           6
 #define MISTAKE         3
 #define ZERO	        50
 
@@ -46,32 +45,32 @@ unsigned char BeepT, displ_num, ok, portOut, newSetButt, ds18b20, pointY, DHTexi
 signed char numMenu, numSet, pauseEdit/*, displCO2, timerCO2*/;
 unsigned char relOut[4]={0}, analogOut[4]={0}, dacU[4]={ZERO}, buff[40], familycode[MAX_DEVICES][9], clock_buffer[7], alarm[4]={2,2,2,2};
 unsigned int  max_X, max_Y, timerOn, timerOff, fillScreen = BLACK;
-signed int pvT=1990, offsetT, pvRH=1990, offsetRH, pvCO2, pvPH, newval[MAX_DATE];
+signed int pvT=1990, offsetT, pvRH=1990, offsetRH, pvCO2, pvPH, newval[MAX_6];
 unsigned char *ptr_char;
 const char* setMenu[MAX_MENU]={"Температура","Вологысть","Таймер","День Ныч","Ынше","Час Дата"};
-const char* setName0[MAX_SET]={"ДЕНЬ","НЫЧ","Выдхил.","Гыстер.","Режим"};
-const char* setName1[MAX_SET]={"Включено","Розмір.","Вимкнено","Розмір.","Крок"};
-const char* setName2[MAX_OUT]={"Вихыд НО","Вихыд П","Вихыд Гр1","Вихыд Гр2","Вихыд Тм","Вихыд ДН"};
-const char* setName3[MAX_DATE]={"хвилини","години","день","мысяц","рык"};
+const char* setName0[MAX_5]={"ДЕНЬ","НЫЧ","Выдхил.","Гыстер.","Режим"};
+const char* setName1[MAX_6]={"Включено","Розмір.","Вимкнено","Розмір.","Крок","ЗМЫЩЕННЯ"};
+const char* setName2[MAX_6]={"День почат.","Ныч почат.","Включено А","Вимкнено А","Включено Б","Вимкнено Б"};
+const char* setName6[MAX_6]={"Вихыд НО","Вихыд П","Вихыд Гр1","Вихыд Гр2","Вихыд Тм","Вихыд ДН"};
+const char* setName7[MAX_5]={"хвилини","години","день","мысяц","рык"};
 //--------------- union declaration -----------------------------------------------
 union {signed int point[MAX_DEVICES]; unsigned char buff[];} t; // буффер значений температур
 union {unsigned char buffer[8]; unsigned int pvT;} ds;          // буффер микросхемы DS18B20
 union {unsigned char buffer[4]; unsigned int val[2];} in;
 union {unsigned char buffer[4]; unsigned int val[2];} out;
 //---------------------------------------------------------------------------------
-signed int iPart[4];
-float Told1[5], Told2[5];
+float Told1[5], Told2[5], iPart[4];
 
 //-------------------------
 eeprom signed char relaySet[4]={2,2,2,2};
-eeprom signed char analogSet[4]={-1,30,90,-1};
+eeprom signed char analogSet[4]={-1,-1,-1,-1};
 
 eeprom signed int set[6][7]={
-{ 270, 200,  50,  10,   0,   0,   0},  // (ВОЗД.) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход № РЕЛЕ1
+{ 270, 200,  50,  10,   0,  -1,   0},  // (ВОЗД.) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход № РЕЛЕ1
 {  55,  50,  10,   5,   0,   0,   1},  // (ВОЗД.) RHday; RHnight; dRHalarm; hysteresis;  mode=1(увлажнение)/mode=0(осушение); DHT22=0; выход № РЕЛЕ2
-{ 200, 180,  50,  10,   0,   0,   4},  // (ГРУНТ) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход №
-{ 400, 350, 100,  50,   0,   0,   5},  // (ГРУНТ) RHday; RHnight;  dTalarm;  hysteresis; mode=1(увлажнение)/mode=0(осушение); резерв;  выход №   
-{  10,  10,   1,   0,0x07,   0,   2},  // tmOn; tmOff; dim=0(сек.)/dim=1(мин.)/dim=2(час.); dim; HourStart; Programm;                  выход № РЕЛЕ3
+{ 200, 180,  50,  10,   1,  -1,   6},  // (ГРУНТ) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход №
+{ 400, 350, 100,  50,   1,  -1,   7},  // (ГРУНТ) RHday; RHnight;  dTalarm;  hysteresis; mode=1(увлажнение)/mode=0(осушение); резерв;  выход №   
+{  10,  0,   10,   1,   0,0x06,   2},  // tmOn; dimOn=0(сек.)/dim=1(мин.); tmOff; dimOff; HourStart; Programm;                  выход № РЕЛЕ3
 {0x07,0x20,0x05,0x09,0x18,0x23,   3}}; // DayBeg; DayEnd; Light0Beg; Light0End; Light1Beg; Light1End;                                  выход № РЕЛЕ4
 
 eeprom unsigned char limit[4][3]={
@@ -126,7 +125,7 @@ while (1){
         if(clock_buffer[2]>=set[5][0]&&clock_buffer[2]<set[5][1]) byte=0; else byte=1;
         if(byte!=Night){Night = byte; ok = 0;}      // день / ночь
         
-        byte = set[4][5];
+        byte = set[4][4];                           // режим таймера если 0 то простой если 1-14 то программный
         if(byte==0) timerCheck();                   // простой таймер
         else timerRTC(byte);                        // таймер по программе
         
@@ -151,7 +150,7 @@ while (1){
         if(ds18b20) temperature_check();
         if(Dht){                                         // присутствует датчик влажности
             if(readDHT()) DHTexist = 3; 
-            else if(DHTexist) DHTexist--;                   // датчик влажности работает? 
+            else if(DHTexist) DHTexist--;                // датчик влажности работает? 
             else {pvT = 1900; pvRH = 190;}
         }
         for(byte=0; byte<4; byte++){if(relaySet[byte]<2) relOut[byte]=relaySet[byte];}
@@ -160,28 +159,22 @@ while (1){
             dacU[byte] = adapt(analogOut[byte]);// конверсия для ЦАП
         }
         //    setDAC();                           // подать напряжение на аналоговые выходы
-        // --------КАНАЛ температура воздуха ---------
-        byte = set[0][6];  // номер выхода
-        if(byte<4){
-         if(Dht) RelaySensor(pvT,0);
-         else if(ds18b20) RelaySensor((t.point[0]+t.point[1])/2,3);  // средняя грунта
-        }
-        else {
-         if(Dht) analogOut[byte-4] = UpdatePI(pvT,0);
-         else if(ds18b20) analogOut[byte-4] = UpdatePI((t.point[0]+t.point[1])/2,3);  // средняя грунта
-        }
-        // --------КАНАЛ влажность воздуха --------- 
-        byte = set[1][6];  // номер выхода
-        if(byte<4) if(Dht) RelaySensor(pvRH,1);
-        else if(Dht) analogOut[byte-4] = UpdatePI(pvRH,1);
-        // --------КАНАЛ температура грунта ---------
-        byte = set[2][6];  // номер выхода
-        if(byte<4){
-         if(Dht && ds18b20) RelaySensor((t.point[0]+t.point[1])/2,3);  // средняя грунта
-        }
-        else {
-         if(Dht && ds18b20) analogOut[byte-4] = UpdatePI((t.point[0]+t.point[1])/2,3);  // средняя грунта
-        }
+        // --------КАНАЛ температура воздуха ВЫХОД 0 и ВЫХОД 4 ---------
+//         byte = set[0][6];  // номер выхода
+         if(Dht){RelaySensor(pvT,0); analogOut[0]=UpdatePI(pvT,0);}
+         else if(ds18b20){
+            RelaySensor((t.point[0]+t.point[1])/2,0);  // средняя грунта
+            analogOut[0]=UpdatePI((t.point[0]+t.point[1])/2,0);
+         }
+        // --------КАНАЛ влажность воздуха ВЫХОД 1 и ВЫХОД 5 --------- 
+//         byte = set[1][6];  // номер выхода
+        if(Dht){RelaySensor(pvRH,1); analogOut[1]=UpdatePI(pvRH,1);}
+        // --------КАНАЛ температура грунта ВЫХОД 6 ---------
+//         byte = set[2][6];  // номер выхода
+         if(ds18b20) analogOut[2]=UpdatePI((t.point[0]+t.point[1])/2,2);  // средняя грунта
+        // --------КАНАЛ влажность грунта ВЫХОД 7 ---------
+//         byte = set[3][6];  // номер выхода
+//         if(ds18b20) analogOut[3] = UpdatePI((t.point[0]+t.point[1])/2,3);  // средняя грунта
     }
    //---------- функция 1 секунда --------------------------
 //   if(newButton==100) display();

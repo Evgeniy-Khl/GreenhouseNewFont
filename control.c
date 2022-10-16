@@ -10,18 +10,16 @@ void RelaySensor(signed int val, unsigned char ch){
  char x=UNCHANGED, byte;                           
  signed int error;
     byte = set[ch][2];                       // уставка аварии
-    error = set[ch][Night]-val;              // ошибка регулирования
+    if(set[ch][4]) error = set[ch][Night]-val;  // mode=1(нагрев/увлажнение)   ошибка регулирования
+    else error = val - set[ch][Night];         // mode=0(охлаждение/осушение) ошибка регулирования
+    
     if(abs(error)<(byte/2)) ok |= (1<<ch);   // достигли заданного значения
     if(abs(error)>byte) byte |= (1<<ch); else byte = 0;// авария
     if(ok&byte) alarm[ch] = 1; else if(ok&(1<<ch)) alarm[ch] = 0; else alarm[ch] = 2;// авария или норма или еще не вышли на заданное значение
-    if(set[ch][4]){                          // mode=1 -> нагрев / увлажнение
-        if(error-set[ch][3] > 0) x = ON;     // включить
-        if(error < 0) x = OFF;               // отключить
-    }
-    else {                                   // mode=0 -> охлаждение / осушение
-        if(error+set[ch][3] < 0) x = ON;     // включить
-        if(error > 0) x = OFF;               // отключить
-    }
+
+    if(error-set[ch][3] > 0) x = ON;     // включить
+    if(error < 0) x = OFF;               // отключить
+
     if(x<UNCHANGED) {
         byte = 1 << set[ch][6];              // № реле
         if(x) {portOut |= byte; relOut[ch] = 1;}
@@ -34,8 +32,8 @@ unsigned char UpdatePI(signed int val, char i){// i-> индекс iPart[i]; time-> пе
   float pPart, Kp, Ki, Ud;
     Kp = (float) limit[i][1]/4;               // Пропорциональный    limit[i][1]=20/4=5
     Ki = (float) limit[i][2]*100;             // Интегральный        limit[i][2]=200*100=20000
-    if(set[i][4]) error = set[i][Night]-val;  // mode=1 ошибка регулирования
-    else error = val - set[i][Night];         // mode=0 ошибка регулирования
+    if(set[i][4]) error = set[i][Night]-val;  // mode=1(нагрев/увлажнение) ошибка регулирования
+    else error = val - set[i][Night];         // mode=0(охлаждение/осушение) ошибка регулирования
     pPart = (float) Kp * error;               // расчет пропорциональной части
 //---- функция ограничения pPart -----------------------------
     if(pPart <0){pPart = 0; iPart[i] = 0;} else if(pPart > 100) pPart = 100; // функция ограничения ????? if(pPart <=0)
