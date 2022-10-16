@@ -104,10 +104,15 @@ void setDAC(void){ // V = Vref x (255/256)
     SPCR = 0;             //disable SPI
 }
 
-unsigned char adapt(unsigned char n){
-    if (n>100) n=100;
-    n <<= 1; n += ZERO;
-    return n;
+unsigned char adapt(unsigned char val){
+    val <<= 1; val += ZERO;
+    return val;
+}
+
+unsigned char limitationOut(unsigned char val, unsigned char n){// ограничение управляющего сигнала
+    if(val<limit[n][0]) val = limit[n][0];
+    if(val>limit[n][1]) val = limit[n][1];
+    return val;
 }
 
 // - Converts from 2 digit BCD to Binary. -----------

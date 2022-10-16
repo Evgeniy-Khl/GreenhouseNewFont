@@ -25,6 +25,7 @@ Program size: 14365 words (28730 bytes), 87,7% of FLASH  16.10.2022
 #define CONECT          PINB.3    // если bluetooth подключен то здесь +3,3В
 #define MAX_DEVICES     3
 #define MAX_MENU        6
+#define MAX_4           4
 #define MAX_5           5
 #define MAX_6           6
 #define MISTAKE         3
@@ -47,12 +48,12 @@ unsigned char relOut[4]={0}, analogOut[4]={0}, dacU[4]={ZERO}, buff[40], familyc
 unsigned int  max_X, max_Y, timerOn, timerOff, fillScreen = BLACK;
 signed int pvT=1990, offsetT, pvRH=1990, offsetRH, pvCO2, pvPH, newval[MAX_6];
 unsigned char *ptr_char;
-const char* setMenu[MAX_MENU]={"Температура","Вологысть","Таймер","День Ныч","Ынше","Час Дата"};
+const char* setMenu[MAX_MENU]={"Температура","Вологысть","Таймер","День Ныч","Час Дата","Ынше"};
 const char* setName0[MAX_5]={"ДЕНЬ","НЫЧ","Выдхил.","Гыстер.","Режим"};
 const char* setName1[MAX_6]={"Включено","Розмір.","Вимкнено","Розмір.","Крок","ЗМЫЩЕННЯ"};
 const char* setName2[MAX_6]={"День почат.","Ныч почат.","Включено А","Вимкнено А","Включено Б","Вимкнено Б"};
-const char* setName6[MAX_6]={"Вихыд НО","Вихыд П","Вихыд Гр1","Вихыд Гр2","Вихыд Тм","Вихыд ДН"};
-const char* setName7[MAX_5]={"хвилини","години","день","мысяц","рык"};
+const char* setName3[MAX_4]={"MIN","MAX","Пропор.","Ынтегр."};
+const char* setName7[MAX_5]={"Хвилини","Години","День","Мысяц","Рык"};
 //--------------- union declaration -----------------------------------------------
 union {signed int point[MAX_DEVICES]; unsigned char buff[];} t; // буффер значений температур
 union {unsigned char buffer[8]; unsigned int pvT;} ds;          // буффер микросхемы DS18B20
@@ -70,15 +71,15 @@ eeprom signed int set[6][7]={
 {  55,  50,  10,   5,   0,   0,   1},  // (ВОЗД.) RHday; RHnight; dRHalarm; hysteresis;  mode=1(увлажнение)/mode=0(осушение); DHT22=0; выход № РЕЛЕ2
 { 200, 180,  50,  10,   1,  -1,   6},  // (ГРУНТ) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход №
 { 400, 350, 100,  50,   1,  -1,   7},  // (ГРУНТ) RHday; RHnight;  dTalarm;  hysteresis; mode=1(увлажнение)/mode=0(осушение); резерв;  выход №   
-{  10,  0,   10,   1,   0,0x06,   2},  // tmOn; dimOn=0(сек.)/dim=1(мин.); tmOff; dimOff; HourStart; Programm;                  выход № РЕЛЕ3
+{  10,  0,   10,   1,   0,0x06,   2},  // tmOn; dimOn=0(сек.)/dim=1(мин.); tmOff; dimOff; HourStart; Programm;                         выход № РЕЛЕ3
 {0x07,0x20,0x05,0x09,0x18,0x23,   3}}; // DayBeg; DayEnd; Light0Beg; Light0End; Light1Beg; Light1End;                                  выход № РЕЛЕ4
 
-eeprom unsigned char limit[4][3]={
-                    // max  kP   kI 
-                      {100, 20, 200}, // 4
-                      {100, 20, 200}, // 5
-                      {100, 20, 200}, // 6
-                      {100, 20, 200}};// 7 
+eeprom unsigned char limit[4][4]={
+                    // min max  kP   kI 
+                      {  0,100, 20, 100}, // 4
+                      {  0,100, 20, 100}, // 5
+                      {  0,100, 20, 100}, // 6
+                      {  0,100, 20, 100}};// 7 
 
 bit Night;
 bit Sec;
@@ -137,7 +138,7 @@ while (1){
             byte = 1 << byte;
             portOut |= byte;
             if(x==1) byte = rtcTodec(set[5][3])-1; else byte = rtcTodec(set[5][5])-1;            
-            sprintf(txt,"ON  выдкл.%02u:59:59",byte);
+            sprintf(txt,"ON  вимкн.%02u:59:59",byte);
         } 
         else {
             relOut[byte] = 0;
@@ -152,29 +153,26 @@ while (1){
             if(readDHT()) DHTexist = 3; 
             else if(DHTexist) DHTexist--;                // датчик влажности работает? 
             else {pvT = 1900; pvRH = 190;}
-        }
-        for(byte=0; byte<4; byte++){if(relaySet[byte]<2) relOut[byte]=relaySet[byte];}
-        for(byte=0; byte<4; byte++){
-            if(analogSet[byte]>=0) analogOut[byte] = analogSet[byte]; else analogOut[byte] = 0; //??????????????
-            dacU[byte] = adapt(analogOut[byte]);// конверсия для ЦАП
-        }
-        //    setDAC();                           // подать напряжение на аналоговые выходы
+        }  
         // --------КАНАЛ температура воздуха ВЫХОД 0 и ВЫХОД 4 ---------
-//         byte = set[0][6];  // номер выхода
          if(Dht){RelaySensor(pvT,0); analogOut[0]=UpdatePI(pvT,0);}
          else if(ds18b20){
             RelaySensor((t.point[0]+t.point[1])/2,0);  // средняя грунта
             analogOut[0]=UpdatePI((t.point[0]+t.point[1])/2,0);
          }
         // --------КАНАЛ влажность воздуха ВЫХОД 1 и ВЫХОД 5 --------- 
-//         byte = set[1][6];  // номер выхода
         if(Dht){RelaySensor(pvRH,1); analogOut[1]=UpdatePI(pvRH,1);}
         // --------КАНАЛ температура грунта ВЫХОД 6 ---------
-//         byte = set[2][6];  // номер выхода
-         if(ds18b20) analogOut[2]=UpdatePI((t.point[0]+t.point[1])/2,2);  // средняя грунта
+        if(ds18b20) analogOut[2]=UpdatePI((t.point[0]+t.point[1])/2,2);  // средняя грунта
         // --------КАНАЛ влажность грунта ВЫХОД 7 ---------
-//         byte = set[3][6];  // номер выхода
-//         if(ds18b20) analogOut[3] = UpdatePI((t.point[0]+t.point[1])/2,3);  // средняя грунта
+//        if(ds18b20) analogOut[3] = UpdatePI((t.point[0]+t.point[1])/2,3);  // средняя грунта
+        for(byte=0; byte<4; byte++){
+            if(relaySet[byte]<2) relOut[byte]=relaySet[byte];
+            if(analogSet[byte]>=0) analogOut[byte] = analogSet[byte]; 
+            else analogOut[byte] = limitationOut(analogOut[byte], byte);            
+            dacU[byte] = adapt(analogOut[byte]);// конверсия для ЦАП
+        }
+//        setDAC();                           // подать напряжение на аналоговые выходы
     }
    //---------- функция 1 секунда --------------------------
 //   if(newButton==100) display();
