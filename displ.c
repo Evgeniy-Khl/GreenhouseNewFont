@@ -306,29 +306,31 @@ void displ_4(void){
   pointY += 25;
   switch (numMenu){
     case 0: //-------- "Температура" ---------
-        for (item = 0; item < MAX_5;item++){
+        for (item = 0; item < MAX_7;item++){
             if (item<4){
                 temp = set[0][item]; tmpv0 = temp%10; tmpv1 = temp/10;
                 sprintf(buff,"%7s = %2u.%u", setName0[item],tmpv1,tmpv0); // T с десятичным знаком
             }
-            else {
+            else if(item==4) {
                 sprintf(buff,"%7s = ", setName0[item]);
                 if(set[0][item]==1) strcat(buff,"НАГРЫВ");
                 else  strcat(buff,"ОХОЛОДЖЕННЯ"); 
             }
+            else sprintf(buff,"%8s = %i", setName0[item],set[0][item]);
             if (item == numSet){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
             ILI9341_WriteString(15,pointY,buff,Font_11x18,color_txt,color_fon,1);
             pointY += 25;
         }
     break;
     case 1: //-------- "Влажность" -----------
-        for (item = 0; item < MAX_5;item++){
+        for (item = 0; item < MAX_7;item++){
             if(item<4) sprintf(buff,"%8s = %i%%", setName0[item],set[1][item]);
-            else {
+            else if(item==4) {
                 sprintf(buff,"%8s = ", setName0[item]);
                 if(set[1][item]==1) strcat(buff,"ЗВОЛОЖЕННЯ");
                 else  strcat(buff,"ОСУШЕННЯ"); 
             }
+            else sprintf(buff,"%8s = %i", setName0[item],set[1][item]);
             if (item == numSet){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
             ILI9341_WriteString(15,pointY,buff,Font_11x18,color_txt,color_fon,1);
             pointY += 25;
@@ -389,11 +391,15 @@ void displ_5(void){
         sprintf(buff,"%5s = %2u.%u", setName0[numSet],tmpv1,tmpv0); // T с десятичным знаком
         ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
       }
-      else {
+      else if(numSet==4) {
         sprintf(buff,"%7s = ", setName0[numSet]);
         if(newval[numSet]==1) strcat(buff,"НАГРЫВ     ");
         else strcat(buff,"ОХОЛОДЖЕННЯ");
         ILI9341_WriteString(15,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
+      }
+      else {
+        sprintf(buff,"%7s = %i", setName0[numSet],newval[numSet]);
+        ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
       }      
     break;
     case 1: //-------- "Влажность" -----------
@@ -401,13 +407,16 @@ void displ_5(void){
         sprintf(buff,"%7s = %i%%", setName0[numSet],newval[numSet]);
         ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
       }
-      else {
+      else if(numSet==4) {
         sprintf(buff,"%8s = ", setName0[numSet]);
         if(newval[numSet]==1) strcat(buff,"ЗВОЛОЖЕННЯ");
         else  strcat(buff,"ОСУШЕННЯ  ");
         ILI9341_WriteString(15,pointY,buff,Font_11x18,bordWindow,fillWindow,1); 
       }
-      
+      else {
+        sprintf(buff,"%7s = %i", setName0[numSet],newval[numSet]);
+        ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+      }
     break;
     case 2: //-------- "Таймер" --------------
         sprintf(buff,"%5s: %i ", setName1[numSet], newval[numSet]);

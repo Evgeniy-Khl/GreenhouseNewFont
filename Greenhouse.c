@@ -28,6 +28,7 @@ Program size: 14365 words (28730 bytes), 87,7% of FLASH  16.10.2022
 #define MAX_4           4
 #define MAX_5           5
 #define MAX_6           6
+#define MAX_7           7
 #define MISTAKE         3
 #define ZERO	        50
 
@@ -46,10 +47,10 @@ unsigned char BeepT, displ_num, ok, portOut, newSetButt, ds18b20, pointY, DHTexi
 signed char numMenu, numSet, pauseEdit/*, displCO2, timerCO2*/;
 unsigned char relOut[4]={0}, analogOut[4]={0}, dacU[4]={ZERO}, buff[40], familycode[MAX_DEVICES][9], clock_buffer[7], alarm[4]={2,2,2,2};
 unsigned int  max_X, max_Y, timerOn, timerOff, fillScreen = BLACK;
-signed int pvT=1990, offsetT, pvRH=1990, offsetRH, pvCO2, pvPH, newval[MAX_6];
+signed int pvT=1990, offsetT, pvRH=1990, offsetRH, pvCO2, pvPH, newval[MAX_7];
 unsigned char *ptr_char;
 const char* setMenu[MAX_MENU]={"Температура","Вологысть","Таймер","День Ныч","Час Дата","Ынше"};
-const char* setName0[MAX_5]={"ДЕНЬ","НЫЧ","Выдхил.","Гыстер.","Режим"};
+const char* setName0[MAX_7]={"ДЕНЬ","НЫЧ","Выдхил.","Гыстер.","Режим","Резерв","Вихыд"};
 const char* setName1[MAX_6]={"Включено","Розмір.","Вимкнено","Розмір.","Крок","ЗМЫЩЕННЯ"};
 const char* setName2[MAX_6]={"День почат.","Ныч почат.","Включено Р","Вимкнено Р","Включено В","Вимкнено В"};
 const char* setName3[MAX_4]={"MIN","MAX","Пропор.","Ынтегр."};
@@ -68,7 +69,7 @@ eeprom signed char analogSet[4]={-1,-1,-1,-1};
 
 eeprom signed int set[6][7]={
 { 230, 200,  50,  10,   1,  -1,   0},  // (ВОЗД.) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход № РЕЛЕ1
-{  55,  50,  10,   5,   0,   0,   1},  // (ВОЗД.) RHday; RHnight; dRHalarm; hysteresis;  mode=1(увлажнение)/mode=0(осушение); DHT22=0; выход № РЕЛЕ2
+{  60,  60,  10,   5,   0,   0,   1},  // (ВОЗД.) RHday; RHnight; dRHalarm; hysteresis;  mode=1(увлажнение)/mode=0(осушение); DHT22=0; выход № РЕЛЕ2
 { 200, 180,  50,  10,   1,  -1,   6},  // (ГРУНТ) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход №
 { 400, 350, 100,  50,   1,  -1,   7},  // (ГРУНТ) RHday; RHnight;  dTalarm;  hysteresis; mode=1(увлажнение)/mode=0(осушение); резерв;  выход №   
 {  10,  0,   10,   1,   0,0x06,   2},  // tmOn; dimOn=0(сек.)/dim=1(мин.); tmOff; dimOff; HourStart; Programm;                         выход № РЕЛЕ3
@@ -120,7 +121,7 @@ signed char x, byte;
 #include "init.c"
 
 while (1){
-   //----------- функция 1 секунда ---------------------------
+//--------------------------- функция 1 секунда ---------------------------------------------
     if(Sec){                     
         Sec=0;
         if(clock_buffer[2]>=set[5][0]&&clock_buffer[2]<set[5][1]) byte=0; else byte=1;
@@ -165,7 +166,8 @@ while (1){
         // --------КАНАЛ температура грунта ВЫХОД 6 ---------
         if(ds18b20) analogOut[2]=UpdatePI((t.point[0]+t.point[1])/2,2);  // средняя грунта
         // --------КАНАЛ влажность грунта ВЫХОД 7 ---------
-//        if(ds18b20) analogOut[3] = UpdatePI((t.point[0]+t.point[1])/2,3);  // средняя грунта
+        //if(ds18b20) analogOut[3] = UpdatePI((t.point[0]+t.point[1])/2,3);  // средняя грунта
+// ================ Управление исполнительными механизмами ======================================
         for(byte=0; byte<4; byte++){
             if(relaySet[byte]<2) relOut[byte]=relaySet[byte];
             if(analogSet[byte]>=0) analogOut[byte] = analogSet[byte]; 
@@ -174,11 +176,9 @@ while (1){
         }
 //        setDAC();                           // подать напряжение на аналоговые выходы
     }
-   //---------- функция 1 секунда --------------------------
-//   if(newButton==100) display();
-//   else {touchpad(newButton); newButton=100; display();}
+//------------------------- КОНЕЦ функция 1 секунда ---------------------------------------------
     display();
-//   sprintf(buff,"X%4u; Y%4u; D%u newB=%3u",point_X,point_Y, displ_num, newButton);
-//   ILI9341_WriteString(5,TFTBUTTON-10,buff,Font_11x18,WHITE,BLACK,1);
+//sprintf(buff,"X%4u; Y%4u; D%u newB=%3u",point_X,point_Y, displ_num, newButton);
+//ILI9341_WriteString(5,TFTBUTTON-10,buff,Font_11x18,WHITE,BLACK,1);
  }
 }

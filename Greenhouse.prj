@@ -179,7 +179,7 @@ UseEEPROMLocation0=1
 RebuildAll=1
 LinkageInformationPresent=0
 COFFileTimeStamp=1431261877
-Build=330
+Build=336
 [DefinedSymbolsDebug]
 Count=0
 [Compiler]
@@ -280,8 +280,8 @@ WatchAVR8LAutoVariables=0
 UseEEPROMLocation0=1
 RebuildAll=0
 LinkageInformationPresent=1
-COFFileTimeStamp=1431390657
-Build=330
+COFFileTimeStamp=1431455474
+Build=336
 IncludePath0=
 IncludePath1=
 IncludePath2=
@@ -515,8 +515,8 @@ L13=Enhanced function parameters passing: Yes
 L14=Automatic register allocation: Yes
 L15=Smart register allocation: Yes
 L16=
-L17=Build: 329
-L18=16230 line(s) compiled
+L17=Build: 336
+L18=16250 line(s) compiled
 L19=No errors
 L20=No warnings
 L21=
@@ -527,19 +527,19 @@ L25=Data Stack area: 0x60 to 0x15F
 L26=Data Stack size: 256 byte(s)
 L27=Estimated Data Stack usage: 183 byte(s)
 L28=
-L29=RAM Global variables area: 0x160 to 0x5C9
-L30=RAM Global variables size: 1130 byte(s)
+L29=RAM Global variables area: 0x160 to 0x5DC
+L30=RAM Global variables size: 1149 byte(s)
 L31=
-L32=Hardware Stack area: 0x5CA to 0x75F
-L33=Hardware Stack size: 406 byte(s)
+L32=Hardware Stack area: 0x5DD to 0x75F
+L33=Hardware Stack size: 387 byte(s)
 L34=
 L35=Heap area: 0x760 to 0x85F
 L36=Heap size: 256 byte(s)
 L37=
 L38=EEPROM usage: 108 byte(s), 10,5% of EEPROM
-L39=Program size: 15785 words (31570 bytes), 96,3% of FLASH
+L39=Program size: 16029 words (32058 bytes), 97,8% of FLASH
 Lines=40
-L40=4288 words (8576 bytes), 21,4% reduced by Code Compression
+L40=4486 words (8972 bytes), 21,9% reduced by Code Compression
 [BuildInfoAssembler]
 L1=AVRASM: AVR macro assembler 2.1.30 (build 592 Nov  7 2008 12:38:17)
 L2=Copyright (C) 1995-2008 ATMEL Corporation
@@ -547,8 +547,8 @@ L3=
 L4=ATmega32 memory use summary [bytes]:
 L5=Segment   Begin    End      Code   Data   Used    Size   Use%
 L6=---------------------------------------------------------------
-L7=[.cseg] 0x000000 0x007b52  23958   7612  31570   32768  96.3%
-L8=[.dseg] 0x000060 0x0005ca      0   1130   1130    2048  55.2%
+L7=[.cseg] 0x000000 0x007d3a  24422   7636  32058   32768  97.8%
+L8=[.dseg] 0x000060 0x0005dd      0   1149   1149    2048  56.1%
 L9=[.eseg] 0x000000 0x00006c      0    108    108    1024  10.5%
 L10=
 L11=[.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
@@ -938,6 +938,36 @@ Blocks=0
 Blocks=0
 [FoldedCode17]
 Blocks=0
+[FoldedCode2]
+Blocks=0
+[Bookmarks21]
+TimeStamp=1431388290
+Row=127
+Column=0
+ScrollPosX=0
+ScrollPosY=111
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode21]
+Blocks=0
+[FoldedCode19]
+Blocks=0
+[FoldedCode14]
+Blocks=0
+[FoldedCode18]
+Blocks=0
+[FoldedCode16]
+Blocks=0
+[FoldedCode15]
+Blocks=0
 [HeadersList]
 Files=1
 F1=E:\!PROJECTS\C++\2023\GreenhouseNewFont\Greenhouse.c
@@ -971,33 +1001,3 @@ F25=control.c
 F26=touchpad.c
 F27=displ.c
 F28=init.c
-[FoldedCode2]
-Blocks=0
-[Bookmarks21]
-TimeStamp=1431388290
-Row=127
-Column=0
-ScrollPosX=0
-ScrollPosY=111
-BK0=-1
-BK1=-1
-BK2=-1
-BK3=-1
-BK4=-1
-BK5=-1
-BK6=-1
-BK7=-1
-BK8=-1
-BK9=-1
-[FoldedCode21]
-Blocks=0
-[FoldedCode19]
-Blocks=0
-[FoldedCode14]
-Blocks=0
-[FoldedCode18]
-Blocks=0
-[FoldedCode16]
-Blocks=0
-[FoldedCode15]
-Blocks=0

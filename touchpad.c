@@ -1,5 +1,5 @@
 void touchpad(char byte){
-  char max = MAX_MENU-1;
+  char max = 5;
      switch (displ_num){
         //- Общий список Установок -
         case 3:
@@ -16,15 +16,16 @@ void touchpad(char byte){
         break;
         //- Установки пунктов -
         case 4:
+        if(numMenu<2) max=6; else if(numMenu==4) max=4;
           switch (byte){
             case 0: displ_num = 3; newSetButt = 1;  break;
             case 1: if (--numSet<0) numSet = 0;     break;
-            case 2: if (++numSet>4) numSet = 4; break;
+            case 2: if (++numSet>max) numSet = max; break;
             case 3:  
               switch (numMenu){
-                case 0: for (byte=0;byte<MAX_5;byte++) newval[byte] = set[0][byte]; break; // "Температура"
-                case 1: for (byte=0;byte<MAX_5;byte++) newval[byte] = set[1][byte]; break; // "Влажность"
-                case 2: for (byte=0;byte<MAX_5;byte++) newval[byte] = set[4][byte]; break; // "Таймер" 
+                case 0: for (byte=0;byte<MAX_7;byte++) newval[byte] = set[0][byte]; break; // "Температура"
+                case 1: for (byte=0;byte<MAX_7;byte++) newval[byte] = set[1][byte]; break; // "Влажность"
+                case 2: for (byte=0;byte<MAX_6;byte++) newval[byte] = set[4][byte]; break; // "Таймер" 
                 case 3: for (byte=0;byte<MAX_6;byte++) newval[byte] = rtcTodec(set[5][byte]); break; // "День Ночь"
                 case 4: for (byte=0;byte<2;byte++) newval[byte] = rtcTodec(clock_buffer[byte+1]); 
                         for (byte=2;byte<5;byte++) newval[byte] = rtcTodec(clock_buffer[byte+2]);
@@ -48,6 +49,8 @@ void touchpad(char byte){
                             case 2: if(newval[numSet]>500) newval[numSet]=500; break;   // Отклонение
                             case 3: if(newval[numSet]>100) newval[numSet]=100; break;   // Гистерезис
                             case 4: if(newval[numSet]>1)  newval[numSet]=1;    break;   // Режим
+                            case 5: if(newval[numSet]>0) newval[numSet]=0;     break;   // Резерв
+                            case 6: if(newval[numSet]>0)  newval[numSet]=0;    break;   // ВЫХОД
                         }; 
                     break;
                     case 1:  // Влажность 
@@ -57,6 +60,8 @@ void touchpad(char byte){
                             case 2: if(newval[numSet]>90) newval[numSet]=90; break;   // Отклонение
                             case 3: if(newval[numSet]>50) newval[numSet]=50; break;   // Гистерезис
                             case 4: if(newval[numSet]>1)  newval[numSet]=1;  break;   // Режим
+                            case 5: if(newval[numSet]>1) newval[numSet]=1;   break;   // Датчик DHT11/22
+                            case 6: if(newval[numSet]>1)  newval[numSet]=1;  break;   // ВЫХОД
                         };
                     break;
                     case 2:  // Таймер 
@@ -66,6 +71,7 @@ void touchpad(char byte){
                             case 2: if(newval[numSet]>1200) newval[numSet]=1200; break;  // Отключен
                             case 3: if(newval[numSet]>1) newval[numSet]=1; break;        // Размерность
                             case 4: if(newval[numSet]>14) newval[numSet]=14; break;      // Шаг
+                            case 5: if(newval[numSet]>14) newval[numSet]=14; break;      // Смещение
                         };
                     break;
                     case 3:  // День Ночь 
@@ -95,18 +101,22 @@ void touchpad(char byte){
                         switch (numSet) {
                             case 0: if(newval[numSet]<-500) newval[numSet]=-500; break;   // День
                             case 1: if(newval[numSet]<-500) newval[numSet]=-500; break;   // Ночь
-                            case 2: if(newval[numSet]<1) newval[numSet]=1; break;   // Отклонение
-                            case 3: if(newval[numSet]<1) newval[numSet]=1; break;   // Гистерезис
-                            case 4: if(newval[numSet]<0) newval[numSet]=0; break;   // Режим                            
+                            case 2: if(newval[numSet]<1) newval[numSet]=1;       break;   // Отклонение
+                            case 3: if(newval[numSet]<1) newval[numSet]=1;       break;   // Гистерезис
+                            case 4: if(newval[numSet]<0) newval[numSet]=0;       break;   // Режим
+                            case 5: if(newval[numSet]<-1) newval[numSet]=-1;     break;   // Резерв
+                            case 6: if(newval[numSet]<0)  newval[numSet]=0;      break;   // ВЫХОД                            
                         }; 
                     break;
                     case 1:  // Влажность 
                         switch (numSet) {
                             case 0: if(newval[numSet]<10) newval[numSet]=10; break;   // День
                             case 1: if(newval[numSet]<10) newval[numSet]=10; break;   // Ночь
-                            case 2: if(newval[numSet]<1) newval[numSet]=1; break;   // Отклонение
-                            case 3: if(newval[numSet]<1) newval[numSet]=1; break;   // Гистерезис
-                            case 4: if(newval[numSet]<0) newval[numSet]=0; break;   // Режим     
+                            case 2: if(newval[numSet]<1) newval[numSet]=1;   break;   // Отклонение
+                            case 3: if(newval[numSet]<1) newval[numSet]=1;   break;   // Гистерезис
+                            case 4: if(newval[numSet]<0) newval[numSet]=0;   break;   // Режим
+                            case 5: if(newval[numSet]<0) newval[numSet]=0;   break;   // Датчик DHT11/22
+                            case 6: if(newval[numSet]<1)  newval[numSet]=1;  break;   // ВЫХОД     
                         };
                     break;
                     case 2:  // Таймер 
@@ -116,6 +126,7 @@ void touchpad(char byte){
                             case 2: if(newval[numSet]<1) newval[numSet]=1; break;   // Отключен
                             case 3: if(newval[numSet]<0) newval[numSet]=1; break;   // Размерность
                             case 4: if(newval[numSet]<0) newval[numSet]=0; break;   // Шаг
+                            case 5: if(newval[numSet]<0) newval[numSet]=0; break;   // Смещение
                         };
                     break;
                     case 3:  // День Ночь 
