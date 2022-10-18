@@ -200,8 +200,8 @@ void touchpad(char byte){
                 switch (numSet) {
                     case 0: if(newval[numSet]<0) newval[numSet]=0; break;   // MIN
                     case 1: if(newval[numSet]<0) newval[numSet]=0; break;   // MAX
-                    case 2: if(newval[numSet]<1) newval[numSet]=1; break;   // Пропорциональный
-                    case 3: if(newval[numSet]<1) newval[numSet]=1; break;   // Интегральный                            
+                    case 2: if(newval[numSet]<4) newval[numSet]=4; break;   // Пропорциональный
+                    case 3: if(newval[numSet]<10) newval[numSet]=10; break; // Интегральный                            
                 };
             break; 
             case 3: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);

@@ -51,7 +51,7 @@ unsigned char *ptr_char;
 const char* setMenu[MAX_MENU]={"Температура","Вологысть","Таймер","День Ныч","Час Дата","Ынше"};
 const char* setName0[MAX_5]={"ДЕНЬ","НЫЧ","Выдхил.","Гыстер.","Режим"};
 const char* setName1[MAX_6]={"Включено","Розмір.","Вимкнено","Розмір.","Крок","ЗМЫЩЕННЯ"};
-const char* setName2[MAX_6]={"День почат.","Ныч почат.","Включено А","Вимкнено А","Включено Б","Вимкнено Б"};
+const char* setName2[MAX_6]={"День почат.","Ныч почат.","Включено Р","Вимкнено Р","Включено В","Вимкнено В"};
 const char* setName3[MAX_4]={"MIN","MAX","Пропор.","Ынтегр."};
 const char* setName7[MAX_5]={"Хвилини","Години","День","Мысяц","Рык"};
 //--------------- union declaration -----------------------------------------------
@@ -67,7 +67,7 @@ eeprom signed char relaySet[4]={2,2,2,2};
 eeprom signed char analogSet[4]={-1,-1,-1,-1};
 
 eeprom signed int set[6][7]={
-{ 270, 200,  50,  10,   0,  -1,   0},  // (ВОЗД.) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход № РЕЛЕ1
+{ 230, 200,  50,  10,   1,  -1,   0},  // (ВОЗД.) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход № РЕЛЕ1
 {  55,  50,  10,   5,   0,   0,   1},  // (ВОЗД.) RHday; RHnight; dRHalarm; hysteresis;  mode=1(увлажнение)/mode=0(осушение); DHT22=0; выход № РЕЛЕ2
 { 200, 180,  50,  10,   1,  -1,   6},  // (ГРУНТ) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;    выход №
 { 400, 350, 100,  50,   1,  -1,   7},  // (ГРУНТ) RHday; RHnight;  dTalarm;  hysteresis; mode=1(увлажнение)/mode=0(осушение); резерв;  выход №   

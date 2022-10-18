@@ -243,7 +243,8 @@ void displ_2(void){
     for (i=0;i<4;i++){
         sprintf(buff,"ÂÈÕÛÄ N%u: ",i+1);
         if(analogSet[i]==-1) strcat(buff,"ÀÂÒ"); else {strcat(buff,"ÐÓ×"); analogOut[i]=analogSet[i];}
-        sprintf(txt," %3u%% ",analogOut[i]);
+//        sprintf(txt," %3u%% ",analogOut[i]);
+        sprintf(txt,"%7.4f %3u%%",iPart[i],analogOut[i]);
         strcat(buff,txt);
         ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
         pointY = pointY+22;    

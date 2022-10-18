@@ -31,7 +31,7 @@ unsigned char UpdatePI(signed int val, char i){// i-> индекс iPart[i]; time-> пе
   signed int error;
   float pPart, Kp, Ki, Ud;
     Kp = (float) limit[i][2]/4;               // Пропорциональный    limit[i][1]=20/4=5
-    Ki = (float) limit[i][3]*100;             // Интегральный        limit[i][2]=200*100=20000
+    Ki = (float) limit[i][3]*10;             // Интегральный        limit[i][2]=200*10=2000
     if(set[i][4]) error = set[i][Night]-val;  // mode=1(нагрев/увлажнение) ошибка регулирования
     else error = val - set[i][Night];         // mode=0(охлаждение/осушение) ошибка регулирования
     pPart = (float) Kp * error;               // расчет пропорциональной части

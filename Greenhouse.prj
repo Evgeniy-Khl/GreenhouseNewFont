@@ -7,9 +7,9 @@ A=
 C=
 D=07.10.2022
 Files=1
-OpenedFiles=6
+OpenedFiles=7
 OF1=Greenhouse.c
-Active1=1
+Active1=0
 DebugOutputListFilesDirectory=Debug\List
 DebugOutputObjectFilesDirectory=Debug
 DebugOutputExecutableFilesDirectory=Debug\Exe
@@ -26,7 +26,7 @@ Active0=0
 EditorPanel0=0
 PageIndex0=0
 EditorPanel1=0
-TimeStamp1=1431331858
+TimeStamp1=1431390653
 PageIndex1=2
 OF2=init.c
 Active2=0
@@ -36,27 +36,27 @@ PageIndex2=1
 OF3=displ.c
 Active3=0
 EditorPanel3=0
-TimeStamp3=1431331561
+TimeStamp3=1431390521
 PageIndex3=3
 OF4=touchpad.c
 Active4=0
 EditorPanel4=0
-TimeStamp4=1431331561
+TimeStamp4=1431342248
 PageIndex4=4
 OF5=proc.c
 Active5=0
 EditorPanel5=0
-TimeStamp5=1431331561
+TimeStamp5=1431343319
 PageIndex5=5
 OF6=control.c
-Active6=0
+Active6=1
 EditorPanel6=0
-TimeStamp6=1431203361
+TimeStamp6=1431390653
 PageIndex6=6
-OF7=proc.c
+OF7=fontsN.c
 Active7=0
 EditorPanel7=0
-TimeStamp7=1431217550
+TimeStamp7=1431388290
 PageIndex7=7
 OF8=9341.h
 Active8=0
@@ -78,8 +78,8 @@ Active11=0
 EditorPanel11=0
 TimeStamp11=1361388410
 PageIndex11=11
-F1=Greenhouse.c
 TimeStamp0=1431331500
+F1=Greenhouse.c
 [CompilerDebug]
 Chip=ATmega32
 CPUClock=16000000
@@ -179,7 +179,7 @@ UseEEPROMLocation0=1
 RebuildAll=1
 LinkageInformationPresent=0
 COFFileTimeStamp=1431261877
-Build=323
+Build=330
 [DefinedSymbolsDebug]
 Count=0
 [Compiler]
@@ -189,7 +189,7 @@ MemoryModel=1
 OptimizeSize=1
 OptimizationLevel=2
 OutputFormat=1
-PrintfFeatures=1
+PrintfFeatures=4
 ScanfFeatures=0
 DataStackSize=256
 PgmMemSize=32768
@@ -280,8 +280,8 @@ WatchAVR8LAutoVariables=0
 UseEEPROMLocation0=1
 RebuildAll=0
 LinkageInformationPresent=1
-COFFileTimeStamp=1431343430
-Build=323
+COFFileTimeStamp=1431390657
+Build=330
 IncludePath0=
 IncludePath1=
 IncludePath2=
@@ -493,7 +493,7 @@ CheckSignature=1
 CheckErasure=0
 PreserveEEPROM=0
 VerifyProgramming=0
-ProgrammingCounter=170
+ProgrammingCounter=196
 RunUserProg=0
 UserProgPath=
 UserProgCmdLine=
@@ -505,7 +505,7 @@ L3=Clock frequency: 16,000000 MHz
 L4=Program type: Application
 L5=Memory model: Small
 L6=Optimize for: Size
-L7=(s)printf features: int, width
+L7=(s)printf features: float, width, precision
 L8=(s)scanf features: int, width
 L9=Promote 'char' to 'int': Yes
 L10='char' is unsigned: Yes
@@ -515,8 +515,8 @@ L13=Enhanced function parameters passing: Yes
 L14=Automatic register allocation: Yes
 L15=Smart register allocation: Yes
 L16=
-L17=Build: 323
-L18=16051 line(s) compiled
+L17=Build: 329
+L18=16230 line(s) compiled
 L19=No errors
 L20=No warnings
 L21=
@@ -525,7 +525,7 @@ L23=Bit variables size: 2 byte(s)
 L24=
 L25=Data Stack area: 0x60 to 0x15F
 L26=Data Stack size: 256 byte(s)
-L27=Estimated Data Stack usage: 115 byte(s)
+L27=Estimated Data Stack usage: 183 byte(s)
 L28=
 L29=RAM Global variables area: 0x160 to 0x5C9
 L30=RAM Global variables size: 1130 byte(s)
@@ -537,9 +537,9 @@ L35=Heap area: 0x760 to 0x85F
 L36=Heap size: 256 byte(s)
 L37=
 L38=EEPROM usage: 108 byte(s), 10,5% of EEPROM
-L39=Program size: 14828 words (29656 bytes), 90,5% of FLASH
+L39=Program size: 15785 words (31570 bytes), 96,3% of FLASH
 Lines=40
-L40=4030 words (8060 bytes), 21,4% reduced by Code Compression
+L40=4288 words (8576 bytes), 21,4% reduced by Code Compression
 [BuildInfoAssembler]
 L1=AVRASM: AVR macro assembler 2.1.30 (build 592 Nov  7 2008 12:38:17)
 L2=Copyright (C) 1995-2008 ATMEL Corporation
@@ -547,7 +547,7 @@ L3=
 L4=ATmega32 memory use summary [bytes]:
 L5=Segment   Begin    End      Code   Data   Used    Size   Use%
 L6=---------------------------------------------------------------
-L7=[.cseg] 0x000000 0x0073d8  22036   7620  29656   32768  90.5%
+L7=[.cseg] 0x000000 0x007b52  23958   7612  31570   32768  96.3%
 L8=[.dseg] 0x000060 0x0005ca      0   1130   1130    2048  55.2%
 L9=[.eseg] 0x000000 0x00006c      0    108    108    1024  10.5%
 L10=
@@ -555,7 +555,7 @@ L11=[.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 L12=
 Lines=10
 [BookmarksFoldedCode]
-Files=20
+Files=21
 F1=9341.h
 F2=Greenhouse.c
 F3=fontsN.c
@@ -576,6 +576,7 @@ F17=buttons.c
 F18=touchpad.c
 F19=control.c
 F20=C:\cvavr312\inc\string.h
+F21=E:\!PROJECTS\C++\2023\GreenhouseNewFont\fontsN.c
 [Bookmarks1]
 TimeStamp=1430819738
 Row=46
@@ -604,13 +605,13 @@ Row=0
 Column=13
 ScrollPosX=0
 ScrollPosY=0
-TimeStamp=1431331858
+TimeStamp=1431390701
 [Bookmarks2]
-TimeStamp=1431331858
-Row=71
-Column=29
+TimeStamp=1431390653
+Row=69
+Column=25
 ScrollPosX=0
-ScrollPosY=54
+ScrollPosY=55
 BK0=-1
 BK1=-1
 BK2=-1
@@ -810,9 +811,9 @@ BK9=-1
 [FoldedCode13]
 Blocks=0
 [Bookmarks14]
-TimeStamp=1431330041
-Row=0
-Column=0
+TimeStamp=1431343319
+Row=113
+Column=41
 ScrollPosX=0
 ScrollPosY=0
 BK0=-1
@@ -842,11 +843,11 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks16]
-TimeStamp=1431330041
-Row=0
-Column=0
+TimeStamp=1431390521
+Row=246
+Column=21
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=226
 BK0=-1
 BK1=-1
 BK2=-1
@@ -876,11 +877,11 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks18]
-TimeStamp=1431330664
-Row=0
-Column=0
+TimeStamp=1431342248
+Row=182
+Column=26
 ScrollPosX=0
-ScrollPosY=0
+ScrollPosY=182
 BK0=-1
 BK1=-1
 BK2=-1
@@ -900,11 +901,11 @@ Blocks=0
 [FoldedCode1]
 Blocks=0
 [Bookmarks19]
-TimeStamp=1431203361
-Row=8
-Column=5
+TimeStamp=1431390653
+Row=33
+Column=31
 ScrollPosX=0
-ScrollPosY=17
+ScrollPosY=12
 BK0=-1
 BK1=-1
 BK2=-1
@@ -936,18 +937,6 @@ Blocks=0
 [FoldedCode12]
 Blocks=0
 [FoldedCode17]
-Blocks=0
-[FoldedCode2]
-Blocks=0
-[FoldedCode19]
-Blocks=0
-[FoldedCode14]
-Blocks=0
-[FoldedCode18]
-Blocks=0
-[FoldedCode16]
-Blocks=0
-[FoldedCode15]
 Blocks=0
 [HeadersList]
 Files=1
@@ -982,3 +971,33 @@ F25=control.c
 F26=touchpad.c
 F27=displ.c
 F28=init.c
+[FoldedCode2]
+Blocks=0
+[Bookmarks21]
+TimeStamp=1431388290
+Row=127
+Column=0
+ScrollPosX=0
+ScrollPosY=111
+BK0=-1
+BK1=-1
+BK2=-1
+BK3=-1
+BK4=-1
+BK5=-1
+BK6=-1
+BK7=-1
+BK8=-1
+BK9=-1
+[FoldedCode21]
+Blocks=0
+[FoldedCode19]
+Blocks=0
+[FoldedCode14]
+Blocks=0
+[FoldedCode18]
+Blocks=0
+[FoldedCode16]
+Blocks=0
+[FoldedCode15]
+Blocks=0
