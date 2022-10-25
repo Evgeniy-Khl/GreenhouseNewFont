@@ -66,6 +66,10 @@ if(ds18b20)           // если датчики были найдены
    w1_write(0xCC); // Load Skip ROM [CCH] command
    w1_write(0x44); // Load Convert T [44H] command
  }
+else {
+    soilModule = module_check(ID_SOIL1);  // detect модуль грунта #1
+    soilModule += module_check(ID_SOIL2); // detect модуль грунта #2
+}
 //------------------------ once per second --------------------------------------
 clock_buffer[0] = 0;// EOSC=0 BBSQW=0 CONV=0 RS2=0 RS1=0 INTCN=0 A2IE=0 A1IE=0
 clock_buffer[1] = 0;//  EN32kHz=0 BSY=0 A2F=0 A1F=0      
@@ -90,10 +94,14 @@ ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
 pointY = pointY+20;
 sprintf(buff,"Датчик вологосты %u",Dht);                // датчик AM2301
 ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
-//  pointY = pointY+20;
-
+if(soilModule){
+    pointY = pointY+20;
+    sprintf(buff,"Модуль грунту %u",soilModule);
+    ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
+}
 newSetButt = 1;
 timerOn = 1;
 timerOff = 1;
 temperature_check();
+delay_ms(1000);
 //display();

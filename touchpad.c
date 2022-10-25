@@ -171,8 +171,8 @@ void touchpad(char byte){
         case 6:
           switch (byte){
             case 0: displ_num = 3; newSetButt = 1; break;
-            case 1: if (--numMenu<0) numMenu = 0;  break;
-            case 2: if (++numMenu>3) numMenu = 3;  break;
+            case 1: if (--numMenu<0) numMenu = 5;  break;
+            case 2: if (++numMenu>5) numMenu = 0;  break;
             case 3: displ_num = 7; newSetButt = 1; break;
           }
           byte = 10;
@@ -181,14 +181,16 @@ void touchpad(char byte){
         case 7:
           switch (byte){
             case 0: displ_num = 6; newSetButt = 1; break;
-            case 1: if (--numSet<0) numSet = 0;    break;
-            case 2: if (++numSet>4) numSet = 4;    break;
+            case 1: if (--numSet<0) numSet = 5;    break;
+            case 2: if (++numSet>5) numSet = 0;    break;
             case 3:  
               switch (numMenu){
                 case 0: for (byte=0;byte<3;byte++) newval[byte] = limit[0][byte]; break; // "Канал 0"
                 case 1: for (byte=0;byte<3;byte++) newval[byte] = limit[1][byte]; break; // "Канал 1"
                 case 2: for (byte=0;byte<3;byte++) newval[byte] = limit[2][byte]; break; // "Канал 2" 
                 case 3: for (byte=0;byte<3;byte++) newval[byte] = limit[3][byte]; break; // "Канал 3"
+                case 4: for (byte=0;byte<3;byte++) newval[byte] = limit[4][byte]; break; // Грунт температура 
+                case 5: for (byte=0;byte<3;byte++) newval[byte] = limit[5][byte]; break; // Грунт влажность
               }
                 displ_num = 8; newSetButt = 1; 
             break;
@@ -203,8 +205,8 @@ void touchpad(char byte){
                 switch (numSet) {
                     case 0: if(newval[numSet]>100) newval[numSet]=100; break; // MIN
                     case 1: if(newval[numSet]>100) newval[numSet]=100; break; // MAX
-                    case 2: if(newval[numSet]>100) newval[numSet]=100; break; // Пропорциональный
-                    case 3: if(newval[numSet]>250) newval[numSet]=250; break; // Интегральный
+                    case 2: if(newval[numSet]>500) newval[numSet]=500; break; // Пропорциональный
+                    case 3: if(newval[numSet]>1000) newval[numSet]=1000; break; // Интегральный
                 };
             break; 
             case 2: --newval[numSet];

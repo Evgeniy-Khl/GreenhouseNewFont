@@ -2,61 +2,70 @@
 
 unsigned char txtTimer[20];
 
-void temperature_check(void)
-{
+void temperature_check(void){
  int val;
  unsigned char item, byte, crc, try=0;
-  for (item=0; item < ds18b20;)
-   {
-     w1_init();                 // 1 Wire Bus initialization
-     w1_write(0x55);            // Load MATCH ROM [55H] comand
-     ptr_char = &familycode[item][0];
-     for (byte=0; byte < 8; byte++) w1_write(*ptr_char++);
-     ptr_char = ds.buffer;
-     w1_write(0xBE);            // Read Scratchpad command [BE]
-     for (byte=0; byte < 8; byte++) *ptr_char++ = w1_read(); // Read cont. byte
-     crc = w1_read();           // Read CRC byte
-     ptr_char = ds.buffer;
-     if (w1_dow_crc8(ptr_char, 8)==crc){
-       try = 0; val = ds.pvT;
-       if (val<0) {val=-val; val = val*10/16; val=-val;} // перевод в десятичное значение !!
-       else val = val*10/16; // перевод в десятичное значение !!
-       //----- Коректировка датчика DS18B20 ----------
-       if(ds.buffer[2]==TUNING) val +=(signed char)ds.buffer[3]; // корекция показаний датчика
-     }
-     else if (++try > 2) {val = 1990; try = 0;}// (199.0) если ошибка более X раз то больше не опрашиваем     
-     t.point[item] = val; 
-     if (try==0) item++;
-   }
-  w1_init();                    // 1 Wire Bus initialization
-  w1_write(0xCC);               // Load Skip ROM [CCH] command
-  w1_write(0x44);               // Load Convert T [44H] command
+    for (item=0; item < ds18b20;){
+        w1_init();                 // 1 Wire Bus initialization
+        w1_write(0x55);            // Load MATCH ROM [55H] comand
+        ptr_char = &familycode[item][0];
+        for (byte=0; byte < 8; byte++) w1_write(*ptr_char++);
+        ptr_char = ds.buffer;
+        w1_write(0xBE);            // Read Scratchpad command [BE]
+        for (byte=0; byte < 8; byte++) *ptr_char++ = w1_read(); // Read cont. byte
+        crc = w1_read();           // Read CRC byte
+        ptr_char = ds.buffer;
+        if (w1_dow_crc8(ptr_char, 8)==crc){
+            try = 0; val = ds.pvT;
+            if (val<0) {val=-val; val = val*10/16; val=-val;} // перевод в десятичное значение !!
+            else val = val*10/16; // перевод в десятичное значение !!
+            //----- Коректировка датчика DS18B20 ----------
+            if(ds.buffer[2]==TUNING) val +=(signed char)ds.buffer[3]; // корекция показаний датчика
+        }
+        else if (++try > 2) {val = 1990; try = 0;}// (199.0) если ошибка более X раз то больше не опрашиваем     
+        t[item] = val; 
+        if (try==0) item++;
+    }
+    w1_init();                    // 1 Wire Bus initialization
+    w1_write(0xCC);               // Load Skip ROM [CCH] command
+    w1_write(0x44);               // Load Convert T [44H] command
 }
 
-unsigned char module_check(unsigned char fc)
-{
+#define ID_SOIL1         0xF1   // идентификатор модуля грунта #1
+#define ID_SOIL2         0xF2   // идентификатор модуля грунта #2
+#define ID_PH            0xF4   // идентификатор сенсора pH
+#define ID_CO2           0xF5   // идентификатор модуля CO2
+unsigned char module_check(unsigned char fc){
  unsigned char *p, try, byte;
-  p = out.buffer;
-  out.buffer[3]=w1_dow_crc8(p,3);// контрольная сумма
-  for (try=0; try<3; try++)
-   {
-    w1_init();            // 1 Wire Bus initialization
-    w1_write(fc);         // Family code
     p = out.buffer;
-    for (byte=0; byte<4; byte++) w1_write(*p++);
-    delay_us(250);      // ожидаем пока модуль обработает информацию
-    p = in.buffer;
-    for (byte=0; byte<4; byte++) *p++ = w1_read();// Read 4 byte
-    byte = w1_read();  // Read CRC byte #5
-    p = in.buffer;
-    if(byte==w1_dow_crc8(p,4)) break;
-    delay_ms(10);
-   };
-  if(try>2) byte=0; else byte=1;
-  return byte;
+    out.buffer[3]=w1_dow_crc8(p,3);// контрольная сумма
+    for (try=0; try<3; try++){
+        w1_init();            // 1 Wire Bus initialization
+        w1_write(fc);         // Family code
+        p = out.buffer;
+        for (byte=0; byte<4; byte++) w1_write(*p++);
+        delay_us(250);      // ожидаем пока модуль обработает информацию
+        p = in.buffer;
+        for (byte=0; byte<4; byte++) *p++ = w1_read();// Read 4 byte
+        byte = w1_read();  // Read CRC byte #5
+        p = in.buffer;
+        if(byte==w1_dow_crc8(p,4)) break;
+        delay_ms(10);
+    };
+    if(try>2) byte=0; else byte=1;
+    return byte;
 }
 
-//#define ID_CO2          0xF5    // идентификатор блока
+void soilModule_check(void){
+ unsigned char item, fc, res;
+    for (item=0; item < soilModule; item++){
+        fc = ID_SOIL1 + item;
+        res = module_check(fc);
+        if(res){t[item] = in.val[0]; hum[item] = in.val[1];}
+        else {t[item] = 1990; hum[item] = 1990;}    
+    }    
+}
+
 //#define DATAREAD        0xA1    // Read Scratchpad
 //unsigned char readCO2(void) // чтение модуля СО2
 //{
@@ -155,6 +164,7 @@ unsigned char calcRtc(unsigned char rtc, signed char val){
     return res;
 }
 
+// Работа таймера не привязанная к RTC
 void timerCheck(void){
  unsigned char byte, port, dimOn=set[4][1], dimOff=set[4][3];
     port = set[4][6];  // № выхода таймера
@@ -187,6 +197,7 @@ void timerCheck(void){
     }
 }
 
+// Работа таймера привязанная к RTC
 void timerRTC(unsigned char prg){
   unsigned char byte, port, dimOn=set[4][3];
     port = set[4][6];  // № выхода таймера

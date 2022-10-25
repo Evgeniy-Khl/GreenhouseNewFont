@@ -119,29 +119,41 @@ void displ_1(void){
     }
 //--- Индикация t ГРУНТА ---
     pointY += 20;
-    for (i=0;i<ds18b20;i++){
-        sprintf(buff,"зона %u",i+1);
-        ILI9341_WriteString(5,pointY+12,buff,Font_11x18,bordWindow,fillWindow,1);
-        temp = t.point[i];
-        if(temp>1250) sprintf(buff,"**.*");
-        else {
-            fraction(temp);     // проверка знака температуры
-            sprintf(buff,"%2u.%u  ---%%",intval,frcval); // T датчиков показываем с десятичным знаком 
-        }
-        ILI9341_WriteString(90,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
-        pointY += 35;
-    };
-    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
-    pointY += 10;
-//--- Модуль грунта ---
-    if(Soilmodule){
-        if(error&0x08) ILI9341_WriteString(10,pointY,"Помилка модуля грунту!",Font_11x18,YELLOW,RED,1);
-        else {
-            sprintf(buff,"грунт   ---%%");
-            ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
-        }
+    if(ds18b20){
+        for (i=0;i<ds18b20;i++){
+            sprintf(buff,"зона %u",i+1);
+            ILI9341_WriteString(5,pointY+12,buff,Font_11x18,bordWindow,fillWindow,1);
+            temp = t[i];
+            if(temp>1250) sprintf(buff,"**.*");
+            else {
+                fraction(temp);     // проверка знака температуры
+                sprintf(buff,"%2u.%u",intval,frcval); // T датчиков показываем с десятичным знаком 
+            }
+            ILI9341_WriteString(90,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+            pointY += 35;
+        };
     }
-    else ILI9341_WriteString(10,pointY,"Модуль грунту выдсутный.",Font_11x18,bordWindow,fillWindow,1);
+    else if(soilModule){
+        for (i=0;i<soilModule;i++){
+            sprintf(buff,"зона %u",i+1);
+            ILI9341_WriteString(5,pointY+12,buff,Font_11x18,bordWindow,fillWindow,1);
+            temp = map(t[i], limit[4][2], limit[4][3], limit[4][0], limit[4][1]);// температура
+            if(temp>100) sprintf(buff,"*** ");
+            else sprintf(buff,"%3u ",temp); // T грунта в целых числах 
+            ILI9341_WriteString(90,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+            sprintf(buff,"%3u",t[i]);
+            ILI9341_WriteString(155,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
+            
+            temp = 100 - map(hum[i], limit[5][2], limit[5][3], limit[5][0], limit[5][1]);// влажность
+            if(temp>100) sprintf(buff,"***%%");
+            else sprintf(buff,"%3u%%",temp); // RH грунта в целых числах 
+            ILI9341_WriteString(190,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+            sprintf(buff,"%3u",hum[i]);
+            ILI9341_WriteString(270,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
+            pointY += 35;
+        };
+    }
+    else ILI9341_WriteString(10,pointY,"Модуль грунту выдсутный.",Font_11x18,bordWindow,fillWindow,1); 
     if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
     pointY += 30;
 //--- Модуль CO2 ----
@@ -243,8 +255,8 @@ void displ_2(void){
     for (i=0;i<4;i++){
         sprintf(buff,"ВИХЫД N%u: ",i+1);
         if(analogSet[i]==-1) strcat(buff,"АВТ"); else {strcat(buff,"РУЧ"); analogOut[i]=analogSet[i];}
-//        sprintf(txt," %3u%% ",analogOut[i]);
-        sprintf(txt,"%7.4f %3u%%",iPart[i],analogOut[i]);
+        sprintf(txt," %3u%% ",analogOut[i]);
+//        sprintf(txt,"%7.4f %3u%%",iPart[i],analogOut[i]);
         strcat(buff,txt);
         ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
         pointY = pointY+22;    
@@ -444,7 +456,7 @@ void displ_6(void){
     ILI9341_WriteString(20,pointY,"НАЛАШТУВАННЯ КОЕФЫЦЫЭНТЫВ",Font_11x18,bordWindow,fillWindow,1);
   }
   pointY += 35;
-  for (item = 0; item < 4; item++){
+  for (item = 0; item < MAX_6; item++){
     sprintf(buff,"Набыр коефыцыэнтыв N%u",item+1);
     if(item == numMenu){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
     ILI9341_WriteString(20,pointY,buff,Font_11x18,color_txt,color_fon,1);    

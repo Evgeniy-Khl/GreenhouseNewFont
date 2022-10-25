@@ -129,7 +129,7 @@ void drawPlus(char i, unsigned int fill){
 //in_max: верхний предел текущего диапазона переменной value
 //out_min:    нижний предел нового диапазона переменной value
 //out_max:   верхний предел нового диапазона переменной value
-unsigned int map(unsigned int x, char in_min, unsigned int in_max, char out_min, unsigned int out_max){
+unsigned int map(unsigned int x, unsigned int in_min, unsigned int in_max, char out_min, unsigned int out_max){
  long val;
     val = (x - in_min); val *= (out_max - out_min); val /= (in_max - in_min); val += out_min;
     return val;

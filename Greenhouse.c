@@ -23,7 +23,7 @@ Program size: 14365 words (28730 bytes), 87,7% of FLASH  16.10.2022
 #define CSDAC3		    PORTD.6
 #define CSDAC4	        PORTD.7
 #define CONECT          PINB.3    // если bluetooth подключен то здесь +3,3В
-#define MAX_DEVICES     3
+#define MAX_DEVICES     2
 #define MAX_MENU        6
 #define MAX_4           4
 #define MAX_5           5
@@ -43,11 +43,11 @@ Program size: 14365 words (28730 bytes), 87,7% of FLASH  16.10.2022
 #define ADC_VREF_TYPE   0x40
 
 // Declare your global variables here
-unsigned char BeepT, displ_num, ok, portOut, newSetButt, ds18b20, pointY, DHTexist, signchar, intval, frcval, error;
+unsigned char BeepT, displ_num, ok, portOut, newSetButt, ds18b20, soilModule, pointY, DHTexist, signchar, intval, frcval, error;
 signed char numMenu, numSet, pauseEdit/*, displCO2, timerCO2*/;
 unsigned char relOut[4]={0}, analogOut[4]={0}, dacU[4]={ZERO}, buff[40], familycode[MAX_DEVICES][9], clock_buffer[7], alarm[4]={2,2,2,2};
 unsigned int  max_X, max_Y, timerOn, timerOff, fillScreen = BLACK;
-signed int pvT=1990, offsetT, pvRH=1990, offsetRH, pvCO2, pvPH, newval[MAX_7];
+signed int pvT=1990, offsetT, pvRH=1990, offsetRH, pvCO2, pvPH, newval[MAX_7], t[MAX_DEVICES], hum[MAX_DEVICES];
 unsigned char *ptr_char;
 const char* setMenu[MAX_MENU]={"Температура","Вологысть","Таймер","День Ныч","Час Дата","Ынше"};
 const char* setName0[MAX_7]={"ДЕНЬ","НЫЧ","Выдхил.","Гыстер.","Режим","Резерв","Вихыд"};
@@ -56,7 +56,6 @@ const char* setName2[MAX_6]={"День почат.","Ныч почат.","Включено Р","Вимкнено Р
 const char* setName3[MAX_4]={"MIN","MAX","Пропор.","Ынтегр."};
 const char* setName7[MAX_5]={"Хвилини","Години","День","Мысяц","Рык"};
 //--------------- union declaration -----------------------------------------------
-union {signed int point[MAX_DEVICES]; unsigned char buff[];} t; // буффер значений температур
 union {unsigned char buffer[8]; unsigned int pvT;} ds;          // буффер микросхемы DS18B20
 union {unsigned char buffer[4]; unsigned int val[2];} in;
 union {unsigned char buffer[4]; unsigned int val[2];} out;
@@ -75,19 +74,20 @@ eeprom signed int set[6][7]={
 {  10,  0,   10,   1,   0,0x06,   2},  // tmOn; dimOn=0(сек.)/dim=1(мин.); tmOff; dimOff; HourStart; Programm;                         выход № РЕЛЕ3
 {0x07,0x20,0x05,0x09,0x18,0x23,   3}}; // DayBeg; DayEnd; Light0Beg; Light0End; Light1Beg; Light1End;                                  выход № РЕЛЕ4
 
-eeprom unsigned char limit[4][4]={
+eeprom unsigned int limit[6][4]={
                     // min max  kP   kI 
                       {  0,100, 20, 100}, // 4
                       {  0,100, 20, 100}, // 5
                       {  0,100, 20, 100}, // 6
-                      {  0,100, 20, 100}};// 7 
+                      {  0,100, 20, 100}, // 7
+                      {  0, 33,270, 530}, // Грунт температура  t=0 -> V=1.32 -> ADC=270; t=25 -> V=2.51 -> ADC=514
+                      {  0,100,420, 850}};// Грунт влажность  RH=100% -> V=2.45 -> ADC=435; RH=0% -> V=4.43 -> ADC=920 
 
 bit Night;
 bit Sec;
 bit Dht;
 bit Clock_Ok;
 bit pHsensor;
-bit Soilmodule;
 bit CO2module;       // подключен измеритель СО2
 bit typeS;           // DHT11/DHT22
 
@@ -126,11 +126,11 @@ while (1){
         Sec=0;
         if(clock_buffer[2]>=set[5][0]&&clock_buffer[2]<set[5][1]) byte=0; else byte=1;
         if(byte!=Night){Night = byte; ok = 0;}      // день / ночь
-        
+    // -- работа таймера ----------    
         byte = set[4][4];                           // режим таймера если 0 то простой если 1-14 то программный
         if(byte==0) timerCheck();                   // простой таймер
         else timerRTC(byte);                        // таймер по программе
-        
+    // -- работа освещения --------    
         if(clock_buffer[2]>=set[5][2]&&clock_buffer[2]<set[5][3]) x=1; else x=0; // Light0Beg; Light0End;
         if(x==0){if(clock_buffer[2]>=set[5][4]&&clock_buffer[2]<set[5][5]) x=2; else x=0;}//Light1Beg; Light1End;
         byte = set[5][6];  // № выхода таймера
@@ -148,23 +148,25 @@ while (1){
             if(Night) byte = rtcTodec(set[5][2]); else byte = rtcTodec(set[5][4]);
             sprintf(txt,"OFF включ.%02u:00:00",byte);
         }
-        
-        if(ds18b20) temperature_check();
+    // -- измерение параметров воздуха ---------            
         if(Dht){                                         // присутствует датчик влажности
             if(readDHT()) DHTexist = 3; 
             else if(DHTexist) DHTexist--;                // датчик влажности работает? 
             else {pvT = 1900; pvRH = 190;}
-        }  
+        }
+    // -- измерение параметров грунта ---------
+        if(ds18b20) temperature_check();
+        else if(soilModule) soilModule_check(); 
         // --------КАНАЛ температура воздуха ВЫХОД 0 и ВЫХОД 4 ---------
          if(Dht){RelaySensor(pvT,0); analogOut[0]=UpdatePI(pvT,0);}
          else if(ds18b20){
-            RelaySensor((t.point[0]+t.point[1])/2,0);  // средняя грунта
-            analogOut[0]=UpdatePI((t.point[0]+t.point[1])/2,0);
+            RelaySensor((t[0]+t[1])/2,0);  // средняя грунта
+            analogOut[0]=UpdatePI((t[0]+t[1])/2,0);
          }
         // --------КАНАЛ влажность воздуха ВЫХОД 1 и ВЫХОД 5 --------- 
         if(Dht){RelaySensor(pvRH,1); analogOut[1]=UpdatePI(pvRH,1);}
         // --------КАНАЛ температура грунта ВЫХОД 6 ---------
-        if(ds18b20) analogOut[2]=UpdatePI((t.point[0]+t.point[1])/2,2);  // средняя грунта
+        if(ds18b20) analogOut[2]=UpdatePI((t[0]+t[1])/2,2);  // средняя грунта
         // --------КАНАЛ влажность грунта ВЫХОД 7 ---------
         //if(ds18b20) analogOut[3] = UpdatePI((t.point[0]+t.point[1])/2,3);  // средняя грунта
 // ================ Управление исполнительными механизмами ======================================

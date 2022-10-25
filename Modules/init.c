@@ -45,7 +45,7 @@ DIDR0=(0<<AIN0D) | (0<<AIN1D);
 // ADC Auto Trigger Source: ADC Stopped
 // Digital input buffers on ADC0: On, ADC1: On, ADC2: On, ADC3: Off
 DIDR0|=(0<<ADC0D) | (0<<ADC2D) | (1<<ADC3D) | (0<<ADC1D);
-ADMUX=ADC_VREF_TYPE;
+ADMUX=ADC_VREF_TYPE;       // ((0<<REFS0) | (0<<ADLAR))
 ADCSRA=(1<<ADEN) | (0<<ADSC) | (0<<ADATE) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) | (1<<ADPS1) | (0<<ADPS0);
 ADCSRB=(0<<ADTS2) | (0<<ADTS1) | (0<<ADTS0);
 

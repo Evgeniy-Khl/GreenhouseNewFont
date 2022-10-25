@@ -20,6 +20,8 @@ Program size    : 403 words (806 bytes), 78,7% of FLASH
 #define LEDcool	PORTB.2
 #define ON      0
 #define OFF     1
+#define ADC_PB4 2
+#define ADC_PB3 3
 
 #define TIMING480    60	// 60*64*0.10417=400 us  (50*64*0.125=400 us)
 #define PRESET48 	249	// (256 - n)*64*0.10417= 46,6 us  ( Waits 48 us )
@@ -35,7 +37,6 @@ Program size    : 403 words (806 bytes), 78,7% of FLASH
 // Declare your global variables here
 union {unsigned char data[4]; signed int val[2];} out;
 unsigned char buffer[4];
-//eeprom unsigned char nil=255;   // НЕ используется, только для ускорения программирования.
 
 bit TimeSlot;
 bit Fall;
@@ -86,6 +87,7 @@ interrupt [TIM0_OVF] void timer0_ovf_isr(void)
 
 // Bandgap Voltage Reference: Off
 #define ADC_VREF_TYPE ((0<<REFS0) | (0<<ADLAR))
+#define ADC_REF 5
 
 // Read the AD conversion result
 unsigned int read_adc(unsigned char adc_input){
@@ -113,7 +115,8 @@ while (1)
     if(TimeSlot) w1_handler();
     if(Measur){
         Measur = 0;
-        out.val[0] = read_adc(3);
+        out.val[0] = read_adc(ADC_PB4);// температура
+        out.val[1] = read_adc(ADC_PB3);// влажность
     }
  }
 }
