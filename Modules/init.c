@@ -52,6 +52,8 @@ ADCSRB=(0<<ADTS2) | (0<<ADTS1) | (0<<ADTS0);
 delay_ms(1000);
 // 1 Wire Bus initialization
 w1_init();
+word = read_adc(ADC_PB3);// влажность
+if(word<100){limitRH[0]=450; limitRH[1]=850;} // если вход датчика закорочен то сброс лимитов
 
 // Watchdog Timer initialization
 // Watchdog Timer Prescaler: OSC/1024k

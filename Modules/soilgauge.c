@@ -111,6 +111,7 @@ unsigned int read_adc(unsigned char adc_input){
 void main(void)
 {
 // Declare your local variables here
+unsigned int word;
 
 #include "init.c"
 ptr_to_eeprom=&limitRH[0];
