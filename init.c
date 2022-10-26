@@ -95,6 +95,7 @@ pointY = pointY+20;
 sprintf(buff,"Датчик вологосты %u",Dht);                // датчик AM2301
 ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
 if(soilModule){
+    soilModule_check(EEPROMREAD);
     pointY = pointY+20;
     sprintf(buff,"Модуль грунту %u",soilModule);
     ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);

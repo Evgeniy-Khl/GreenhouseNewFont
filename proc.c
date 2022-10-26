@@ -56,12 +56,22 @@ unsigned char module_check(unsigned char fc){
     return byte;
 }
 
-void soilModule_check(void){
+void soilModule_check(unsigned char command){
  unsigned char item, fc, res;
     for (item=0; item < soilModule; item++){
         fc = ID_SOIL1 + item;
+        out.buffer[0] = command;
         res = module_check(fc);
-        if(res){t[item] = in.val[0]; hum[item] = in.val[1];}
+        if(res){
+            if(command==DATAREAD){
+                t[item] = in.val[0];
+                hum[item] = in.val[1];
+            }
+            else if(command==EEPROMREAD){
+                limit[5][2] = t[item];
+                limit[5][3] = hum[item];
+            } 
+        }
         else {t[item] = 1990; hum[item] = 1990;}    
     }    
 }

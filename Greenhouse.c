@@ -32,9 +32,8 @@ Program size: 14365 words (28730 bytes), 87,7% of FLASH  16.10.2022
 #define MISTAKE         3
 #define ZERO	        50
 
-#define SBLK		    0x91      // Начало блока данных
-#define BSTR		    0x81      // Начало строки данных
-#define EBLK            0xF1      // Конец блока данных
+#define DATAREAD        0xA1    // Read Scratchpad
+#define EEPROMREAD      0xB1    // Read EEPROM
 #define DS3231          0xD0      // Часовая микросхема
 
 #define SPI_MOUD_FL	    0x51	  // SPI Type: Master, Clock Rate: 1000,000 kHz, Clock Phase: Cycle Half, Clock Polarity: Low, Data Order: MSB First
@@ -81,7 +80,7 @@ eeprom unsigned int limit[6][4]={
                       {  0,100, 20, 100}, // 6
                       {  0,100, 20, 100}, // 7
                       {  0, 33,270, 530}, // Грунт температура  t=0 -> V=1.32 -> ADC=270; t=25 -> V=2.51 -> ADC=514
-                      {  0,100,420, 850}};// Грунт влажность  RH=100% -> V=2.45 -> ADC=435; RH=0% -> V=4.43 -> ADC=920 
+                      {  0,100,450, 850}};// Грунт влажность  RH=100% -> V=2.45 -> ADC=435; RH=0% -> V=4.43 -> ADC=920 
 
 bit Night;
 bit Sec;
@@ -156,7 +155,7 @@ while (1){
         }
     // -- измерение параметров грунта ---------
         if(ds18b20) temperature_check();
-        else if(soilModule) soilModule_check(); 
+        else if(soilModule) soilModule_check(DATAREAD); 
         // --------КАНАЛ температура воздуха ВЫХОД 0 и ВЫХОД 4 ---------
          if(Dht){RelaySensor(pvT,0); analogOut[0]=UpdatePI(pvT,0);}
          else if(ds18b20){

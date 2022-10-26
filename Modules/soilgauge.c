@@ -11,10 +11,12 @@ Program size    : 403 words (806 bytes), 78,7% of FLASH
 #include <delay.h>
 #include <1wire.h>
 #include <1wireslave.h>
+#include <eeprom.h>
 
 #define ID              0xF1    // идентификатор блока
 #define RESET           0xC1    // Generate Reset Pulse
 #define DATAREAD        0xA1    // Read Scratchpad
+#define EEPROMREAD      0xB1    // Read EEPROM
 
 #define LEDrst	PORTB.0
 #define LEDcool	PORTB.2
@@ -37,6 +39,8 @@ Program size    : 403 words (806 bytes), 78,7% of FLASH
 // Declare your global variables here
 union {unsigned char data[4]; signed int val[2];} out;
 unsigned char buffer[4];
+signed int eeprom *ptr_to_eeprom;
+eeprom signed int limitRH[2]={450, 850};
 
 bit TimeSlot;
 bit Fall;
@@ -109,6 +113,7 @@ void main(void)
 // Declare your local variables here
 
 #include "init.c"
+ptr_to_eeprom=&limitRH[0];
 
 while (1)
  {
@@ -117,6 +122,8 @@ while (1)
         Measur = 0;
         out.val[0] = read_adc(ADC_PB4);// температура
         out.val[1] = read_adc(ADC_PB3);// влажность
+        if(out.val[1]>limitRH[1]) limitRH[1] = out.val[1];
+        else if(out.val[1]<limitRH[0]) limitRH[0] = out.val[1];
     }
  }
 }

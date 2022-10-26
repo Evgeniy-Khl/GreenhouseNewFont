@@ -167,12 +167,12 @@ void touchpad(char byte){
           }
           byte = 10;
         break;
-        //- Общий список коэффициентов -
+        //-- Общий список коэффициентов #1 - #6 --
         case 6:
           switch (byte){
             case 0: displ_num = 3; newSetButt = 1; break;
-            case 1: if (--numMenu<0) numMenu = 5;  break;
-            case 2: if (++numMenu>5) numMenu = 0;  break;
+            case 1: if (--numMenu<0) numMenu = 0;  break;
+            case 2: if (++numMenu>5) numMenu = 5;  break;
             case 3: displ_num = 7; newSetButt = 1; break;
           }
           byte = 10;
@@ -181,18 +181,10 @@ void touchpad(char byte){
         case 7:
           switch (byte){
             case 0: displ_num = 6; newSetButt = 1; break;
-            case 1: if (--numSet<0) numSet = 5;    break;
-            case 2: if (++numSet>5) numSet = 0;    break;
-            case 3:  
-              switch (numMenu){
-                case 0: for (byte=0;byte<3;byte++) newval[byte] = limit[0][byte]; break; // "Канал 0"
-                case 1: for (byte=0;byte<3;byte++) newval[byte] = limit[1][byte]; break; // "Канал 1"
-                case 2: for (byte=0;byte<3;byte++) newval[byte] = limit[2][byte]; break; // "Канал 2" 
-                case 3: for (byte=0;byte<3;byte++) newval[byte] = limit[3][byte]; break; // "Канал 3"
-                case 4: for (byte=0;byte<3;byte++) newval[byte] = limit[4][byte]; break; // Грунт температура 
-                case 5: for (byte=0;byte<3;byte++) newval[byte] = limit[5][byte]; break; // Грунт влажность
-              }
-                displ_num = 8; newSetButt = 1; 
+            case 1: if (--numSet<0) numSet = 3;    break;
+            case 2: if (++numSet>3) numSet = 0;    break;
+            case 3: for (byte=0;byte<4;byte++) newval[byte] = limit[numMenu][byte];
+                    displ_num = 8; newSetButt = 1; 
             break;
           }
           byte = 10;
@@ -218,15 +210,10 @@ void touchpad(char byte){
                 };
             break; 
             case 3: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
-                  ILI9341_WriteString(10,100,"ВИКОНУЮ ЗАПИС",Font_11x18,GREEN,fillScreen,2);
-                  switch (numMenu){
-                    case 0: limit[0][numSet] = newval[numSet]; break; // MIN
-                    case 1: limit[1][numSet] = newval[numSet]; break; // MAX
-                    case 2: limit[2][numSet] = newval[numSet]; break; // Пропорциональный
-                    case 3: limit[3][numSet] = newval[numSet]; break; // Интегральный
-                  }
-                  delay_ms(500);
-                  displ_num = 7; newSetButt = 1;
+                    ILI9341_WriteString(10,100,"ВИКОНУЮ ЗАПИС",Font_11x18,GREEN,fillScreen,2);
+                    limit[numMenu][numSet] = newval[numSet];
+                    delay_ms(500);
+                    displ_num = 7; newSetButt = 1;
             break;
           }
           byte = 10;
