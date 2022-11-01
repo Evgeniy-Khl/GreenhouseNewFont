@@ -20,10 +20,11 @@ TIMSK0=(0<<OCIE0B) | (0<<OCIE0A) | (1<<TOIE0);
 // External Interrupt(s) initialization
 // INT0: On
 // INT0 Mode: Falling Edge
-// Interrupt on any change on pins PCINT0-5: Off
-GIMSK=(1<<INT0) | (0<<PCIE);
+// Interrupt on any change on pins PCINT0-5: Off; PCINT3
+GIMSK=(1<<INT0);
 MCUCR=(1<<ISC01) | (0<<ISC00);
-GIFR=(1<<INTF0) | (0<<PCIF);
+PCMSK=(0<<PCINT5) | (0<<PCINT4) | (1<<PCINT3) | (0<<PCINT2) | (0<<PCINT1) | (0<<PCINT0);
+GIFR=(1<<INTF0) | (1<<PCIF);
 
 // Analog Comparator initialization
 // Analog Comparator: Off
@@ -46,8 +47,8 @@ ADCSRA=(1<<ADEN) | (0<<ADSC) | (0<<ADATE) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) |
 w1_init();
 
 if(LEDlim==0){
-    limitRH[0]=600; 
-    limitRH[1]=700; 
+    limitRH[0]=250; 
+    limitRH[1]=0; 
     delay_ms(5000);
 } // если вход датчика закорочен то записаны начальные границы диапазона значений
 

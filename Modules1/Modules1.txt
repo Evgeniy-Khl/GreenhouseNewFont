@@ -1,0 +1,19 @@
+
+Capacitor (C)		0.4 nanoFarad (nF)
+Resistance 1 (R1)	10  kilohms (kom)
+Resistance 2 (R2)	1   megaohms (Mom)
+Frequency		1.795 Kilohertz (KHz)
+Period (T)		557.172 microseconds (&mu;s)
+Duty Cycle		50.25%
+Time High (T1)		279.972 microseconds (&mu;s)
+Time Low (T0)		277.200 microseconds (&mu;s)
+
+
+Capacitor (C)		0.03 nanoFarad (nF)
+Resistance 1 (R1)	10   kilohms (kom)
+Resistance 2 (R2)	1    megaohms (Mom)
+Frequency		23.930 Kilohertz (KHz)
+Period (T)		41.788 microseconds (&mu;s)
+Duty Cycle		50.25%
+Time High (T1)		20.998 microseconds (&mu;s)
+Time Low (T0)		20.790 microseconds (&mu;s)

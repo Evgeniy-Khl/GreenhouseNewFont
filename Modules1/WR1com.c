@@ -21,5 +21,5 @@ void w1_handler(void){
     TimeSlot=0; Fall=0; LEDrst=OFF; // ¬ј∆Ќќ на этом месте !!!
     TIMSK0=0;                       // TOV0 Off TOV1 Off
     MCUCR=0x02;                     // INT1 Mode: Falling Edge;
-    GIFR=0x60; GIMSK=0x60;          // INT0: On; Interrupt on any change on pins PCINT0-5: On
+    GIFR=GIMSK=(1<<INT0); GIMSK=GIMSK=(1<<INT0); // INT0: On; Interrupt on any change on pins PCINT0-5: Off
 }

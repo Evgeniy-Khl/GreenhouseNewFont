@@ -64,7 +64,7 @@ void soilModule_check(unsigned char command){
         res = module_check(fc);
         if(res){
             if(command==DATAREAD){t[item] = in.val[0]; hum[item] = in.val[1];}
-            else if(command==EEPROMREAD){limit[5][2] = t[item]; limit[5][3] = hum[item];} 
+            else if(command==EEPROMREAD){limit[5][2] = in.val[0]; limit[5][3] = in.val[1];} 
         }
         else {t[item] = 1990; hum[item] = 1990;}    
     }    

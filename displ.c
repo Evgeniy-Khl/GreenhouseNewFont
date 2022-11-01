@@ -400,7 +400,7 @@ void displ_5(void){
     case 0: //-------- "Температура" ---------
       if (numSet<4){
         temp = newval[numSet]; tmpv0 = temp%10; tmpv1 = temp/10;
-        sprintf(buff,"%5s = %2u.%u", setName0[numSet],tmpv1,tmpv0); // T с десятичным знаком
+        sprintf(buff,"%5s = %3u.%u", setName0[numSet],tmpv1,tmpv0); // T с десятичным знаком
         ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
       }
       else if(numSet==4) {
@@ -416,7 +416,7 @@ void displ_5(void){
     break;
     case 1: //-------- "Влажность" -----------
       if(numSet<4){
-        sprintf(buff,"%7s = %i%%", setName0[numSet],newval[numSet]);
+        sprintf(buff,"%7s = %3i%%", setName0[numSet],newval[numSet]);
         ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
       }
       else if(numSet==4) {
@@ -431,15 +431,15 @@ void displ_5(void){
       }
     break;
     case 2: //-------- "Таймер" --------------
-        sprintf(buff,"%5s: %i ", setName1[numSet], newval[numSet]);
+        sprintf(buff,"%5s: %3i ", setName1[numSet], newval[numSet]);
         ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
     break;
     case 3: //-------- "День Ночь" -----------
-        sprintf(buff,"%5s: %i ", setName2[numSet], newval[numSet]);
+        sprintf(buff,"%5s: %3i ", setName2[numSet], newval[numSet]);
         ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
     break;
     case 4: //-------- "Время и Дата" ---------------
-        sprintf(buff,"%7s: %u ", setName7[numSet], newval[numSet]);
+        sprintf(buff,"%7s: %3u ", setName7[numSet], newval[numSet]);
         ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
     break;
    }
@@ -499,7 +499,7 @@ void displ_8(void){
   }
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     pointY = pointY+50;
-    sprintf(buff,"%7s:%3i", setName3[numSet], newval[numSet]);
+    sprintf(buff,"%7s:%4i", setName3[numSet], newval[numSet]);
     ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
     if(--pauseEdit==0){pauseEdit=1; if(checkTouch()) checkSkipEdit();}//***************************** проверим нажатие кнопки *************************************** 
 }

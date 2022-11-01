@@ -55,7 +55,7 @@ offsetT = 0;// set[4][0];
 offsetRH = 0;// set[4][1];
 typeS = set[1][5];
 //setDAC();           // подать напряжение на аналоговые выходы
-delay_ms(1000);
+delay_ms(2000);
 Dht = readDHT();    // detect DHT-21/11
 //------ 1 Wire Protocol Functions ----------------------------------------------------------------------
 ds18b20 = w1_search(0xf0,familycode);// detect how many DS1820/DS18S20 devices are connected to the 1 Wire bus
@@ -68,7 +68,10 @@ if(ds18b20)           // если датчики были найдены
  }
 else {
     soilModule = module_check(ID_SOIL1);  // detect модуль грунта #1
-    soilModule += module_check(ID_SOIL2); // detect модуль грунта #2
+//    soilModule += module_check(ID_SOIL2); // detect модуль грунта #2
+    if(soilModule){
+        soilModule_check(EEPROMREAD);
+    }
 }
 //------------------------ once per second --------------------------------------
 clock_buffer[0] = 0;// EOSC=0 BBSQW=0 CONV=0 RS2=0 RS1=0 INTCN=0 A2IE=0 A1IE=0
@@ -105,4 +108,3 @@ timerOn = 1;
 timerOff = 1;
 temperature_check();
 delay_ms(1000);
-//display();
