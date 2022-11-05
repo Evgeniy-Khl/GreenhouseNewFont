@@ -19,8 +19,7 @@ MCUCSR=0x00;
 GIFR=0x40;
 
 // Timer(s)/Counter(s) Interrupt(s) initialization
-//TIMSK=0x10;
-TIMSK=1<<TOIE1;// enable Timer1 overflow interrupt
+TIMSK=(1<<TOIE1);// enable Timer1 overflow interrupt
 
 // USART initialization
 // Communication Parameters: 8 Data, 1 Stop, No Parity
@@ -69,9 +68,8 @@ if(ds18b20)           // если датчики были найдены
 else {
     soilModule = module_check(ID_SOIL1);  // detect модуль грунта #1
 //    soilModule += module_check(ID_SOIL2); // detect модуль грунта #2
-    if(soilModule){
-        soilModule_check(EEPROMREAD);
-    }
+//    soilModule += module_check(ID_SOIL3); // detect модуль грунта #3
+//    soilModule += module_check(ID_SOIL4); // detect модуль грунта #4
 }
 //------------------------ once per second --------------------------------------
 clock_buffer[0] = 0;// EOSC=0 BBSQW=0 CONV=0 RS2=0 RS1=0 INTCN=0 A2IE=0 A1IE=0
@@ -98,13 +96,11 @@ pointY = pointY+20;
 sprintf(buff,"Датчик вологосты %u",Dht);                // датчик AM2301
 ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
 if(soilModule){
-    soilModule_check(EEPROMREAD);
+    soilModule_check(EEPROMREAD);  // EEPROMREAD
     pointY = pointY+20;
-    sprintf(buff,"Модуль грунту %u",soilModule);
+    sprintf(buff,"Модулыв грунту %u",soilModule);
     ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
 }
-newSetButt = 1;
-timerOn = 1;
-timerOff = 1;
+newSetButt = 1; timerOn = 1; timerOff = 1;
 temperature_check();
 delay_ms(1000);
