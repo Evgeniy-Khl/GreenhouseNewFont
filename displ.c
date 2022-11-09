@@ -138,8 +138,8 @@ void displ_1(void){
             sprintf(buff,"зона %u",i+1);
             ILI9341_WriteString(5,pointY+12,buff,Font_11x18,bordWindow,fillWindow,1);
             temp = map(t[i], limit[4][2], limit[4][3], limit[4][0], limit[4][1]);// температура
-            if(temp>100) sprintf(buff,"*** ");
-            else sprintf(buff,"%3u ",temp); // T грунта в целых числах 
+            if(temp>99) sprintf(buff,"**");
+            else sprintf(buff,"%2u",temp); // T грунта в целых числах 
             ILI9341_WriteString(90,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
             sprintf(buff,"%3u",t[i]);
             ILI9341_WriteString(155,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
@@ -152,16 +152,14 @@ void displ_1(void){
             ILI9341_WriteString(270,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
             pointY += 35;
         };
+        pointY += 20;
         for (i=soilModule;i<4;i++){
             sprintf(buff,"зона %u выдсутня!",i+1);
             ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
-            pointY += 20;
+            pointY += 35;
         }
     }
-    else {
-        ILI9341_WriteString(10,pointY,"Модулы грунту выдсутны!",Font_11x18,bordWindow,fillWindow,1);
-        pointY += 20;
-    } 
+    else ILI9341_WriteString(10,pointY,"Модулы грунту выдсутны!",Font_11x18,bordWindow,fillWindow,1); 
     if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
     
 //--- Модуль CO2 ----

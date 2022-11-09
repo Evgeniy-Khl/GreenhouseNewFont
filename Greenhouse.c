@@ -50,9 +50,7 @@ Program size: 15690 words (31380 bytes), 95,8% of FLASH  08.11.2022
 #define OUT_OFF         0x80
 
 // Declare your global variables here
-//flash float A1=1.8, A2=0.81, A3=0.01;  // порядок a=0.9 (A1=2a; A2=a^2; A3=(1-a)^2)
-flash float A1=1.6, A2=0.64, A3=0.04;  // порядок a=0.8 (A1=2a; A2=a^2; A3=(1-a)^2)
-//flash float A1=1.2, A2=0.36, A3=0.16;  // порядок a=0.6 (A1=2a; A2=a^2; A3=(1-a)^2)
+flash float A1=1.8, A2=0.81, A3=0.01;  // порядок a=0.9 (A1=2a; A2=a^2; A3=(1-a)^2)
 unsigned char BeepT, displ_num, ok, portOut, newSetButt, ds18b20, soilModule, pointY, DHTexist, signchar, intval, frcval, error;
 signed char numMenu, numSet, pauseEdit, moduleEdit/*, displCO2, timerCO2*/;
 unsigned char relOut[4]={0}, analogOut[4]={0}, dacU[4]={ZERO}, buff[40], familycode[MAX_DEVICES][9], clock_buffer[CLOCK_BUFFER], alarm[4]={2,2,2,2};
@@ -90,13 +88,13 @@ eeprom unsigned int limit[5][4]={
                       {  0,100, 21, 100}, // 5
                       {  0,100, 22, 100}, // 6
                       {  0,100, 23, 100}, // 7
-                      {  0, 50,265, 720}}; // Грунт температура  t=0 -> V=1.32 -> ADC=270; t=25 -> V=2.51 -> ADC=514
+                      {  0, 30,265, 555}}; // Грунт температура  t=0 -> V=1.32 -> ADC=270; t=25 -> V=2.51 -> ADC=514
 
 eeprom unsigned char module[4][4]={
-                      {  0,100,4,200}, // Грунт влажность 0%: 100% OutMIN; OutMAX; модуль №1
-                      {  0,100,4,200}, // Грунт влажность 0%: 100% OutMIN; OutMAX; модуль №2
-                      {  0,100,4,200}, // Грунт влажность 0%: 100% OutMIN; OutMAX; модуль №3
-                      {  0,100,4,200}};// Грунт влажность 0%: 100% OutMIN; OutMAX; модуль №4
+                      {  0,100,1,195}, // Грунт влажность 0%: 100% OutMIN; OutMAX; модуль №1
+                      {  0,100,1,195}, // Грунт влажность 0%: 100% OutMIN; OutMAX; модуль №2
+                      {  0,100,1,195}, // Грунт влажность 0%: 100% OutMIN; OutMAX; модуль №3
+                      {  0,100,1,195}};// Грунт влажность 0%: 100% OutMIN; OutMAX; модуль №4
 bit Night;
 bit Sec;
 bit Dht;
