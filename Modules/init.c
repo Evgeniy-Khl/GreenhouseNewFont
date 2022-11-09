@@ -47,11 +47,11 @@ ADCSRA=(1<<ADEN) | (0<<ADSC) | (0<<ADATE) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) |
 // 1 Wire Bus initialization
 w1_init();
 
-if(LEDlim==0){
-    limitRH[0]=100; 
-    limitRH[1]=100; 
-    delay_ms(5000);
-} // если вход датчика закорочен то записаны начальные границы диапазона значений
+//if(LEDlim==0){
+//    limitRH[0]=100; 
+//    limitRH[1]=100; 
+//    delay_ms(5000);
+//} // если вход датчика закорочен то записаны начальные границы диапазона значений
 
 // Watchdog Timer initialization
 // Watchdog Timer Prescaler: OSC/1024k

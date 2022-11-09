@@ -4,17 +4,17 @@ Version :  0.0
 Date    : 01.11.2022
 Chip type       : ATtiny13A
 Clock frequency : 9,600000 MHz
-Program size    : 456 words (912 bytes), 89,1% of FLASH [0x3D01]-#1; [0x3D02]-#2  09.11.2022
+Program size    : 387 words (774 bytes), 75,6% of FLASH [0xE381]-#1; [0xE382]-#2  09.11.2022
 *******************************************************/
 
 #include <tiny13a.h>
 #include <delay.h>
 #include <1wire.h>
 #include <1wireslave.h>
-#include <eeprom.h>
+//#include <eeprom.h>
 
 #define ID              0xF1    // идентификатор блока
-#define DATAREAD        0xA1    // Read Scratchpad
+//#define DATAREAD        0xA1    // Read Scratchpad
 //#define EEPROMREAD      0xB1    // Read EEPROM
 //#define EEPROMLOAD      0xC1    // Load EEPROM
 
@@ -40,8 +40,8 @@ Program size    : 456 words (912 bytes), 89,1% of FLASH [0x3D01]-#1; [0x3D02]-#2
 unsigned char counter, humid;
 union {unsigned char data[4]; signed int val[2];} out;
 unsigned char buffer[4];
-unsigned char eeprom *ptr_to_eeprom;
-eeprom unsigned char limitRH[2]={100, 100};
+//unsigned char eeprom *ptr_to_eeprom;
+//eeprom unsigned char limitRH[2]={100, 100};
 
 bit TimeSlot;
 bit Fall;
@@ -133,7 +133,7 @@ void main(void)
 // Declare your local variables here
 
 #include "init.c"
-ptr_to_eeprom=&limitRH[0];
+//ptr_to_eeprom=&limitRH[0];
 
 while (1)
  {
@@ -146,13 +146,14 @@ while (1)
         GIFR=(1<<PCIE); GIMSK=(1<<PCIE);        // Interrupt on any change on pins PCINT0-5: On; PCINT3
         while(Measur)
 //        out.val[1] = map(humid, limitRH[0], limitRH[1]);
+        if(humid>200) humid=200;
         out.val[1] = humid;
         MCUCR=0x02;                     // INT1 Mode: Falling Edge;
         GIFR=GIMSK=(1<<INT0);           // INT0: On; Interrupt on any change on pins PCINT0-5: Off
-        if(LEDlim==0){
-            if(humid>limitRH[1]) limitRH[1] = humid;      // расширение границ диапазона вверх
-            else if(humid<limitRH[0]) limitRH[0] = humid; // расширение границ диапазона вниз
-        }        
+//        if(LEDlim==0){
+//            if(humid>limitRH[1]) limitRH[1] = humid;      // расширение границ диапазона вверх
+//            else if(humid<limitRH[0]) limitRH[0] = humid; // расширение границ диапазона вниз
+//        }        
     }
  }
 }
