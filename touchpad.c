@@ -9,11 +9,10 @@ void touchpad(char byte){
             case 2: if (++numMenu>MAX_MENU-1) numMenu = 0; break;
             case 3: newSetButt = 1;
                     switch (numMenu){
-                        case 5:  displ_num=6; break;
-                        case 6:  displ_num=9; break;   
+                        case 5:  displ_num=6; numMenu = 0; break;
+                        case 6:  displ_num=9; numMenu = 0; break;   
                         default: displ_num=4;
-                    };
-                    numMenu = 0;   
+                    };  
             break;
           }
           byte = 10;
@@ -212,7 +211,7 @@ void touchpad(char byte){
                 switch (numSet) {
                     case 0: if(newval[numSet]<0) newval[numSet]=0; break;   // MIN
                     case 1: if(newval[numSet]<0) newval[numSet]=0; break;   // MAX
-                    case 2: if(newval[numSet]<4) newval[numSet]=4; break;   // Коф.1
+                    case 2: if(newval[numSet]<1) newval[numSet]=1; break;   // Коф.1
                     case 3: if(newval[numSet]<10) newval[numSet]=10; break; // Коф.2                            
                 };
             break; 

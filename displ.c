@@ -152,38 +152,49 @@ void displ_1(void){
             ILI9341_WriteString(270,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
             pointY += 35;
         };
+        for (i=soilModule;i<4;i++){
+            sprintf(buff,"зона %u выдсутня!",i+1);
+            ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,1);
+            pointY += 20;
+        }
     }
-    else ILI9341_WriteString(10,pointY,"Модуль грунту выдсутный.",Font_11x18,bordWindow,fillWindow,1); 
+    else {
+        ILI9341_WriteString(10,pointY,"Модулы грунту выдсутны!",Font_11x18,bordWindow,fillWindow,1);
+        pointY += 20;
+    } 
     if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
-    pointY += 30;
+    
 //--- Модуль CO2 ----
 //CO2module = 1;
 //pHsensor = 1;
 //pvCO2 = 2500;
 //pvPH = 75;
-    if(CO2module){
-        if(error&0x08) ILI9341_WriteString(10,pointY,"CO2 помилка модуля!",Font_11x18,YELLOW,RED,1);
-        else {
-            sprintf(buff,"CO2   %4u",pvCO2);
-            ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
-            ILI9341_WriteString(250,pointY+10,"ppm",Font_11x18,bordWindow,fillWindow,1);
-        }
-    }
-    else ILI9341_WriteString(10,pointY,"CO2 модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
-    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
-//--- Модуль рH-4502 -----
-    pointY += 30;
-    if(pHsensor){
-        if(error&0x08) ILI9341_WriteString(10,pointY,"рН помилка модуля!",Font_11x18,YELLOW,RED,1);
-        else {
-          temp = pvPH; fraction(temp);
-          sprintf(buff,"рН   %2u.%u",intval,frcval);
-          ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
-          ILI9341_WriteString(230,pointY+10,"одиниць",Font_11x18,bordWindow,fillWindow,1);
-        }
-    }
-    else ILI9341_WriteString(10,pointY,"рН  модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
-    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
+//    if(CO2module){
+//        if(error&0x08) ILI9341_WriteString(10,pointY,"CO2 помилка модуля!",Font_11x18,YELLOW,RED,1);
+//        else {
+//            sprintf(buff,"CO2   %4u",pvCO2);
+//            ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+//            ILI9341_WriteString(250,pointY+10,"ppm",Font_11x18,bordWindow,fillWindow,1);
+//        }
+//    }
+//    else {
+//        ILI9341_WriteString(5,pointY,"CO2 модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
+//        pointY += 20;
+//    }
+//    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
+    
+//--- Модуль рH-4502 -----    
+//    if(pHsensor){
+//        if(error&0x08) ILI9341_WriteString(10,pointY,"рН помилка модуля!",Font_11x18,YELLOW,RED,1);
+//        else {
+//          temp = pvPH; fraction(temp);
+//          sprintf(buff,"рН   %2u.%u",intval,frcval);
+//          ILI9341_WriteString(20,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
+//          ILI9341_WriteString(230,pointY+10,"одиниць",Font_11x18,bordWindow,fillWindow,1);
+//        }
+//    }
+//    else ILI9341_WriteString(5,pointY,"рН  модуль выдсутный.",Font_11x18,bordWindow,fillWindow,1);
+//    if(checkTouch()) if(checkDisplNum()==10) return;//***************************** проверим нажатие кнопки ***************************************
 }
 
 //------------------------------ РЕЛЕЙНЫЕ ВЫХОДЫ --------------------------------------------

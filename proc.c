@@ -33,8 +33,8 @@ void temperature_check(void){
 
 #define ID_SOIL1         0xF1   // идентификатор модуля грунта #1
 #define ID_SOIL2         0xF2   // идентификатор модуля грунта #2
-#define ID_PH            0xF4   // идентификатор сенсора pH
-#define ID_CO2           0xF5   // идентификатор модуля CO2
+#define ID_SOIL3         0xF3   // идентификатор модуля грунта #3
+#define ID_SOIL4         0xF4   // идентификатор модуля грунта #4
 unsigned char module_check(unsigned char fc){
  unsigned char *p, try, byte;
     p = out.buffer;
@@ -56,45 +56,14 @@ unsigned char module_check(unsigned char fc){
     return byte;
 }
 
-void soilModule_check(unsigned char command){
- unsigned char item, fc, res;
-    for (item=0; item < soilModule; item++){
-        fc = ID_SOIL1 + item;
-        out.buffer[0] = command;
-        res = module_check(fc);
-        if(res){
-            if(command==DATAREAD){t[item] = in.val[0]; hum[item] = in.val[1];}
-            else if(command==EEPROMREAD){module[item][2] = (char)in.buffer[0]; module[item][3] = (char)in.buffer[1];} 
-        }
-        else {t[item] = 1990; hum[item] = 1990;}    
-    }    
+signed int LowPassF2(signed int t,unsigned char i)
+{
+float val;
+  val = A1*Told1[i]-A2*Told2[i]+A3*t;
+  Told2[i] = Told1[i];
+  Told1[i] = val;
+  return val;
 }
-
-//#define DATAREAD        0xA1    // Read Scratchpad
-//unsigned char readCO2(void) // чтение модуля СО2
-//{
-// unsigned char byte;
-// static unsigned char try;
-//  out.buffer[0]=DATAREAD;       // Function Command
-//  out.buffer[1]=0x00;           // Data 1
-//  out.buffer[2]=displCO2;       // Data 2 1->компрессор отключен; 2->подготовка к замеру; 3->выполнить замер;
-//  byte = module_check(ID_CO2); // идентификатор блока
-//  if(byte){                     // если блок ответил ...
-//     pvCO2 = in.val[1];// CO2
-//     try = 0;
-//  }
-//  else if(++try>5){pvCO2=0; error|=0x08;}// Отказ модуля CO2
-//  return byte;
-//}
-
-//signed int LowPassF2(signed int t,unsigned char i)
-//{
-//float val;
-//  val = A1*Told1[i]-A2*Told2[i]+A3*t;
-//  Told2[i] = Told1[i];
-//  Told1[i] = val;
-//  return val;
-//}
 
 void setDAC(void){ // V = Vref x (255/256)
   unsigned char i, val;

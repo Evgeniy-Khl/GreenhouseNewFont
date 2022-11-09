@@ -4,7 +4,7 @@ Version :  0.0
 Date    : 01.11.2022
 Chip type       : ATtiny13A
 Clock frequency : 9,600000 MHz
-Program size    : 490 words (980 bytes), 95,7% of FLASH [0x5FF3]-#1
+Program size    : 456 words (912 bytes), 89,1% of FLASH [0x3D01]-#1; [0x3D02]-#2  09.11.2022
 *******************************************************/
 
 #include <tiny13a.h>
@@ -15,7 +15,7 @@ Program size    : 490 words (980 bytes), 95,7% of FLASH [0x5FF3]-#1
 
 #define ID              0xF1    // идентификатор блока
 #define DATAREAD        0xA1    // Read Scratchpad
-#define EEPROMREAD      0xB1    // Read EEPROM
+//#define EEPROMREAD      0xB1    // Read EEPROM
 //#define EEPROMLOAD      0xC1    // Load EEPROM
 
 #define LEDrst    PORTB.0
@@ -27,8 +27,8 @@ Program size    : 490 words (980 bytes), 95,7% of FLASH [0x5FF3]-#1
 
 #define TIMING480    60    // 60*64*0.10417=400 us  (72->480 us)
 #define PRESET48     249    // (256 - n)*64*0.10417= 46,6 us  ( Waits 48 us )
-#define PRESET120     237    // (256 - n)*64*0.10417= 126,6 us ( Presence pulse 120 us )
-#define PRESET260     217    // (256 - n)*64*0.10417= 260,0 us ( Waiting 260 us )
+#define PRESET120    237    // (256 - n)*64*0.10417= 126,6 us ( Presence pulse 120 us )
+#define PRESET260    217    // (256 - n)*64*0.10417= 260,0 us ( Waiting 260 us )
 
 // 1 Wire Bus functions
 #asm
