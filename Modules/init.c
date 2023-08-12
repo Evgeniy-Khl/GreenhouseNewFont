@@ -12,7 +12,10 @@ DDRB=(0<<DDB5)|(0<<DDB4)|(0<<DDB3)|(0<<DDB2)|(0<<DDB1)|(1<<DDB0);          // Fu
 
 // Timer/Counter 0 initialization
 //TCCR0A=(0<<COM0A1) | (0<<COM0A0) | (0<<COM0B1) | (0<<COM0B0) | (0<<WGM01) | (0<<WGM00);
-TCCR0B=(0<<WGM02) | (0<<CS02) | (1<<CS01) | (1<<CS00);// Clock value: 150,000 kHz;  Timer Period: 1,7067 ms
+TCCR0B=(0<<WGM02)|(0<<CS02)|(1<<CS01)|(1<<CS00);// clk/64 (From prescaler) Clock value: 150,000 kHz;  Timer Period: 1,7067 ms
+//-----------
+//TCCR0B=(0<<WGM02)|(1<<CS02)|(0<<CS01)|(0<<CS00);// clk/256 (From prescaler) Clock value: 37,500 kHz;  Timer Period: 6,8267 ms
+//-----------
 
 // Timer/Counter 0 Interrupt(s) initialization
 //TIMSK0=(0<<OCIE0B) | (0<<OCIE0A) | (1<<TOIE0);
@@ -36,13 +39,15 @@ PCMSK=(0<<PCINT5) | (0<<PCINT4) | (1<<PCINT3) | (0<<PCINT2) | (0<<PCINT1) | (0<<
 ACSR=(1<<ACD) | (0<<ACBG) | (0<<ACO) | (0<<ACI) | (0<<ACIE) | (0<<ACIS1) | (0<<ACIS0);
 
 // ADC initialization
-// ADC Clock frequency: 150,000 kHz
+// ADC Clock frequency: 75,000 kHz
 // ADC Bandgap Voltage Reference: Off
 // ADC Auto Trigger Source: ADC Stopped
-// Digital input buffers on ADC0: On, ADC1: On, ADC2: On, ADC3: Off
-DIDR0|=(0<<ADC0D) | (0<<ADC2D) | (1<<ADC3D) | (0<<ADC1D);
-ADMUX=ADC_VREF_TYPE;       // ((0<<REFS0) | (0<<ADLAR))
-ADCSRA=(1<<ADEN) | (0<<ADSC) | (0<<ADATE) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) | (1<<ADPS1) | (0<<ADPS0);
+// Only the 8 most significant bits of
+// the AD conversion result are used
+// Digital input buffers on ADC0: On, ADC1: On, ADC2: Off, ADC3: On
+DIDR0|=(0<<ADC0D) | (1<<ADC2D) | (0<<ADC3D) | (0<<ADC1D);
+ADMUX=ADC_VREF_TYPE;  // ((0<<REFS0) | (1<<ADLAR))
+ADCSRA=(1<<ADEN) | (0<<ADSC) | (0<<ADATE) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);
 
 // 1 Wire Bus initialization
 w1_init();

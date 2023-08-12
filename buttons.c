@@ -129,7 +129,7 @@ void drawPlus(char i, unsigned int fill){
 //in_max: верхний предел текущего диапазона переменной value
 //out_min:    нижний предел нового диапазона переменной value
 //out_max:   верхний предел нового диапазона переменной value
-unsigned int map(unsigned int x, unsigned int in_min, unsigned int in_max, char out_min, unsigned int out_max){
+signed int map(unsigned int x, unsigned int in_min, unsigned int in_max, char out_min, unsigned int out_max){
  long val;
     val = (x - in_min); val *= (out_max - out_min); val /= (in_max - in_min); val += out_min;
     return val;
@@ -180,8 +180,10 @@ int val, samples[2];
   
   if(val < 200){
     InitInterface();
+//*********************************************************************
 //sprintf(buff,"слабое нажатие v=%3u",val);
-//ILI9341_WriteString(5,TFTBUTTON-45,buff,Font_11x18,WHITE,BLACK,1); 
+//ILI9341_WriteString(5,160,buff,Font_11x18,WHITE,BLACK,1); 
+//*********************************************************************
     return 0;         // если слабое нажатие то выход
   }
   else{                // иначе определяем координаты
@@ -217,10 +219,12 @@ int val, samples[2];
      
      InitInterface();
      point_X = map(point_X, TS_MINX, TS_MAXX, 0, max_X);// пересчет координаты резистивной матрицы на пиксельную метрицу
-     point_Y = map(point_Y, TS_MINY, TS_MAXY, 0, max_Y);// пересчет координаты резистивной матрицы на пиксельную метрицу
+     point_Y = map(point_Y, TS_MINY, TS_MAXY, 0, max_Y);// пересчет координаты резистивной матрицы на пиксельную метрицу 
+//*********************************************************************
 //ILI9341_FillRectangle(point_X, point_Y, 5, 5, RED);
 //sprintf(buff,"X%4u; Y%4u",point_X,point_Y);
-//ILI9341_WriteString(5,TFTBUTTON-15,buff,Font_11x18,WHITE,BLACK,1);
+//ILI9341_WriteString(5,180,buff,Font_11x18,WHITE,BLACK,1);
+//*********************************************************************
      return 1;
   }
 }

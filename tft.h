@@ -23,44 +23,48 @@ Clock frequency     : 16,000000 MHz
 #define FONT_Y          8
 
 //----- Invert Colors --------
-// #define RED            0xf800
-// #define GREEN	        0x07e0
-// #define BLUE	        0x001f
-// #define BLACK	        0x0000
-// #define YELLOW	        0xffe0
-// #define WHITE	        0xffff
-// #define CYAN		    0x07ff
-// #define CYAN1		    0x07f0
-// #define MAGENTA	    0xf810
-// #define GRAY1		    0x8410
-// #define GRAY2		    0x4208
-// 
-// #define BUTT_1		0x01
-// #define BUTT_2 	0x02
-// #define BUTT_3		0x04
-// #define BUTT_4		0x08
- 
+ #define RED            0xf800
+ #define ORANGE		    0xfa00
+ #define GREEN	        0x07e0
+ #define LIGHTGREEN     0x9772
+ #define GREEN1		    0x0570
+ #define BLUE	        0x001f
+ #define LIGHTBLUE      0xAEDC
+ #define BLUE1		    0x05ff
+ #define BLUE2		    0x08ff
+ #define PLUM           0x02f0
+ #define BLACK	        0x0000
+ #define YELLOW	        0xffe0
+ #define LIGHTYELLOW    0xFFFC
+ #define YELLOW2        0xfd0f
+ #define PINK		    0xfa8f
+ #define WHITE	        0xffff
+ #define CYAN		    0x07ff   // цнксани
+ #define LIGHTCYAN      0xE7FF
+ #define CYAN1		    0x07f0
+ #define MAGENTA	    0xf810
+ #define GRAY1		    0x8410
+ #define GRAY2		    0x4208
+ #define GRAY3		    0x7bef
+  
 //------Basic Colors ---------
- #define RED            0x07FF
- #define GREEN	        0xF81F
- #define GREEN1		    0xFA8F
- #define BLUE	        0xFFE0
- #define BLUE1		    0xFA00
- #define BLACK	        0xFFFF
- #define YELLOW	        0x001F
- #define YELLOW1	    0x002F
- #define YELLOW2        0x02F0
- #define WHITE	        0x0000
- #define CYAN		    0xF800
- #define MAGENTA	    0x07EF
- #define VIOLET 	    0x05E0
- #define GRAY1		    0x7BEF
- #define GRAY2		    0xBDF7
- 
- #define BUTT_1		0x01
- #define BUTT_2 	0x02
- #define BUTT_3		0x03
- #define BUTT_4		0x04
+// #define RED            0x07FF
+// #define GREEN	        0xF81F
+// #define GREEN1		    0xFA8F  +
+// #define BLUE	        0xFFE0
+// #define BLUE1		    0xFA00  +
+// #define BLACK	        0xFFFF
+// #define YELLOW	        0x001F
+// #define YELLOW1	    0x002F
+// #define YELLOW2        0x02F0    +
+// #define WHITE	        0x0000
+// #define CYAN		    0xF800
+// #define MAGENTA	    0x07EF
+// #define VIOLET 	    0x05E0
+// #define GRAY1		    0x7BEF   +
+// #define GRAY2		    0xBDF7
+
+//-----------------------------
 
 #define TFTWIDTH	320
 #define TFTHEIGHT	240

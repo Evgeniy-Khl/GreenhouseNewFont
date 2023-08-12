@@ -1,6 +1,6 @@
 // Port B initialization
-//PORTB=0x00;// State7=0 State6=T State5=T State4=T State3=T State2=T State1=T State0=T
-DDRB=0xA6; // Func7=Out Func6=In Func5=Out Func4=In Func3=In Func2=Out Func1=Out Func0=In
+PORTB=0x00;// State7=0 State6=T State5=0 State4=T State3=T State2=0 State1=0 State0=0
+DDRB=0xA7; // Func7=Out Func6=In Func5=Out Func4=In Func3=In Func2=Out Func1=Out Func0=Out
 
 // Port D initialization
 PORTD=0xF0;// State7=1 State6=1 State5=1 State4=1 State3=T State2=T State1=T State0=T
@@ -43,6 +43,10 @@ UBRRL=0x67;
 ACSR=0x80;// Analog Comparator: Off
 //SFIOR=0x00;
 
+// SPI initialization
+// SPI disabled
+SPCR=0x00;
+
 // TWI initialization
 //TWBR=0x0C;// Bit Rate: 400,000 kHz
 TWBR=0x48;// Bit Rate: 100,000 kHz
@@ -60,20 +64,15 @@ offsetT = 0;// set[4][0];
 offsetRH = 0;// set[4][1];
 typeS = set[1][5];
 //setDAC();           // подать напряжение на аналоговые выходы
-BEEP = ON;
-delay_ms(300);
-BEEP = OFF;
-delay_ms(1000);
-//Dht = readDHT();    // detect DHT-21/11
+
 //------ 1 Wire Protocol Functions ----------------------------------------------------------------------
 ds18b20 = w1_search(0xf0,familycode);// detect how many DS1820/DS18S20 devices are connected to the 1 Wire bus
-if((ds18b20+Dht)>MAX_DEVICES) ds18b20=(MAX_DEVICES-Dht);
-if(ds18b20)           // если датчики были найдены
- {
+if((ds18b20)>MAX_DS18B20) ds18b20=(MAX_DS18B20);
+if(ds18b20){           // если датчики были найдены
    w1_init();      // 1 Wire Bus initialization
    w1_write(0xCC); // Load Skip ROM [CCH] command
    w1_write(0x44); // Load Convert T [44H] command
- }
+}
 else {
     soilModule = module_check(ID_SOIL1);  // detect модуль грунта #1
     soilModule += module_check(ID_SOIL2); // detect модуль грунта #2
@@ -85,20 +84,14 @@ else {
 //clock_buffer[0] = 0;// EOSC=0 BBSQW=0 CONV=0 RS2=0 RS1=0 INTCN=0 A2IE=0 A1IE=0
 //clock_buffer[1] = 0;//  EN32kHz=0 BSY=0 A2F=0 A1F=0      
 //Clock_Ok = write_TWI(DS3231,0x0E,clock_buffer,2);
-Clock_Ok = read_TWI(DS3231,0,clock_buffer,7);// чтение данных часовой микросхемы
-if(Clock_Ok && clock_buffer[7]!=SQWE_1Hz){
-    clock_buffer[0] &= 0x7F;  // Bit7-'CH'=0
-    for (x=1; x<7; x++) clock_buffer[x] = 1;
-    clock_buffer[7] = SQWE_1Hz;
-    Clock_Ok = read_TWI(DS3231,0,clock_buffer,7);// чтение данных часовой микросхемы
-}
-BEEP = ON;
-delay_ms(200);
-BEEP = OFF;
-delay_ms(200);
-BEEP = ON;
-delay_ms(200);
-BEEP = OFF;
+Clock_Ok = read_TWI(DS_SRTC,0,clock_buffer,CLOCK_BUFFER);// чтение данных часовой микросхемы
+//if(Clock_Ok && clock_buffer[7]!=SQWE_1Hz){
+//    clock_buffer[0] &= 0x7F;  // Bit7-'CH'=0
+//    for (x=1; x<7; x++) clock_buffer[x] = 1;
+//    clock_buffer[7] = SQWE_1Hz;
+//    Clock_Ok = read_TWI(DS_SRTC,0,clock_buffer,7);// чтение данных часовой микросхемы
+//}
+
 // Global enable interrupts
 #asm("sei")
 
@@ -106,6 +99,19 @@ InitInterface();
 ILI9341_Init();
 //TFT_SetOrientation(3);  //0
 ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
+//---------
+//sprintf(buff,"%02x:%02x:%02x   %02x.%02x.%02x  %02x",clock_buffer[2],clock_buffer[1],clock_buffer[0],clock_buffer[4],clock_buffer[5],clock_buffer[6],clock_buffer[7]);//час:мин дата.мес.год
+//ILI9341_WriteString(10,200,buff,Font_11x18,WHITE,BLACK,1);
+if(Clock_Ok && clock_buffer[7]!=SQWE_1Hz){   // SQWE_1Hz -> 0x10
+    clock_buffer[0] &= 0x7F;  // Bit7-'CH'=0
+    for (x=1; x<6; x++) clock_buffer[x] = 1;
+    clock_buffer[6] = 0x23;
+    clock_buffer[7] = SQWE_1Hz;
+    Clock_Ok = write_TWI(DS_SRTC,0,clock_buffer,CLOCK_BUFFER);// чтение данных часовой микросхемы
+}
+//sprintf(buff,"%02x:%02x:%02x   %02x.%02x.%02x  %02x",clock_buffer[2],clock_buffer[1],clock_buffer[0],clock_buffer[4],clock_buffer[5],clock_buffer[6],clock_buffer[7]);//час:мин дата.мес.год
+//ILI9341_WriteString(10,220,buff,Font_11x18,WHITE,BLACK,1);
+//---------
 pointY = 10;
 ILI9341_WriteString(60, pointY, "www.graviton.com.ua", Font_11x18, WHITE, fillScreen, 1);
 pointY += 30;
@@ -113,7 +119,7 @@ ILI9341_WriteString(80, pointY, "Розумна", Font_11x18, WHITE, fillScreen, 2);
 pointY += 30;
 ILI9341_WriteString(80, pointY, "теплиця", Font_11x18, WHITE, fillScreen, 2);
 pointY = pointY+45;
-sprintf(buff,"Датчикыв температури %u",ds18b20+Dht);    // количество датчиков
+sprintf(buff,"Датчикыв температури %u",ds18b20);    // количество датчиков
 ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
 pointY = pointY+20;
 sprintf(buff,"Датчик вологосты %u",Dht);                // датчик AM2301
@@ -131,6 +137,7 @@ if(soilModule){
     sprintf(buff,"Модулыв грунту %u",soilModule);
     ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
 }
-newSetButt = 1; timerOn = 1; timerOff = 1;
+Sec=1; Display=1; newSetButt=1; timerOn = 1; timerOff = 1;
 temperature_check();
+BeepT=50;
 delay_ms(1000);

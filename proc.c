@@ -297,3 +297,28 @@ void timerRTC(unsigned char prg){
 //#12   8 часов	3	0, 8, 16 часов каждого дня (+ сдвиг на стартовый час)
 //#13   12 часов	2	0, 12 часов каждого дня (+ сдвиг на стартовый час)
 //#14   24 часа	1	0 часов каждого дня (+ сдвиг на стартовый час)
+
+unsigned char tableRH(signed int maxT, signed int minT)
+ {
+  signed int dT;
+   if (maxT>199 && maxT<410) // maxT> 19.9 и maxT< 41.0
+    {
+     dT = (maxT-minT)*16/10;
+     if (dT<0) dT = 240;        // задаем число при котором dT >>=3; выполняется -> dT>20
+     maxT /=10;
+     dT >>=3;
+     if (dT>20) dT = 255;
+     else if (dT==0) dT = 100;
+     else {maxT -= 20; maxT *= 20; maxT += (dT-1); dT = tabRH[maxT];};
+    }
+   else dT = 255;
+   return dT;
+ }
+ 
+signed int mean(char item){
+ unsigned char i, x=0;
+ signed int tt=0;
+    for (i=0; i<item; i++){if(t[i] < 850) {tt += t[i]; x++;}};
+    if(x) tt /= x; else {tt = 1900; errors |= 0x08;}  // 0x08 - ошибка датчиков среднего значения внутр. воздуха
+    return tt;
+}
