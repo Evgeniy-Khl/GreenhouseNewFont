@@ -15,7 +15,7 @@ void checkkey(unsigned char key){
   if(key){
      Display=1;
      switch (displ_num){
-       //----------------------------- Ñîñòîÿíèå ÂÛÕÎÄÎÂ -------------------------------
+       //-------------------------------- ÑÒÀÍ ÄÀÒ×ÈÊ²Â è ÒÀÉÌÅĞ²Â ------------------------------------------
        case 2:
          max = 8;
          switch (key){
@@ -34,7 +34,7 @@ void checkkey(unsigned char key){
             break;
          }
        break;
-       //----------------------------- Íà÷àëüíîå ìåíş ----------------------------------
+       //-------------------------------- ÑÒÀÍ ÂÛÕÎÄ²Â ------------------------------------------------------
        case 3:  // displ_num
          switch (key){
             case KEY_1: if(--displ_num<0) displ_num=3; newSetButt=1; break;//  (áåëàÿ 1)
@@ -50,8 +50,8 @@ void checkkey(unsigned char key){
             break;
          }
        break;
-       //----------------------------- Âñå ïîäìåíş -------------------------------------
-        case 4:  // displ_num
+       //-------------------------------- ÍÀËÀØÒÓÂÀÍÍß ÑÈÑÒÅÌÈ ---------------------------------------------
+       case 4:  // displ_num
         if(numMenu<2) max=6; else if(numMenu==4) max=4;
           switch (key){
             case KEY_1: displ_num = 3; newSetButt = 1; break;
@@ -71,9 +71,9 @@ void checkkey(unsigned char key){
               displ_num = 5; newSetButt = 1; 
             break;
           }
-        break;
-       //----------------------------- ĞÅÄÀÊÒÈĞÎÂÀÍÈÅ ----------------------------------
-        case 5:  // displ_num
+       break;
+       //-------------------------------- ĞÅÄÀÃÓÂÀÍÍß îêğåìèõ ïóíêòiâ --------------------------------------
+       case 5:  // displ_num
           switch (key){
             case KEY_1: displ_num = 4; newSetButt = 1; break;
             case KEY_6: displ_num = 0; newSetButt = 1; break;
@@ -202,69 +202,54 @@ void checkkey(unsigned char key){
                   delay_ms(500);
                   displ_num = 4; newSetButt = 1; break;
           }
-        break;
-       //-- Îáùèé ñïèñîê êîıôôèöèåíòîâ #1 - #5 --
+       break;
+       //-------------------------------- ÏÅĞÅËIÊ ÊÎÅÔ²Ö²ªÍÒIÂ ---------------------------------------------
        case 6:  // displ_num
           switch (key){
             case KEY_1: displ_num = 3; newSetButt = 1; break;
+            case KEY_6: displ_num = 0; newSetButt = 1; break;
             case KEY_3: if (--subMenu<0) subMenu = 0; NewnumMenu=1; break;
             case KEY_7: if (++subMenu>4) subMenu = 4; NewnumMenu=1; break;
             case KEY_5: displ_num = 7; newSetButt = 1; moduleEdit = 0; numSet = 0; break;
           }
         break;
-       //- Óñòàíîâêè îòäåëüíûé çíà÷åíèé êîıôôèöèåíòîâ -
+       //-------------------------------- ÏÅĞÅËIÊ ÎÊĞÅÌÎÃÎ ÊÎªÔÔ. ÷è ÌÎÄÓËß --------------------------------
         case 7:  // displ_num
           switch (key){
             case KEY_1: if(moduleEdit) displ_num = 9; else displ_num = 6; newSetButt = 1; break;  // ìîäóëè èëè êîıôôèöèåíòû
+            case KEY_6: displ_num = 3; newSetButt = 1; break;
             case KEY_3: if (--numSet<0) numSet = 3;    break;
             case KEY_7: if (++numSet>3) numSet = 0;    break;
-            case KEY_5: for (byte=0;byte<2;byte++){
-                        if(moduleEdit) newval[byte] = module[numMenu][byte];
-                        else newval[byte] = limit[numMenu][byte];
-                    }
-                    displ_num = 8; newSetButt = 1; 
+            case KEY_5: if(moduleEdit) newval[numSet] = module[subMenu][numSet];
+                        else newval[numSet] = limit[subMenu][numSet];
+                        displ_num = 8; newSetButt = 1; 
             break;
           }
         break;
-       //- ĞÅÄÀÊÒÈĞÎÂÀÍÈÅ êîıôôèöèåíòîâ -
+       //-------------------------------- ĞÅÄÀÃÓÂÀÍÍß ÎÊĞÅÌÎÃÎ ÊÎªÔÔ. ÷è ÌÎÄÓËß ----------------------------
         case 8:  // displ_num
           switch (key){
             case KEY_1: displ_num = 7; newSetButt = 1; break;
-            case KEY_6: displ_num = 7; newSetButt = 1; break;
-            case KEY_3: ++newval[numSet];    
-                switch (numSet) {
-                    case 0: if(newval[numSet]>1000) newval[numSet]=1000; break; // MIN
-                    case 1: if(newval[numSet]>1000) newval[numSet]=1000; break; // MAX
-                    case 2: if(newval[numSet]>1000) newval[numSet]=1000; break; // Êîô.1
-                    case 3: if(newval[numSet]>1000) newval[numSet]=1000; break; // Êîô.2
-                };
+            case KEY_6: displ_num = 3; newSetButt = 1; break;
+            case KEY_4: ++newval[numSet];
+                        if(newval[numSet]>1000) newval[numSet]=1000;
             break; 
-            case KEY_7: --newval[numSet];
-                switch (numSet) {
-                    case 0: if(newval[numSet]<0) newval[numSet]=0; break;   // MIN
-                    case 1: if(newval[numSet]<0) newval[numSet]=0; break;   // MAX
-                    case 2: if(newval[numSet]<1) newval[numSet]=1; break;   // Êîô.1
-                    case 3: if(newval[numSet]<10) newval[numSet]=10; break; // Êîô.2                            
-                };
+            case KEY_8: --newval[numSet];
+                        if(newval[numSet]<0) newval[numSet]=0;
             break; 
             case KEY_5: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
                     ILI9341_WriteString(10,100,"ÂÈÊÎÍÓŞ ÇÀÏÈÑ",Font_11x18,GREEN,fillScreen,2);
-                    if(moduleEdit){
-                        module[numMenu][numSet] = newval[numSet];
-                        displ_num = 9;
-                    }
-                    else {
-                        limit[numMenu][numSet] = newval[numSet];
-                        displ_num = 7;
-                    }
-                    newSetButt = 1; delay_ms(500);                     
+                    if(moduleEdit) module[subMenu][numSet] = newval[numSet];
+                    else limit[subMenu][numSet] = newval[numSet];
+                    displ_num = 7; newSetButt = 1; delay_ms(500);                     
             break;
           }
         break;
-       //-- Îáùèé ñïèñîê ìîäóëåé #1 - #4 --
+       //-------------------------------- ÏÅĞÅËIÊ ÌÎÄÓËIÂ --------------------------------------------------
         case 9:  // displ_num
           switch (key){
             case KEY_1: displ_num = 3; newSetButt = 1; break;
+            case KEY_6: displ_num = 0; newSetButt = 1; break;
             case KEY_3: if (--subMenu<0) numMenu = 0; NewnumMenu=1; break;
             case KEY_7: if (++subMenu>3) numMenu = 3; NewnumMenu=1; break;
             case KEY_5: displ_num = 7; newSetButt = 1; moduleEdit = 1; numSet = 0; break;

@@ -17,7 +17,7 @@ void displ_0(void){
         read_TWI(DS_SRTC,0,clock_buffer,7);// чтение данных часовой микросхемы
         sprintf(buff,"%02x:%02x   %02x.%02x.20%02x",clock_buffer[2],clock_buffer[1],clock_buffer[4],clock_buffer[5],clock_buffer[6]);//час:мин дата.мес.год
         if(Night){ILI9341_WriteString(70,pointY,buff,Font_11x18,WHITE,GRAY1,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,WHITE,BLACK,1);}// "БЕГУЩАЯ СТРОКА"
-        else {ILI9341_WriteString(70,pointY,buff,Font_11x18,BLACK,GRAY1,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,BLACK,WHITE,1);}
+        else {ILI9341_WriteString(70,pointY,buff,Font_11x18,BLACK,GREEN1,1); ILI9341_WriteString(70,pointY,buff,Font_11x18,BLACK,LIGHTGREEN,1);}
     }
     else {
         sprintf(buff,"Помилка часыв!"); 
@@ -36,13 +36,6 @@ void displ_0(void){
         sprintf(buff,"%2u.%u",intval,frcval); // T датчиков показываем с десятичным знаком 
     }
     ILI9341_WriteString(140,pointY,buff,Font_11x18,bordWindow,fillWindow,3);
-    // индикация тревоги alarm[0]
-    switch (alarm[0]) {
-        case 0: temp=GREEN; break;
-        case 1: temp=RED;   break;
-        default: temp=fillWindow;
-    }; 
-    ILI9341_FillRectangle(280,pointY+2,30,45,temp);
     if(keynum&&!keystop){checkkey(keynum); return;}//***************************** проверим номер кнопки ***************************************
     pointY += 52;
 //--- Индикация RH ------
@@ -51,13 +44,6 @@ void displ_0(void){
     ILI9341_WriteString(5,pointY+16,"вологысть",Font_11x18,bordWindow,fillWindow,1);
     if(pvRH>100) sprintf(buff,"***%%",pvRH); else sprintf(buff,"%3u%%",pvRH);
     ILI9341_WriteString(142,pointY,buff,Font_11x18,bordWindow,fillWindow,2); 
-    // индикация тревоги alarm[1]
-//    switch (alarm[1]) {
-//        case 0: temp=GREEN; break;
-//        case 1: temp=RED;   break;
-//        default: temp=fillWindow;
-//    };
-//    ILI9341_FillRectangle(280,pointY+2,30,45,temp);
     if(keynum&&!keystop){checkkey(keynum); return;}//***************************** проверим номер кнопки ***************************************
 // --- СТАН УПРАВЛIННЯ -------
     pointY += 43;
@@ -81,14 +67,13 @@ void displ_0(void){
             sprintf(txt,"виходи: %u в ручному режимы",noAutoAna);
             strcat(buff,txt);
             ILI9341_WriteString(5,pointY,buff,Font_11x18,RED,fillWindow,1);
-        }
-                         
+        }                         
     }
     else {pointY += 25; ILI9341_WriteString(80,pointY,"Помилок немаэ",Font_11x18,bordWindow,fillWindow,1);}
     if(keynum&&!keystop){checkkey(keynum); return;}//***************************** проверим номер кнопки ***************************************      
 }
 
-//-------------------------------- Значение всех датчиков. ------------------------------------------
+//-------------------------------- СТАН ДАТЧИКІВ и ТАЙМЕРІВ ------------------------------------------
 void displ_1(void){
  unsigned char i, num = 1;
  signed int temp;
@@ -156,7 +141,7 @@ void displ_1(void){
     if(keynum){checkkey(keynum); return;}//***************************** проверим номер кнопки **************************************
 }
 
-//-------------------------------- Состояние ВЫХОДОВ ------------------------------------------------
+//-------------------------------- СТАН ВЫХОДІВ ------------------------------------------------------
 void displ_2(void){
  signed char i, x, keystop=0;
  unsigned int fillWindow = GRAY1, bordWindow = BLACK, color_box; 
@@ -352,7 +337,7 @@ void displ_5(void){
     if(keynum) checkkey(keynum);//***************************** проверим номер кнопки *************************************** 
 }
 
-//-------------------------------- НАЛАШТУВАННЯ КОЕФЫЦЫЭНТIВ ----
+//-------------------------------- ПЕРЕЛIК КОЕФІЦІЄНТIВ ---------------------------------------------
 void displ_6(void){
  char item;
  unsigned int color_txt = BLACK, color_fon = GREEN1; 
@@ -374,7 +359,7 @@ void displ_6(void){
     if(keynum) checkkey(keynum);//***************************** проверим номер кнопки ***************************************
 }
 
-//- Установки пунктов -
+//-------------------------------- ПЕРЕЛIК ОКРЕМОГО КОЄФФ. чи МОДУЛЯ --------------------------------
 void displ_7(void){
  char item, tmpv0, tmpv1;
  unsigned int color_txt = BLACK, color_fon = GREEN1, temp;
@@ -389,7 +374,7 @@ void displ_7(void){
     
     for (item = 0; item < 2;item++){
         if(moduleEdit) sprintf(buff,"%7s = %i", setName3[item],module[subMenu][item]);
-        else sprintf(buff,"%7s = %i", setName3[item],limit[numMenu][item]);
+        else sprintf(buff,"%7s = %i", setName3[item],limit[subMenu][item]);
         if (item == numSet){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
         ILI9341_WriteString(5,pointY,buff,Font_11x18,color_txt,color_fon,1);
         pointY += 25;
@@ -397,15 +382,15 @@ void displ_7(void){
    if(keynum) checkkey(keynum);//***************************** проверим номер кнопки ***************************************   
 }
 
-//- РЕДАКТИРОВАНИЕ -
+//-------------------------------- РЕДАГУВАННЯ ОКРЕМОГО КОЄФФ. чи МОДУЛЯ ----------------------------
 void displ_8(void){
  char tmpv0, tmpv1;
  unsigned int fillWindow = GREEN1, bordWindow = BLACK, temp;
   pointY=7;
   if (newSetButt){
     newSetButt=0; ILI9341_FillScreen(0, max_X, 0, max_Y, fillWindow);
-    if(moduleEdit) sprintf(buff,"РЕДАГУВАННЯ модуля N%u",numMenu+1); 
-    else sprintf(buff,"РЕДАГУВАННЯ коефыцыэнтыв N%u", numMenu+1);
+    if(moduleEdit) sprintf(buff,"РЕДАГУВАННЯ модуля N%u",numSet+1); 
+    else sprintf(buff,"РЕДАГУВАННЯ коефыцыэнтыв N%u", numSet+1);
     ILI9341_WriteString(10,pointY,buff,Font_11x18,bordWindow,fillWindow,1); 
   }
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -415,7 +400,7 @@ void displ_8(void){
     if(keynum) checkkey(keynum);//***************************** проверим номер кнопки *************************************** 
 }
 
-//--- Установки модулей ----
+//-------------------------------- ПЕРЕЛIК МОДУЛIВ --------------------------------------------------
 void displ_9(void){
  char item;
  unsigned int color_txt = BLACK, color_fon = GREEN1; 
@@ -439,16 +424,16 @@ void displ_9(void){
 
 void display(void){
  switch (displ_num){
-    case 0: displ_0(); break;
-    case 1: displ_1(); break;
-    case 2: displ_2(); break;
-    case 3: displ_3(); break;
-    case 4: displ_4(); break;
-    case 5: displ_5(); break;
-    case 6: displ_6(); break;
-    case 7: displ_7(); break;
-    case 8: displ_8(); break;
-    case 9: displ_9(); break;
+    case 0: displ_0(); break;//- СТАН ПОВІТРЯ. --
+    case 1: displ_1(); break;//- СТАН ДАТЧИКІВ и ТАЙМЕРІВ -
+    case 2: displ_2(); break;//- СТАН ВЫХОДІВ -
+    case 3: displ_3(); break;//- НАЛАШТУВАННЯ СИСТЕМИ -
+    case 4: displ_4(); break;//- НАЛАШТУВАННЯ окремих пунктiв -
+    case 5: displ_5(); break;//- РЕДАГУВАННЯ окремих пунктiв -
+    case 6: displ_6(); break;//- ПЕРЕЛIК КОЕФІЦІЄНТIВ -
+    case 7: displ_7(); break;//- ПЕРЕЛIК ОКРЕМОГО КОЄФФ. чи МОДУЛЯ -
+    case 8: displ_8(); break;//- РЕДАГУВАННЯ ОКРЕМОГО КОЄФФ. чи МОДУЛЯ -
+    case 9: displ_9(); break;//- ПЕРЕЛIК МОДУЛIВ -
     default: displ_0(); break;
   }
 }

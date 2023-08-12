@@ -1,9 +1,10 @@
 /*******************************************************
-Project : Greenhouse
-Version : 0.2
-Date    : 10.08.2023
-Clock   : 16 MHz
-Program size: 14474 words (28948 bytes), 88,3% of FLASH  10.08.2023
+Project        : Greenhouse
+Version        : 0.2
+Date           : 10.08.2023
+Chip type      : ATmega32
+Clock frequency: 16,000000 MHz
+Program size   : 14644 words (29288 bytes), 89,4% of FLASH  12.08.2023
 *******************************************************/
 
 #include <mega32.h>
