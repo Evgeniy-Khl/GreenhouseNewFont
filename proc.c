@@ -4,7 +4,7 @@ unsigned char txtTimer[20];
 
 void temperature_check(void){
  int val;
- unsigned char item, byte, crc, try=0;
+ unsigned char *ptr_char, item, byte, crc, try=0;
     for (item=0; item < ds18b20;){
         w1_init();                 // 1 Wire Bus initialization
         w1_write(0x55);            // Load MATCH ROM [55H] comand
@@ -22,7 +22,7 @@ void temperature_check(void){
             //----- Коректировка датчика DS18B20 ----------
             if(ds.buffer[2]==TUNING) val +=(signed char)ds.buffer[3]; // корекция показаний датчика
         }
-        else if (++try > 2) {val = 1990; try = 0;}// (199.0) если ошибка более X раз то больше не опрашиваем     
+        else if (++try > 2) {val = 1990; try = 0; errors |= (1<<item);}// (199.0) если ошибка более X раз то больше не опрашиваем     
         t[item] = val; 
         if (try==0) item++;
     }
@@ -91,11 +91,11 @@ unsigned char adapt(unsigned char val){
     return val;
 }
 
-unsigned char limitationOut(unsigned char val, unsigned char n){// ограничение управляющего сигнала
-    if(val<limit[n][0]) val = limit[n][0];
-    if(val>limit[n][1]) val = limit[n][1];
-    return val;
-}
+//unsigned char limitationOut(unsigned char val, unsigned char n){// ограничение управляющего сигнала
+//    if(val<limit[n][1]) val = limit[n][1];
+//    if(val>limit[n][2]) val = limit[n][2];
+//    return val;
+//}
 
 // - Converts from 2 digit BCD to Binary. -----------
 //char Bcd2ToByte(char Value)
@@ -137,34 +137,34 @@ unsigned char calcRtc(unsigned char rtc, signed char val){
     return res;
 }
 
-// Работа таймера не привязанная к RTC
+// Работа таймера привязанная к xternal Interrupt 0
 void timerCheck(void){
  unsigned char byte, port, dimOn=set[4][1], dimOff=set[4][3];
     port = set[4][6];  // № выхода таймера
     byte = 1 << port;
-    if(portOut&byte){
-        if(--timerOn==0){
-            if(dimOff) timerOff = (int)set[4][2]*60; 
-            else timerOff = set[4][2];
-            portOut &= ~byte; relOut[port] = 0; 
+    if(relayOut&byte){
+        if(timerCount==0){
+            if(dimOff) timerCount = (int)set[4][2]*60; 
+            else timerCount = set[4][2];
+            relayOut &= ~byte; relOut[port] = 0; 
         }
         else {
-            dimOff = timerOn/3600;
-            port = (timerOn%3600)/60;
-            byte = (timerOn%3600)%60;
+            dimOff = timerCount/3600;
+            port = (timerCount%3600)/60;
+            byte = (timerCount%3600)%60;
             sprintf(txtTimer,"ON  залиш.%02u:%02u:%02u",dimOff,port,byte);
         }
     }
     else {
-        if(--timerOff==0){
-            if(dimOn) timerOn = (int)set[4][0]*60; 
-            else timerOn = set[4][0];
-            portOut |= byte; relOut[port] = 1; 
+        if(timerCount==0){
+            if(dimOn) timerCount = (int)set[4][0]*60; 
+            else timerCount = set[4][0];
+            relayOut |= byte; relOut[port] = 1; 
         }
         else {
-            dimOff = timerOff/3600;
-            port = (timerOff%3600)/60;
-            byte = (timerOff%3600)%60;
+            dimOff = timerCount/3600;
+            port = (timerCount%3600)/60;
+            byte = (timerCount%3600)%60;
             sprintf(txtTimer,"OFF залиш.%02u:%02u:%02u",dimOff,port,byte);
         }    
     }
@@ -177,38 +177,38 @@ void timerRTC(unsigned char prg){
     byte = 1 << port;
     if(clock_buffer[0]<2){
         switch(prg){
-            case 1: portOut |= byte; relOut[port] = 1; 
+            case 1: relayOut |= byte; relOut[port] = 1; 
                     if(dimOn) timerOn = (int)set[4][0]*60; 
                     else timerOn = set[4][0];
                 break;
             case 2: if(clock_buffer[1]%3==0){   
-                        portOut |= byte; relOut[port] = 1; 
+                        relayOut |= byte; relOut[port] = 1; 
                         if(dimOn) timerOn = (int)set[4][0]*60; 
                         else timerOn = set[4][0];
                     } break;
             case 3: if(clock_buffer[1]%5==0){   
-                        portOut |= byte; relOut[port] = 1; 
+                        relayOut |= byte; relOut[port] = 1; 
                         if(dimOn) timerOn = (int)set[4][0]*60; 
                         else timerOn = set[4][0];
                     } break;
             case 4: if(clock_buffer[1]%10==0){   
-                        portOut |= byte; relOut[port] = 1; 
+                        relayOut |= byte; relOut[port] = 1; 
                         if(dimOn) timerOn = (int)set[4][0]*60; 
                         else timerOn = set[4][0];
                     } break;
             case 5: if(clock_buffer[1]%15==0){   
-                        portOut |= byte; relOut[port] = 1; 
+                        relayOut |= byte; relOut[port] = 1; 
                         if(dimOn) timerOn = (int)set[4][0]*60; 
                         else timerOn = set[4][0];
                     } break;
             case 6: if(clock_buffer[1]%30==0){   
-                        portOut |= byte; relOut[port] = 1; 
+                        relayOut |= byte; relOut[port] = 1; 
                         if(dimOn) timerOn = (int)set[4][0]*60; 
                         else timerOn = set[4][0];
                     } break;
             case 7: if(clock_buffer[2]>=set[4][4]){
                         if(clock_buffer[1]==0){   
-                            portOut |= byte; relOut[port] = 1; 
+                            relayOut |= byte; relOut[port] = 1; 
                             if(dimOn) timerOn = (int)set[4][0]*60; 
                             else timerOn = set[4][0];
                         }
@@ -216,7 +216,7 @@ void timerRTC(unsigned char prg){
             case 8: if(clock_buffer[2]>=set[4][4]){
                         clock_buffer[2]-=set[4][4];
                         if(clock_buffer[2]%2==0&&clock_buffer[2]==0){   
-                            portOut |= byte; relOut[port] = 1; 
+                            relayOut |= byte; relOut[port] = 1; 
                             if(dimOn) timerOn = (int)set[4][0]*60; 
                             else timerOn = set[4][0];
                         }
@@ -224,7 +224,7 @@ void timerRTC(unsigned char prg){
             case 9: if(clock_buffer[2]>=set[4][4]){
                         clock_buffer[2]-=set[4][4];
                         if(clock_buffer[2]%3==0&&clock_buffer[2]==0){   
-                            portOut |= byte; relOut[port] = 1; 
+                            relayOut |= byte; relOut[port] = 1; 
                             if(dimOn) timerOn = (int)set[4][0]*60; 
                             else timerOn = set[4][0];
                         }
@@ -232,7 +232,7 @@ void timerRTC(unsigned char prg){
             case 10:if(clock_buffer[2]>=set[4][4]){
                         clock_buffer[2]-=set[4][4];
                         if(clock_buffer[2]%4==0&&clock_buffer[2]==0){   
-                            portOut |= byte; relOut[port] = 1; 
+                            relayOut |= byte; relOut[port] = 1; 
                             if(dimOn) timerOn = (int)set[4][0]*60; 
                             else timerOn = set[4][0];
                         }
@@ -240,7 +240,7 @@ void timerRTC(unsigned char prg){
             case 11:if(clock_buffer[2]>=set[4][4]){
                         clock_buffer[2]-=set[4][4];
                         if(clock_buffer[2]%6==0&&clock_buffer[2]==0){   
-                            portOut |= byte; relOut[port] = 1; 
+                            relayOut |= byte; relOut[port] = 1; 
                             if(dimOn) timerOn = (int)set[4][0]*60; 
                             else timerOn = set[4][0];
                         }
@@ -248,7 +248,7 @@ void timerRTC(unsigned char prg){
             case 12:if(clock_buffer[2]>=set[4][4]){
                         clock_buffer[2]-=set[4][4];
                         if(clock_buffer[2]%8==0&&clock_buffer[2]==0){   
-                            portOut |= byte; relOut[port] = 1; 
+                            relayOut |= byte; relOut[port] = 1; 
                             if(dimOn) timerOn = (int)set[4][0]*60; 
                             else timerOn = set[4][0];
                         }
@@ -256,13 +256,13 @@ void timerRTC(unsigned char prg){
             case 13:if(clock_buffer[2]>=set[4][4]){
                         clock_buffer[2]-=set[4][4];
                         if(clock_buffer[2]%12==0&&clock_buffer[2]==0){   
-                            portOut |= byte; relOut[port] = 1; 
+                            relayOut |= byte; relOut[port] = 1; 
                             if(dimOn) timerOn = (int)set[4][0]*60; 
                             else timerOn = set[4][0];
                         }
                     } break;
             case 14:if(clock_buffer[2]==set[4][4]&&clock_buffer[2]==0){   
-                        portOut |= byte; relOut[port] = 1; 
+                        relayOut |= byte; relOut[port] = 1; 
                         if(dimOn) timerOn = (int)set[4][0]*60; 
                         else timerOn = set[4][0];
                     }    
@@ -272,7 +272,7 @@ void timerRTC(unsigned char prg){
     }
     else  if(--timerOn==0){
         timerOn = 1;
-        portOut &= ~byte; relOut[port] = 0;
+        relayOut &= ~byte; relOut[port] = 0;
         sprintf(txtTimer,"OFF режим роботи %u",prg);        
     }
     else {
@@ -315,10 +315,10 @@ unsigned char tableRH(signed int maxT, signed int minT)
    return dT;
  }
  
-signed int mean(char item){
- unsigned char i, x=0;
- signed int tt=0;
-    for (i=0; i<item; i++){if(t[i] < 850) {tt += t[i]; x++;}};
-    if(x) tt /= x; else {tt = 1900; errors |= 0x08;}  // 0x08 - ошибка датчиков среднего значения внутр. воздуха
-    return tt;
-}
+//signed int mean(char item){
+// unsigned char i, x=0;
+// signed int tt=0;
+//    for (i=0; i<item; i++){if(t[i] < 850) {tt += t[i]; x++;}};
+//    if(x) tt /= x; else {tt = 1900; errors |= 0x08;}  // 0x08 - ошибка датчиков среднего значения внутр. воздуха
+//    return tt;
+//}

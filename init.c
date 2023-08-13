@@ -60,9 +60,6 @@ TWCR=0x44;// Generate Acknowledge Pulse: On; TWI Interrupt: Off
 ADMUX=ADC_VREF_TYPE & 0xff;
 ADCSRA=0x84;
 
-offsetT = 0;// set[4][0];
-offsetRH = 0;// set[4][1];
-typeS = set[1][5];
 //setDAC();           // подать напряжение на аналоговые выходы
 
 //------ 1 Wire Protocol Functions ----------------------------------------------------------------------
@@ -98,7 +95,7 @@ Clock_Ok = read_TWI(DS_SRTC,0,clock_buffer,CLOCK_BUFFER);// чтение данных часово
 InitInterface();
 ILI9341_Init();
 //TFT_SetOrientation(3);  //0
-ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
+ILI9341_FillScreen(0, max_X, 0, max_Y, BLACK);
 //---------
 //sprintf(buff,"%02x:%02x:%02x   %02x.%02x.%02x  %02x",clock_buffer[2],clock_buffer[1],clock_buffer[0],clock_buffer[4],clock_buffer[5],clock_buffer[6],clock_buffer[7]);//час:мин дата.мес.год
 //ILI9341_WriteString(10,200,buff,Font_11x18,WHITE,BLACK,1);
@@ -113,17 +110,17 @@ if(Clock_Ok && clock_buffer[7]!=SQWE_1Hz){   // SQWE_1Hz -> 0x10
 //ILI9341_WriteString(10,220,buff,Font_11x18,WHITE,BLACK,1);
 //---------
 pointY = 10;
-ILI9341_WriteString(60, pointY, "www.graviton.com.ua", Font_11x18, WHITE, fillScreen, 1);
+ILI9341_WriteString(60, pointY, "www.graviton.com.ua", Font_11x18, WHITE, BLACK, 1);
 pointY += 30;
-ILI9341_WriteString(80, pointY, "Розумна", Font_11x18, WHITE, fillScreen, 2);
+ILI9341_WriteString(80, pointY, "Розумна", Font_11x18, WHITE, BLACK, 2);
 pointY += 30;
-ILI9341_WriteString(80, pointY, "теплиця", Font_11x18, WHITE, fillScreen, 2);
+ILI9341_WriteString(80, pointY, "теплиця", Font_11x18, WHITE, BLACK, 2);
 pointY = pointY+45;
 sprintf(buff,"Датчикыв температури %u",ds18b20);    // количество датчиков
-ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
+ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, BLACK, 1);
 pointY = pointY+20;
 sprintf(buff,"Датчик вологосты %u",Dht);                // датчик AM2301
-ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
+ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, BLACK, 1);
 if(soilModule){
     out.buffer[0] = DATAREAD;
     for (x=0; x < soilModule; x++){
@@ -135,7 +132,7 @@ if(soilModule){
     }
     pointY = pointY+20;
     sprintf(buff,"Модулыв грунту %u",soilModule);
-    ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, fillScreen, 1);
+    ILI9341_WriteString(10, pointY, buff, Font_11x18, WHITE, BLACK, 1);
 }
 Sec=1; Display=1; newSetButt=1; timerOn = 1; timerOff = 1;
 temperature_check();

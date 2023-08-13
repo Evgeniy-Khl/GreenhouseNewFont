@@ -13,7 +13,7 @@
 void checkkey(unsigned char key){
  char byte, max = 5;
   if(key){
-     Display=1;
+     Display=1; displwait=60;
      switch (displ_num){
        //-------------------------------- СТАН ДАТЧИКІВ и ТАЙМЕРІВ ------------------------------------------
        case 2:
@@ -60,10 +60,10 @@ void checkkey(unsigned char key){
             case KEY_7: if(++numSet>max) numSet=max; NewnumMenu=1; break;
             case KEY_5:  // (зеленая) 
               switch (numMenu){
-                case 0: for (byte=0;byte<MAX_7;byte++) newval[byte] = set[0][byte]; break; // "Температура"
-                case 1: for (byte=0;byte<MAX_7;byte++) newval[byte] = set[1][byte]; break; // "Влажность"
-                case 2: for (byte=0;byte<MAX_6;byte++) newval[byte] = set[4][byte]; break; // "Таймер" 
-                case 3: for (byte=0;byte<MAX_6;byte++) newval[byte] = rtcTodec(set[5][byte]); break; // "День Ночь"
+                case 0: for (byte=0;byte<LIST0;byte++) newval[byte] = set[0][byte]; break; // "Температура"
+                case 1: for (byte=0;byte<LIST0;byte++) newval[byte] = set[1][byte]; break; // "Влажность"
+                case 2: for (byte=0;byte<LIST1;byte++) newval[byte] = set[4][byte]; break; // "Таймер" 
+                case 3: for (byte=0;byte<LIST2;byte++) newval[byte] = rtcTodec(set[5][byte]); break; // "День Ночь"
                 case 4: for (byte=0;byte<2;byte++) newval[byte] = rtcTodec(clock_buffer[byte+1]); 
                         for (byte=2;byte<5;byte++) newval[byte] = rtcTodec(clock_buffer[byte+2]);
                     break;     // "Время и Дата"
@@ -187,8 +187,8 @@ void checkkey(unsigned char key){
                     break;
                   };
             break;
-            case KEY_5: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
-                  ILI9341_WriteString(10,100,"ВИКОНУЮ ЗАПИС",Font_11x18,GREEN,fillScreen,2);
+            case KEY_5: ILI9341_FillScreen(0, max_X, 0, max_Y, BLACK);
+                  ILI9341_WriteString(10,100,"ВИКОНУЮ ЗАПИС",Font_11x18,GREEN,BLACK,2);
                   switch (numMenu){
                     case 0: set[0][numSet] = newval[numSet]; break; // "Температура"
                     case 1: set[1][numSet] = newval[numSet]; break; // "Влажность"
@@ -221,7 +221,7 @@ void checkkey(unsigned char key){
             case KEY_3: if (--numSet<0) numSet = 3;    break;
             case KEY_7: if (++numSet>3) numSet = 0;    break;
             case KEY_5: if(moduleEdit) newval[numSet] = module[subMenu][numSet];
-                        else newval[numSet] = limit[subMenu][numSet];
+                        else newval[numSet] = analog[subMenu][numSet];
                         displ_num = 8; newSetButt = 1; 
             break;
           }
@@ -237,10 +237,10 @@ void checkkey(unsigned char key){
             case KEY_8: --newval[numSet];
                         if(newval[numSet]<0) newval[numSet]=0;
             break; 
-            case KEY_5: ILI9341_FillScreen(0, max_X, 0, max_Y, fillScreen);
-                    ILI9341_WriteString(10,100,"ВИКОНУЮ ЗАПИС",Font_11x18,GREEN,fillScreen,2);
+            case KEY_5: ILI9341_FillScreen(0, max_X, 0, max_Y, BLACK);
+                    ILI9341_WriteString(10,100,"ВИКОНУЮ ЗАПИС",Font_11x18,GREEN,BLACK,2);
                     if(moduleEdit) module[subMenu][numSet] = newval[numSet];
-                    else limit[subMenu][numSet] = newval[numSet];
+                    else analog[subMenu][numSet] = newval[numSet];
                     displ_num = 7; newSetButt = 1; delay_ms(500);                     
             break;
           }
@@ -261,8 +261,8 @@ void checkkey(unsigned char key){
             case KEY_2: if(++displ_num>3) displ_num=0; newSetButt=1; break;//  (белая 2)
             case KEY_3:  break;//  (белая 3)
             case KEY_4:  break;//  (желтая)            
-            case KEY_5:  break;//  (зеленая)       
-            case KEY_6:  break;//  (черная)           
+            case KEY_5: displ_num=3; newSetButt=1; break;//  (зеленая)       
+            case KEY_6: displ_num=2; newSetButt=1; break;//  (черная)           
             case KEY_7:  break;//  (красная)             
             case KEY_8:  break;//  (синяя)
             case KEY_7_4:  break;// (красная + зеленая)

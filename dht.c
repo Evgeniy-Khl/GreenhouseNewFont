@@ -44,9 +44,8 @@ unsigned char readDHT(void){
     if(flag==tem[4]){
       if(typeS) {tempRH =(int)tem[0]*10; pvT =(int)tem[2]*10;}            // Other = 1 -> DHT11
       else {tempRH =(int)tem[0]*256+tem[1]; pvT =(int)tem[2]*256+tem[3];} // Other = 0 -> DHT21
-      pvT  += offsetT;
       pvRH = tempRH/10;
-      pvRH += offsetRH;                  // коррекция датчика влажности
+      pvRH += set[1][5];    // коррекция датчика влажности
       err = 0;
       if(pvRH>100) pvRH=100; else if (pvRH<1) pvRH=1;
       return 1;
