@@ -86,13 +86,13 @@ eeprom signed int set[6][7]={
  { 10,  0,   10,   1,   0,0x06,   6},  //   tmOn; dimOn=0(сек.)/dim=1(мин.); tmOff;    dimOff; HourStart;  Programm; выход № 6=>0x40
  {0x07,0x20,0x05,0x09,0x18,0x23,   7}}; // DayBeg;           DayEnd;      Light0Beg; Light0End; Light1Beg; Light1End; выход № 8=>0x80
 
-eeprom unsigned char analog[6][5]={
+eeprom unsigned char analog[6][4]={
                 //     dT min max  kP 
                       {20,  0, 100, 20}, // 0 - Аналоговый ВЫХОД I   Тунельная вентиляция
                       {10,  0, 100, 21}, // 1 - Аналоговый ВЫХОД II  Положение заслонок вытяжной вентиляции
                       {15,  0, 100, 22}, // 2 - Аналоговый ВЫХОД III Положение заслонок приточной вентиляции
                       { 5,  0, 100, 23}, // 3 - Аналоговый ВЫХОД IV  Положение клапана горячей воды.
-                      { 2, 30,   1,  5}, // minRun=4, maxRun=30, minPeriod=1*60, Period=5*60;
+                      { 1, 30,   1,  5}, // minRun=1, maxRun=30, minPeriod=1*60, Period=5*60;
                       { 5,100,  30,100}};// K1; Ti1*10; K2; Ti2*10;
                       
 eeprom unsigned int module[4][2]={
@@ -288,8 +288,8 @@ while (1){
     if(Display){
       Display=0; display();
       //----------
-//      sprintf(buff,"P1 %5u P2 %5u",p[0],p[1]);
-//      ILI9341_WriteString(5,180,buff,Font_11x18,WHITE,BLACK,1);
+      sprintf(buff,"P1 %6i P2 %6i",p[0],p[1]);
+      ILI9341_WriteString(5,180,buff,Font_11x18,WHITE,BLACK,1);
       sprintf(buff,"Out %02x RhC%5u R%3u P%5u",relayOut,rhCount,valRun,valPeriod);
       ILI9341_WriteString(5,200,buff,Font_11x18,WHITE,BLACK,1);
       sprintf(buff,"Dn%2u nM%2u sM%2u nS%2u Er0x%02x",displ_num,numMenu,subMenu,numSet,errors);

@@ -235,7 +235,8 @@ void checkkey(unsigned char key){
                         if(newval[numSet]>250) newval[numSet]=250;
             break; 
             case KEY_8: --newval[numSet];
-                        if(newval[numSet]<0) newval[numSet]=0;
+                        if(numSet<2) if(newval[numSet]<0) newval[numSet]=0;
+                        else if(newval[numSet]<1) newval[numSet]=1;
             break; 
             case KEY_5: ILI9341_FillScreen(0, max_X, 0, max_Y, BLACK);
                     ILI9341_WriteString(10,100,"ÂÈÊÎÍÓÞ ÇÀÏÈÑ",Font_11x18,GREEN,BLACK,2);

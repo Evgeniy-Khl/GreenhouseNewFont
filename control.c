@@ -3,20 +3,23 @@
 #define UNCHANGED       2
 
 void UpdatePID(signed int err, unsigned char K, unsigned char Ti, char cn){
-  signed int minP, maxP=analog[4][3]*60; // analog[4][3]=>Period  maxP =< 15000 (max_int)32767
+  signed int minP, maxP; 
   float pPart, Ud;
+    if(cn){maxP=analog[4][3]*60; if(maxP==0) maxP=20;}// analog[4][3]=>Period  maxP =< 15000 (max_int)32767
+    else maxP=analog[4][1];                           // analog[4][1]=>maxRun <= 250
     minP = - maxP;
-    pPart = (float) err * K;             // расчет пропорциональной части
+    Ud = (float) K / 4;                     // расчет пропорционального коэфициента
+    pPart = (float) err * Ud;               // расчет пропорциональной части
     //---- функци€ ограничени€ pPart ---------------
     if (pPart < minP) pPart = minP;
-    else if (pPart > maxP) pPart = maxP;         // функци€ ограничени€    
+    else if (pPart > maxP) pPart = maxP;    // функци€ ограничени€    
     //----------------------------------------------
-    iPart[cn] += (float)err * K / (unsigned int)(Ti*10);       // приращение интегральной части
-    Ud = pPart + iPart[cn];                      // выход регул€тора до ограничени€
+    iPart[cn] += (float)err * Ud / (unsigned int)(Ti*10);   // приращение интегральной части
+    Ud = pPart + iPart[cn];                 // выход регул€тора до ограничени€
     //---- функци€ ограничени€ Ud ------------------
     if (Ud < minP) Ud = minP;
-    else if (Ud > maxP) Ud = maxP;               // функци€ ограничени€
-    iPart[cn] = Ud - pPart;                      // "антинасыщ€юща€" поправка
+    else if (Ud > maxP) Ud = maxP;          // функци€ ограничени€
+    iPart[cn] = Ud - pPart;                 // "антинасыщ€юща€" поправка
     p[cn] = Ud;
 //    return Ud;
 }
@@ -55,13 +58,13 @@ void RelaySensor(signed int val, unsigned char ch){
         valRun = p[0];
         if(valRun < byte) valRun = byte;
         else if(valRun > port) valRun = port;
-        if(error<=0) valRun = 0;                // отключение впрыска по 2 каналу если сильный перелив        
-        val = analog[4][3]*60;                  // analog[4][3]=>Period 
-        if(val<60) val = 20;                    // если analog[4][3]=0 то Period=20сек.
+        if(error<=0) valRun = 0;                // отключение впрыска если сильный перелив                 
         UpdatePID(error,analog[5][2],analog[5][3],1);// определение длительности OFF
+        val = analog[4][3]*60;                  // analog[4][3]=>Period
         valPeriod = val - p[1]; 
         val = analog[4][2]*60;                  //analog[4][2]=>minPeriod
         if(valPeriod < val) valPeriod = val;    // minPeriod
+        if(valPeriod < 60) val = 20;            // MIN valPeriod=20сек.
         return;    
     }
     port = set[ch][6];                      // є выхода

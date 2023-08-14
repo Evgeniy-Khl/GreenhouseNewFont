@@ -50,7 +50,7 @@ void displ_0(void){
     ILI9341_WriteString(70,pointY,"СТАН УПРАВЛЫННЯ",Font_11x18,bordWindow,fillWindow,1);
     ILI9341_FillScreen(0, max_X,135, max_Y, fillWindow);
     if(errors+noAutoRel+noAutoAna){
-        BeepT=100;
+        BeepT=10;
         if(errors&0x01){pointY += 18;      ILI9341_WriteString(5,pointY,"Помилка датчика температури",Font_11x18,RED,fillWindow,1);}
         else if(errors&0x02){pointY += 18; ILI9341_WriteString(5,pointY,"Помилка датчика вологосты",Font_11x18,RED,fillWindow,1);}
         else if(errors&0x10){pointY += 18; ILI9341_WriteString(5,pointY,"Велике відхилення температур",Font_11x18,RED,fillWindow,1);}
