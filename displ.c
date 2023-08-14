@@ -236,7 +236,12 @@ void displ_4(void){
                     if(item<4) sprintf(buff,"%8s = %i%%", setName0[item],set[1][item]);
                     else if(item==4) {
                         sprintf(buff,"%8s = ", setName0[item]);
-                        if(set[1][item]==1) strcat(buff,"ÇÂÎËÎÆÅÍÍß"); else  strcat(buff,"ÎÑÓØÅÍÍß"); 
+                        switch (set[1][item]){
+                            case 2: strcat(buff,"ÛÌÏÓËÜÑÍÈÉ"); break;
+                            case 1: strcat(buff,"ÏÎÑÒÎßÍÍÈÉ"); break;
+                            case 0: strcat(buff,"ÎÑÓØÅÍÍß"); break;   
+                            default: strcat(buff,"ÏÎÌÈËÊÀ");
+                        };
                     }
                     else sprintf(buff,"%8s = %i", setName0[item],set[1][item]);
                     if (item == numSet){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
@@ -365,9 +370,10 @@ void displ_6(void){
 
 //-------------------------------- ÏÅÐÅËIÊ ÎÊÐÅÌÎÃÎ ÊÎªÔÔ. ÷è ÌÎÄÓËß --------------------------------
 void displ_7(void){
- char item, tmpv0, tmpv1;
+ char item, max=6;
  unsigned int color_txt = BLACK, color_fon = GREEN1, temp;
     pointY=7;
+    if(moduleEdit) max=4;
     if(newSetButt){
         newSetButt=0; 
         ILI9341_FillScreen(0, max_X, 0, max_Y, color_fon);
@@ -377,9 +383,9 @@ void displ_7(void){
     }
     pointY += 25;
     
-    for (item = 0; item < LIST3;item++){
-        if(moduleEdit) sprintf(buff,"%7s = %i", setName3[item],module[subMenu][item]);
-        else sprintf(buff,"%7s = %i", setName3[item],analog[subMenu][item]);
+    for (item = 0; item < max;item++){
+        if(moduleEdit) sprintf(buff,"ÊÎÔ.%i= %4i",item,module[subMenu][item]);
+        else sprintf(buff,"ÊÎÔ.%i= %4i",item,analog[subMenu][item]);
         if (item == numSet){color_txt = WHITE; color_fon = BLACK;} else {color_txt = BLACK; color_fon = GREEN1;}
         ILI9341_WriteString(5,pointY,buff,Font_11x18,color_txt,color_fon,1);
         pointY += 25;
@@ -400,7 +406,7 @@ void displ_8(void){
   }
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     pointY = pointY+50;
-    sprintf(buff,"%7s:%4i", setName3[numSet], newval[numSet]);
+    sprintf(buff,"ÊÎÔ.%i:%4i",numSet,newval[numSet]);
     ILI9341_WriteString(5,pointY,buff,Font_11x18,bordWindow,fillWindow,2);
     if(keynum) checkkey(keynum);//***************************** ïðîâåðèì íîìåð êíîïêè *************************************** 
 }

@@ -91,6 +91,7 @@ Clock_Ok = read_TWI(DS_SRTC,0,clock_buffer,CLOCK_BUFFER);// чтение данных часово
 
 // Global enable interrupts
 #asm("sei")
+//while (1){BeepT=500; delay_ms(1000);};
 
 InitInterface();
 ILI9341_Init();

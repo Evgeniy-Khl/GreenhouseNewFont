@@ -232,7 +232,7 @@ void checkkey(unsigned char key){
             case KEY_1: displ_num = 7; newSetButt = 1; break;
             case KEY_6: displ_num = 3; newSetButt = 1; break;
             case KEY_4: ++newval[numSet];
-                        if(newval[numSet]>1000) newval[numSet]=1000;
+                        if(newval[numSet]>250) newval[numSet]=250;
             break; 
             case KEY_8: --newval[numSet];
                         if(newval[numSet]<0) newval[numSet]=0;

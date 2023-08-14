@@ -4,7 +4,7 @@ Version        : 0.2
 Date           : 10.08.2023
 Chip type      : ATmega32
 Clock frequency: 16,000000 MHz
-Program size   : 14503 words (29006 bytes), 88,5% of FLASH  13.08.2023
+Program size   : 14850 words (29700 bytes), 90,6% of FLASH  13.08.2023
 *******************************************************/
 
 #include <mega32.h>
@@ -33,7 +33,7 @@ Program size   : 14503 words (29006 bytes), 88,5% of FLASH  13.08.2023
 #define LIST0           7
 #define LIST1           6
 #define LIST2           6
-#define LIST3           5
+//#define LIST3           5
 #define LIST4           5
 #define ZERO	        50
 
@@ -58,42 +58,43 @@ unsigned char BeepT, keynum, keycount, keywait, displwait, relayOut, ds18b20, si
 signed char numMenu, subMenu, numSet, displ_num, moduleEdit, soilModule, DHTexist;
 // масив relOut[8] специально сосздан на 8 ячеек!
 unsigned char relOut[8]={0}, analogOut[4]={0}, dacU[4]={ZERO}, buff[40], familycode[MAX_DS18B20][9], clock_buffer[CLOCK_BUFFER];
-unsigned int  max_X, max_Y, timerOn, timerOff, timerCount;
-signed int pvT=1990, pvRH=1990, offsetRH, newval[7], t[MAX_DS18B20], hum[MAX_DS18B20];
+unsigned int  max_X, max_Y, timerOn, timerOff, timerCount, rhCount;
+signed int pvT=1990, pvRH=1990, offsetRH, valRun, valPeriod, newval[7], t[MAX_DS18B20], hum[MAX_DS18B20], p[2];
 
 const char* setMenu[MENU]={"Температура","Вологысть","Таймер","День Ныч","Час Дата","Ынше","Модуль"};
 const char* setName0[LIST0]={"ДЕНЬ","НЫЧ","Выдхил","Гыстер","Режим","Резерв","Вихыд"};
 const char* setName1[LIST1]={"Увымкнено","Розмір","Вимкнено","Розмір","Крок","ЗМЫЩЕННЯ"};
 const char* setName2[LIST2]={"День почат","Ныч почат","Увымкнено Р","Вимкнено Р","Увымкнено В","Вимкнено В"};
-const char* setName3[LIST3]={"ЗМЫЩЕННЯ","MIN","MAX","КОФ.1","Коф.2"};
+//const char* setName3[LIST3]={"КОФ.1","КОФ.2","КОФ.3","КОФ.4","Коф.2"};
 const char* setName7[LIST4]={"Хвилини","Години","День","Мысяц","Рык"};
 //--------------- union declaration -----------------------------------------------
 union {unsigned char buffer[8]; unsigned int pvT;} ds;          // буффер микросхемы DS18B20
 union {unsigned char buffer[4]; unsigned int val[2];} in;
 union {unsigned char buffer[4]; unsigned int val[2];} out;
 //---------------------------------------------------------------------------------
-float Told1[8], Told2[8], iPart[4];
+float Told1[8], Told2[8], iPart[2];
 
 //-------------------------
 eeprom signed char relaySet[4]={-1,-1,-1,-1};
 eeprom signed char analogSet[4]={-1,-1,-1,-1};
 
 eeprom signed int set[6][7]={
-{ 240, 200,  30,  10,   1,  -1,   0},  // (ВОЗД.) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;  выход №
-{  90,  90,  10,   5,   0,   0,   1},  // (ВОЗД.) RHday; RHnight; dRHalarm; hysteresis;  mode=1(увлажн)/mode=0(осушение); коррекция; выход №
-{ 200, 180,  50,  10,   1,  -1,   4},  // (ГРУНТ) Tday;  Tnight;  dTalarm;  hysteresis;  mode=1(нагрев)/mode=0(охлаждение); резерв;  выход № 4=>0x10
-{ 400, 350, 100,  50,   1,  -1,   5},  // (ГРУНТ) RHday; RHnight;  dTalarm;  hysteresis; mode=1(увлажнение)/mode=0(осушение); резерв; выход № 5=>0x20  
-{  10,  0,   10,   1,   0,0x06,   6},  // tmOn; dimOn=0(сек.)/dim=1(мин.); tmOff; dimOff; HourStart; Programm;                       выход № 6=>0x40
-{0x07,0x20,0x05,0x09,0x18,0x23,   7}}; // DayBeg; DayEnd; Light0Beg; Light0End; Light1Beg; Light1End;                                выход № 8=>0x80
+ {240, 200,  30,  10,   1,  -1,   0},  // (ВОЗД.)  Tday;  Tnight;  dTalarm; hysteresis; mode=1(нагрев)/mode=0(охлаждение); резерв; выход №
+ {100,  90,  10,   5,   2,   0,   1},  // (ВОЗД.) RHday; RHnight; dRHalarm; hysteresis; mode=2(импульс)/mode=1(увл)/mode=0(осуш); коррекция; выход №
+ {200, 180,  50,  10,   1,  -1,   4},  // (ГРУНТ)  Tday;  Tnight;  dTalarm; hysteresis; mode=1(нагрев)/mode=0(охлаждение); резерв; выход № 4=>0x10
+ {400, 350, 100,  50,   1,  -1,   5},  // (ГРУНТ) RHday; RHnight;  dTalarm; hysteresis; mode=1(увлажнение)/mode=0(осушение); резерв; выход № 5=>0x20  
+ { 10,  0,   10,   1,   0,0x06,   6},  //   tmOn; dimOn=0(сек.)/dim=1(мин.); tmOff;    dimOff; HourStart;  Programm; выход № 6=>0x40
+ {0x07,0x20,0x05,0x09,0x18,0x23,   7}}; // DayBeg;           DayEnd;      Light0Beg; Light0End; Light1Beg; Light1End; выход № 8=>0x80
 
-eeprom unsigned char analog[5][5]={
+eeprom unsigned char analog[6][5]={
                 //     dT min max  kP 
-                      {20, 0, 100, 20}, // 0 - Аналоговый ВЫХОД I   Тунельная вентиляция
-                      {10, 0, 100, 21}, // 1 - Аналоговый ВЫХОД II  Положение заслонок вытяжной вентиляции
-                      {15, 0, 100, 22}, // 2 - Аналоговый ВЫХОД III Положение заслонок приточной вентиляции
-                      { 5, 0, 100, 23}, // 3 - Аналоговый ВЫХОД IV  Положение клапана горячей воды.
-                      { 0,30, 66, 138}}; // Грунт температура  t=0 -> V=1.32 -> ADC=270; t=25 -> V=2.51 -> ADC=514
-
+                      {20,  0, 100, 20}, // 0 - Аналоговый ВЫХОД I   Тунельная вентиляция
+                      {10,  0, 100, 21}, // 1 - Аналоговый ВЫХОД II  Положение заслонок вытяжной вентиляции
+                      {15,  0, 100, 22}, // 2 - Аналоговый ВЫХОД III Положение заслонок приточной вентиляции
+                      { 5,  0, 100, 23}, // 3 - Аналоговый ВЫХОД IV  Положение клапана горячей воды.
+                      { 2, 30,   1,  5}, // minRun=4, maxRun=30, minPeriod=1*60, Period=5*60;
+                      { 5,100,  30,100}};// K1; Ti1*10; K2; Ti2*10;
+                      
 eeprom unsigned int module[4][2]={
                       { 10,600}, // Грунт влажность 100%: 0% OutMIN; OutMAX; модуль №1
                       { 10,600}, // Грунт влажность 100%: 0% OutMIN; OutMAX; модуль №2
@@ -151,6 +152,7 @@ void display(void);
 // External Interrupt 0 service routine
 interrupt [EXT_INT0] void ext_int0_isr(void){
  if(timerCount) --timerCount;
+ if(rhCount) --rhCount;
 }
 
 // Timer 0 overflow interrupt service routine
@@ -190,7 +192,9 @@ while (1){
         Sec=0; noAutoRel=0; noAutoAna=0; errors=0;
         for (byte=0; byte<4; byte++) if(relaySet[byte]>=0)  noAutoRel++; // проверка - все ли находится в автоматическом режиме
         for (byte=0; byte<4; byte++) if(analogSet[byte]>=0) noAutoAna++; // проверка - все ли находится в автоматическом режиме
-        if(displwait) --displwait; else {displ_num=0; newSetButt=1;}     // возврат дисплея к главному экрану
+        if(displ_num){
+            if(displwait) --displwait; else {displ_num=0; newSetButt=1;}     // возврат дисплея к главному экрану
+        }
         if(clock_buffer[2]>=set[5][0]&&clock_buffer[2]<set[5][1]) Night=0; else Night=1;   // set[5][0]=> DayBeg; set[5][1]=> DayEnd;
     // -- работа таймера ----------    
         byte = set[4][4];                           // режим таймера если 0 то простой если 1-14 то программный
@@ -240,7 +244,7 @@ while (1){
         // --------КАНАЛ температура воздуха ВЫХОД x и ВЫХОД x ---------
          RelaySensor(pvT,0); analogOut[0]=UpdatePI(pvT,0);
         // --------КАНАЛ влажность воздуха ВЫХОД x и ВЫХОД x --------- 
-        //RelaySensor(pvRH,1); analogOut[1]=UpdatePI(pvRH,1);
+        RelaySensor(pvRH,1);
         // --------КАНАЛ температура грунта ВЫХОД x ---------
         //if(ds18b20) analogOut[2]=UpdatePI((t[0]+t[1])/2,2);  // средняя грунта
         // --------КАНАЛ влажность грунта ВЫХОД x ---------
@@ -257,12 +261,26 @@ while (1){
         for (byte=0;byte<4;byte++){
             if(relaySet[byte]==1) {relOut[byte]=ON;  relayOut |= (1<<(byte));} // ручной On
             if(relaySet[byte]==0) {relOut[byte]=OFF; relayOut &= ~(1<<(byte));}// ручной Off
+        }        
+    //------------------------ импульсный режим увлажнения --------------------------------------
+        if(set[1][4]==2 && rhCount==0){
+            byte = set[1][6];               // № выхода увлажнителя
+            if(relayOut&(1<<byte)){
+                relOut[byte]=OFF;
+                relayOut &= ~(1<<(byte));   // если 1 то...
+                rhCount = valPeriod;    
+            }
+            else if(valRun){
+                relOut[byte]=ON;
+                relayOut |= (1<<(byte));    // если 0 то...
+                rhCount = valRun;          
+            }
         }
-        
-//        byte = PORTA & 0x0F;
-//        relayOut = (relayOut<<4)&0xF0;
-//        relayOut |= byte;
-//        PORTA = relayOut;  // PORA.4->Ст. I -- PORA.7->Ст. IV
+
+        byte = PORTA & 0x0F;
+        x = (relayOut<<4)&0xF0;
+        x |= byte;
+//        PORTA = x;  // PORA.4->Ст. I -- PORA.7->Ст. IV
 //        LOCK=1; delay_us(1); LOCK=0;
         //setDAC();                           // подать напряжение на аналоговые выходы
     }
@@ -270,7 +288,9 @@ while (1){
     if(Display){
       Display=0; display();
       //----------
-      sprintf(buff,"rOut 0x%02x",relayOut);
+//      sprintf(buff,"P1 %5u P2 %5u",p[0],p[1]);
+//      ILI9341_WriteString(5,180,buff,Font_11x18,WHITE,BLACK,1);
+      sprintf(buff,"Out %02x RhC%5u R%3u P%5u",relayOut,rhCount,valRun,valPeriod);
       ILI9341_WriteString(5,200,buff,Font_11x18,WHITE,BLACK,1);
       sprintf(buff,"Dn%2u nM%2u sM%2u nS%2u Er0x%02x",displ_num,numMenu,subMenu,numSet,errors);
       ILI9341_WriteString(5,220,buff,Font_11x18,WHITE,BLACK,1);
